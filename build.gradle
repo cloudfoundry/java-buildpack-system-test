@@ -1,0 +1,19 @@
+// Root Project Configuration
+apply plugin: 'base'
+apply plugin: 'versions'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.4'
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.8'
+}
+
+defaultTasks 'build'
