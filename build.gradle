@@ -1,19 +1,29 @@
+// All Project Configuration
+allprojects {
+	apply plugin: "eclipse"
+
+	repositories {
+		mavenCentral()
+	}
+}
+
 // Root Project Configuration
-apply plugin: 'base'
-apply plugin: 'versions'
+apply plugin: "base"
+apply plugin: "versions"
+apply plugin: "java"
 
 buildscript {
-    repositories {
-        mavenCentral()
-    }
+	repositories {
+		mavenCentral()
+	}
 
-    dependencies {
-        classpath 'com.github.ben-manes:gradle-versions-plugin:0.4'
-    }
+	dependencies {
+		classpath "com.github.ben-manes:gradle-versions-plugin:0.4"
+	}
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.8'
+	gradleVersion = "1.8"
 }
 
 defaultTasks 'build'
