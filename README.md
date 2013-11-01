@@ -10,17 +10,28 @@ The Cloud Foundry Client Library from the [CF Java Client repository][] is used 
 [Java test applications]: https://github.com/cloudfoundry/java-test-applications
 [CF Java Client repository]: https://github.com/cloudfoundry/cf-java-client
 
+## Environment Variables
+The following environment variables must be set before building this project or running the tests.
+
+| Environment Variable | Value
+| -------------------- | -----
+| `CF_ORG` | The Cloud Foundry organisation to use.
+| `CF_PASSWORD` | The password corresponding to the Cloud Foundry username.
+| `CF_SPACE` | The Cloud Foundry space to use.
+| `CF_TARGET` | The Cloud Foundry instance to use, e.g. `https://api.run.pivotal.io`.
+| `CF_USERNAME` | A Cloud Foundry username, which often consists of an email address.
+
+Note: when running tests in Eclipse, you can set environment variables in a run configuration.
+
 ## Building
 
-This project is built with Gradle.
-
+This project is built with Gradle. Set the environment variables as described above and then issue:
 ```plain
 ./gradlew
 ```
 
 ## Running Tests
-To run the tests, do the following:
-
+To run the tests, set the environment variables as described above and then do the following:
 ```bash
 ./gradlew
 ```

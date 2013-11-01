@@ -1,0 +1,9 @@
+apply plugin: "java"
+
+dependencies {
+	testCompile "junit:junit:$junitVersion"
+	testCompile "org.cloudfoundry:cloudfoundry-client-lib:$cfClientLibVersion"
+	testCompile "org.yaml:snakeyaml:1.13"
+	testCompile "org.apache.commons:commons-lang3:3.1"
+	testCompile "org.springframework:spring-test:3.2.4.RELEASE"
+}
