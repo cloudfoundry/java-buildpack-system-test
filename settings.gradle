@@ -1,9 +1,4 @@
 rootProject.name = "java-buildpack-system-test"
 
-// Unfortunately, gradle builds can only contain a single settings.gradle, so it is necessary to break the encapsulation of vendor:java-test-applications.
-include "vendor:java-test-applications:grails-application"
-include "vendor:java-test-applications:java-application"
-include "vendor:java-test-applications:java-application-with-web-inf"
-include "vendor:java-test-applications:play-application"
-include "vendor:java-test-applications:web-application"
-include "autoreconfiguration"
+include "test-support"
+include "tests"

@@ -1,19 +1,25 @@
 // All Project Configuration
 allprojects {
-	apply plugin: "eclipse"
-
 	ext {
-		cfClientLibVersion = '1.0.0'
-		junitVersion = '4.11'
+		cloudFoundryClientLibVersion = '1.0.0'
+		snakeyamlVersion = '1.13'
+		springBootVersion = '0.5.0.BUILD-SNAPSHOT'
 	}
 
 	repositories {
+		maven {
+			name 'Spring Milestones'
+			url 'http://repo.spring.io/milestone'
+		}
+		maven {
+			name 'Spring Snapshots'
+			url 'http://repo.spring.io/snapshot'
+		}
 		mavenCentral()
 	}
 }
 
 // Root Project Configuration
-apply plugin: "base"
 apply plugin: "versions"
 apply plugin: "java"
 
