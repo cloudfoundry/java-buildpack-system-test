@@ -2,18 +2,19 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/vendor/java-test-applications/core/core.iml" filepath="$PROJECT_DIR$/vendor/java-test-applications/core/core.iml" />
-      <module fileurl="file://$PROJECT_DIR$/vendor/java-test-applications/grails-application/grails-application.iml" filepath="$PROJECT_DIR$/vendor/java-test-applications/grails-application/grails-application.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vendor/java-test-applications/core/core.iml" filepath="$PROJECT_DIR$/vendor/java-test-applications/core/core.iml" group="java-test-applications" />
+      <module fileurl="file://$PROJECT_DIR$/vendor/java-test-applications/grails-application/grails-application.iml" filepath="$PROJECT_DIR$/vendor/java-test-applications/grails-application/grails-application.iml" group="java-test-applications" />
       <module fileurl="file://$PROJECT_DIR$/vendor/java-test-applications/groovy-application/groovy-application.iml" filepath="$PROJECT_DIR$/vendor/java-test-applications/groovy-application/groovy-application.iml" />
       <module fileurl="file://$PROJECT_DIR$/java-buildpack-system-test.iml" filepath="$PROJECT_DIR$/java-buildpack-system-test.iml" />
-      <module fileurl="file://$PROJECT_DIR$/vendor/java-test-applications/java-main-application/java-main-application.iml" filepath="$PROJECT_DIR$/vendor/java-test-applications/java-main-application/java-main-application.iml" />
-      <module fileurl="file://$PROJECT_DIR$/vendor/java-test-applications/java-main-with-web-inf-application/java-main-with-web-inf-application.iml" filepath="$PROJECT_DIR$/vendor/java-test-applications/java-main-with-web-inf-application/java-main-with-web-inf-application.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vendor/java-test-applications/java-main-application/java-main-application.iml" filepath="$PROJECT_DIR$/vendor/java-test-applications/java-main-application/java-main-application.iml" group="java-test-applications" />
+      <module fileurl="file://$PROJECT_DIR$/vendor/java-test-applications/java-main-with-web-inf-application/java-main-with-web-inf-application.iml" filepath="$PROJECT_DIR$/vendor/java-test-applications/java-main-with-web-inf-application/java-main-with-web-inf-application.iml" group="java-test-applications" />
       <module fileurl="file://$PROJECT_DIR$/vendor/java-test-applications/java-test-applications.iml" filepath="$PROJECT_DIR$/vendor/java-test-applications/java-test-applications.iml" />
-      <module fileurl="file://$PROJECT_DIR$/vendor/java-test-applications/play-application/play-application.iml" filepath="$PROJECT_DIR$/vendor/java-test-applications/play-application/play-application.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vendor/java-test-applications/play-application/play-application.iml" filepath="$PROJECT_DIR$/vendor/java-test-applications/play-application/play-application.iml" group="java-test-applications" />
+      <module fileurl="file://$PROJECT_DIR$/vendor/java-test-applications/play-application/play-application-build.iml" filepath="$PROJECT_DIR$/vendor/java-test-applications/play-application/play-application-build.iml" group="java-test-applications" />
       <module fileurl="file://$PROJECT_DIR$/vendor/java-test-applications/spring-boot-cli-application/spring-boot-cli-application.iml" filepath="$PROJECT_DIR$/vendor/java-test-applications/spring-boot-cli-application/spring-boot-cli-application.iml" />
       <module fileurl="file://$PROJECT_DIR$/test-support/test-support.iml" filepath="$PROJECT_DIR$/test-support/test-support.iml" />
       <module fileurl="file://$PROJECT_DIR$/tests/tests.iml" filepath="$PROJECT_DIR$/tests/tests.iml" />
-      <module fileurl="file://$PROJECT_DIR$/vendor/java-test-applications/web-application/web-application.iml" filepath="$PROJECT_DIR$/vendor/java-test-applications/web-application/web-application.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vendor/java-test-applications/web-application/web-application.iml" filepath="$PROJECT_DIR$/vendor/java-test-applications/web-application/web-application.iml" group="java-test-applications" />
     </modules>
   </component>
 </project>

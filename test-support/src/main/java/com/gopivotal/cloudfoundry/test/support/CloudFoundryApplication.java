@@ -1,4 +1,19 @@
-// Copyright (c) 2013 Pivotal, Inc.  All rights reserved.
+/*
+ * Copyright 2013 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.gopivotal.cloudfoundry.test.support;
 
 import com.gopivotal.cloudfoundry.test.support.util.Manifest;
@@ -23,13 +38,19 @@ public class CloudFoundryApplication implements Application {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private static final String JAVA_BUILDPACK_URL = "https://github.com/cloudfoundry/java-buildpack.git"; // TODO:
+
     // convert to
     // env var
     private static final String PREFIX = "java-buildpack-system-test";
+
     private static final String PREFIXED_SUBDOMAIN_FORMAT = "%s-%s-%s";
+
     private final Manifest manifest;
+
     private final CloudFoundryOperations cfOperations;
+
     private final String prefixedName;
+
     private final String defaultDomainName;
 
     /**
@@ -43,7 +64,6 @@ public class CloudFoundryApplication implements Application {
         String rawName = this.manifest.getName();
         this.prefixedName = prefixName(rawName);
         String prefixedSubdomain = prefixSubdomain(rawName);
-
 
         this.logger.info("Creating application '{}'", this.prefixedName);
 

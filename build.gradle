@@ -33,6 +33,10 @@ buildscript {
 	}
 }
 
+task javaTestApplications(type: GradleBuild) {
+	dir = 'vendor/java-test-applications'
+}
+
 task wrapper(type: Wrapper) {
 	gradleVersion = "1.8"
 }
