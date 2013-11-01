@@ -2,90 +2,125 @@
 package com.gopivotal.cloudfoundry.buildpack.systemtest;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.cloudfoundry.client.lib.CloudFoundryOperations;
 import org.cloudfoundry.client.lib.domain.CloudApplication;
+import org.cloudfoundry.client.lib.domain.CloudDomain;
+import org.cloudfoundry.client.lib.domain.Staging;
 
 /**
- * {@link TestApplication} is a helper class for manipulating test applications.
+ * TODO Document XApplication
  */
-public class TestApplication {
+public class TestApplication implements Application {
 
-    private static final String MEMORY_SYNTAX_MESSAGE_FORMAT = "Memory size from manifest.yml has bad syntax: '%s'";
+    private static final String JAVA_BUILDPACK_URL = "https://github.com/cloudfoundry/java-buildpack.git"; // TODO:
+													   // convert to
+													   // env var
 
     private static final String PREFIX = "java-buildpack-system-test";
 
     private static final String PREFIXED_SUBDOMAIN_FORMAT = "%s-%s-%s";
 
-    private final TestClient testClient;
+    private final Manifest manifest;
 
-    private final ManifestReader manifestReader;
-
-    private final String rawName;
+    private final CloudFoundryOperations cfOperations;
 
     private final String prefixedName;
 
-    private final String prefixedSubdomain;
-
-    public TestApplication(TestClient testClient, String applicationPath) throws IOException {
-	this.testClient = testClient;
-	this.manifestReader = new ManifestReader(applicationPath);
-	this.rawName = this.manifestReader.getName();
-	this.prefixedName = prefixName(this.rawName);
-	this.prefixedSubdomain = prefixSubdomain(this.rawName);
-    }
+    private final String defaultDomainName;
 
     /**
-     * Deploys the application and binds services to the application with the given names.
-     * 
-     * @param serviceNames the names of the services to be bound to the application
-     * @return a {@link CloudApplication} representing the deployed application
-     * @throws IOException if the application cannot be uploaded
+     * @param cfOperations
+     * @param string
      */
-    public CloudApplication deploy(List<String> serviceNames) throws IOException {
-	System.out.println(String.format("Deploying '%s' as '%s'", this.rawName, this.prefixedName));
-	return this.testClient.deployApplication(this.prefixedName, this.prefixedSubdomain, this.manifestReader.getPath(),
-		serviceNames, toMegabytes(this.manifestReader.getMemory()));
+    public TestApplication(CloudFoundryOperations cfOperations, String testApplicationName) {
+	this.cfOperations = cfOperations;
+	String testApplicationPath = "../vendor/java-test-applications/" + testApplicationName;
+	this.manifest = new ManifestReader(testApplicationPath);
+	String rawName = this.manifest.getName();
+	this.prefixedName = prefixName(rawName);
+	String prefixedSubdomain = prefixSubdomain(rawName);
+	System.out.println(String.format("Creating '%s' as '%s'", rawName, this.prefixedName));
+
+	Staging staging = new Staging(null, JAVA_BUILDPACK_URL);
+	this.defaultDomainName = getDefaultDomain(cfOperations.getDomainsForOrg()).getName();
+
+	List<String> uris = Arrays.asList(computeAppUri(prefixedSubdomain));
+	cfOperations.createApplication(this.prefixedName, staging, this.manifest.getMemory(), uris,
+		Arrays.<String> asList());
     }
 
-    /**
-     * Deletes the application.
-     */
-    public void delete() {
-	this.testClient.deleteApplication(this.prefixedName);
+    private String computeAppUri(String subdomain) {
+	return subdomain + "." + this.defaultDomainName;
     }
 
-    private int toMegabytes(String memory) {
-	if (memory.length() < 2) {
-	    throwMemorySyntaxException(memory);
+    private CloudDomain getDefaultDomain(List<CloudDomain> domains) {
+	for (CloudDomain domain : domains) {
+	    if (domain.getOwner().getName().equals("none")) {
+		return domain;
+	    }
 	}
-	String unit = memory.substring(memory.length() - 1).toLowerCase();
-	String valueString = memory.substring(0, memory.length() - 1);
-	int value = -1;
+	return null;
+    }
+
+    @Override
+    public Application push() {
 	try {
-	    value = Integer.parseInt(valueString);
-	} catch (NumberFormatException e) {
-	    throwMemorySyntaxException(memory, e);
+	    this.cfOperations.uploadApplication(this.prefixedName, this.manifest.getPath());
+	} catch (IOException e) {
+	    throw new RuntimeException(e);
 	}
-	if (value <= 0) {
-	    throwMemorySyntaxException(memory);
-	}
-	if ("m".equals(unit)) {
-	    return value;
-	} else if ("g".equals(unit)) {
-	    return 1024 * value;
-	}
-	throwMemorySyntaxException(memory);
-	return -1; // never executed
+	return this;
     }
 
-    private void throwMemorySyntaxException(String memory) {
-	throw new IllegalArgumentException(String.format(MEMORY_SYNTAX_MESSAGE_FORMAT, memory));
+    @Override
+    public Application bind(Service... services) {
+	for (Service service : services) {
+	    this.cfOperations.bindService(this.prefixedName, service.getName());
+	}
+	return this;
     }
 
-    private void throwMemorySyntaxException(String memory, Exception e) {
-	throw new IllegalArgumentException(String.format(MEMORY_SYNTAX_MESSAGE_FORMAT, memory), e);
+    @Override
+    public Application start() {
+	this.cfOperations.startApplication(this.prefixedName);
+	return this;
+    }
+
+    @Override
+    public Application stop() {
+	this.cfOperations.stopApplication(this.prefixedName);
+	return this;
+    }
+
+    @Override
+    public Application unbind(Service... services) {
+	for (Service service : services) {
+	    this.cfOperations.unbindService(this.prefixedName, service.getName());
+	}
+	return this;
+    }
+
+    @Override
+    public void delete() {
+	if (applicationExists(this.prefixedName)) {
+	    this.cfOperations.deleteApplication(this.prefixedName);
+	}
+    }
+
+    private boolean applicationExists(String appName) {
+	boolean found = false;
+	List<CloudApplication> apps = this.cfOperations.getApplications();
+	app_loop: for (CloudApplication app : apps) {
+	    if (appName.equals(app.getName())) {
+		found = true;
+		break app_loop;
+	    }
+	}
+	return found;
     }
 
     private static String prefixName(String rawName) {

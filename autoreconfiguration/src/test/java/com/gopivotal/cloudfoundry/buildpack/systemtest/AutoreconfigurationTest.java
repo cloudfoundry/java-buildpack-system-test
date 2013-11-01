@@ -1,17 +1,16 @@
 // Copyright (c) 2013 Pivotal, Inc.  All rights reserved.
 package com.gopivotal.cloudfoundry.buildpack.systemtest;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.cloudfoundry.client.lib.domain.CloudApplication;
-import org.cloudfoundry.client.lib.domain.CloudApplication.AppState;
+import org.cloudfoundry.client.lib.CloudFoundryOperations;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
  * Test autoreconfiguration by ensuring that a bound database service is used by:
@@ -22,40 +21,32 @@ import org.junit.Test;
  * <li>checking that the value read is the same as the value written.</li>
  * </ol>
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = TestConfiguration.class)
 public class AutoreconfigurationTest {
 
-    private static final String MYSQL_SERVICE_NAME = "java-buildpack-system-test-mysql";
+    private volatile Application testApp;
 
-    private TestApplication testApp;
+    @Autowired
+    private volatile CloudFoundryOperations cloudFoundryOperations;
 
-    private TestClient testClient;
-
-    private boolean tornDown = false;
+    private volatile Service mySqlService;
 
     @Before
     public void setup() throws IOException {
-	this.testClient = new TestClient();
-	this.testApp = new TestApplication(this.testClient, "../vendor/java-test-applications/web-application");
-	tearDown();
-	this.tornDown = false;
+	this.mySqlService = new MySqlService(this.cloudFoundryOperations);
+	this.testApp = new TestApplication(this.cloudFoundryOperations, "web-application");
+	this.testApp.push().bind(this.mySqlService).start();
     }
 
     @After
     public void tearDown() {
-	if (!this.tornDown) {
-	    this.testApp.delete();
-	    this.testClient.deleteService(MYSQL_SERVICE_NAME);
-	    this.tornDown = true;
-	}
+	this.testApp.delete();
+	this.mySqlService.delete();
     }
 
     @Test
     public void testAutoreconfiguration() throws IOException {
-	this.testClient.createMySqlService(MYSQL_SERVICE_NAME);
-	List<String> serviceNames = new ArrayList<String>(1);
-	serviceNames.add(MYSQL_SERVICE_NAME);
-	CloudApplication app = this.testApp.deploy(serviceNames);
-	assertEquals(AppState.STARTED, app.getState());
     }
 
 }
