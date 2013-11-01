@@ -11,9 +11,9 @@ import java.util.Map;
 import org.yaml.snakeyaml.Yaml;
 
 /**
- * TODO Document YamlReader
+ * {@link ManifestReader} parses a CloudFoundry <code>manifest.yml</code>.
  */
-public class YamlReader {
+public class ManifestReader {
 
     private final String name;
     private final String memory;
@@ -21,13 +21,8 @@ public class YamlReader {
     private final File path;
     private final String buildpack;
 
-    public static void main(String[] args) throws IOException {
-	YamlReader yamlReader = new YamlReader("../vendor/java-test-applications/web-application");
-	System.out.println(yamlReader.getName());
-    }
-
     @SuppressWarnings("rawtypes")
-    public YamlReader(String applicationPath) throws IOException {
+    public ManifestReader(String applicationPath) throws IOException {
 	InputStream yamlStream = new FileInputStream(applicationPath + File.separator + "manifest.yml");
 	try {
 	    Yaml yaml = new Yaml();
@@ -45,35 +40,45 @@ public class YamlReader {
     }
 
     /**
-     * @return
+     * Gets the application name.
+     * 
+     * @return the application name
      */
     public String getName() {
 	return this.name;
     }
 
     /**
-     * @return
+     * Gets the memory size.
+     * 
+     * @return the memory size in string form including a unit such as 'm'
      */
     public String getMemory() {
 	return this.memory;
     }
 
     /**
-     * @return
+     * Gets the number of instances.
+     * 
+     * @return the number of instances
      */
     public int getInstances() {
 	return this.instances;
     }
 
     /**
-     * @return
+     * Gets the path of the application on the file system.
+     * 
+     * @return a {@link File} the path of the application
      */
     public File getPath() {
 	return this.path;
     }
 
     /**
-     * @return
+     * Gets the buildpack for the application.
+     * 
+     * @return the string URL of the buildpack
      */
     public String getBuildpack() {
 	return this.buildpack;

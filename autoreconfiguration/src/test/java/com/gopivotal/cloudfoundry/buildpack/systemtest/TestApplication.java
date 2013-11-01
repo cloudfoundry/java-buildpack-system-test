@@ -8,7 +8,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.cloudfoundry.client.lib.domain.CloudApplication;
 
 /**
- * TODO Document TestApplication
+ * {@link TestApplication} is a helper class for manipulating test applications.
  */
 public class TestApplication {
 
@@ -20,7 +20,7 @@ public class TestApplication {
 
     private final TestClient testClient;
 
-    private final YamlReader yamlReader;
+    private final ManifestReader manifestReader;
 
     private final String rawName;
 
@@ -30,23 +30,30 @@ public class TestApplication {
 
     public TestApplication(TestClient testClient, String applicationPath) throws IOException {
 	this.testClient = testClient;
-	this.yamlReader = new YamlReader(applicationPath);
-	this.rawName = this.yamlReader.getName();
+	this.manifestReader = new ManifestReader(applicationPath);
+	this.rawName = this.manifestReader.getName();
 	this.prefixedName = prefixName(this.rawName);
 	this.prefixedSubdomain = prefixSubdomain(this.rawName);
     }
 
     /**
+     * Deploys the application and binds services to the application with the given names.
      * 
+     * @param serviceNames the names of the services to be bound to the application
+     * @return a {@link CloudApplication} representing the deployed application
+     * @throws IOException if the application cannot be uploaded
+     */
+    public CloudApplication deploy(List<String> serviceNames) throws IOException {
+	System.out.println(String.format("Deploying '%s' as '%s'", this.rawName, this.prefixedName));
+	return this.testClient.deployApplication(this.prefixedName, this.prefixedSubdomain, this.manifestReader.getPath(),
+		serviceNames, toMegabytes(this.manifestReader.getMemory()));
+    }
+
+    /**
+     * Deletes the application.
      */
     public void delete() {
 	this.testClient.deleteApplication(this.prefixedName);
-    }
-
-    public CloudApplication deploy(List<String> serviceNames) throws IOException {
-	System.out.println(String.format("Deploying '%s' as '%s'", this.rawName, this.prefixedName));
-	return this.testClient.deployApplication(this.prefixedName, this.prefixedSubdomain, this.yamlReader.getPath(),
-		serviceNames, toMegabytes(this.yamlReader.getMemory()));
     }
 
     private int toMegabytes(String memory) {

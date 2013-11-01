@@ -61,49 +61,6 @@ public class TestClient {
 	this.defaultDomainName = getDefaultDomain(this.cfClient.getDomainsForOrg()).getName();
     }
 
-    private String getEnvVariableValue(String envVarName) {
-	Map<String, String> env = System.getenv();
-	String value = env.get(envVarName);
-	if (value == null) {
-	    throw new IllegalArgumentException("Environment variable '" + envVarName + "' must be defined");
-	}
-	return value;
-    }
-
-    private CloudDomain getDefaultDomain(List<CloudDomain> domains) {
-	for (CloudDomain domain : domains) {
-	    if (domain.getOwner().getName().equals("none")) {
-		return domain;
-	    }
-	}
-	return null;
-    }
-
-    private static URL getTargetURL(String target) {
-	try {
-	    return new URI(target).toURL();
-	} catch (Exception e) {
-	    fail("the target URL is not valid: " + e.getMessage());
-	}
-	return null;
-    }
-
-    private String computeAppUri(String subdomain) {
-	return subdomain + "." + this.defaultDomainName;
-    }
-
-    private boolean applicationExists(String appName) {
-	boolean found = false;
-	List<CloudApplication> apps = this.cfClient.getApplications();
-	app_loop: for (CloudApplication app : apps) {
-	    if (appName.equals(app.getName())) {
-		found = true;
-		break app_loop;
-	    }
-	}
-	return found;
-    }
-
     /**
      * Pushes a Java application to Cloud Foundry, with the default memory limit, and starts the application.
      * 
@@ -201,6 +158,49 @@ public class TestClient {
 	    if (serviceName.equals(service.getName())) {
 		found = true;
 		break;
+	    }
+	}
+	return found;
+    }
+
+    private String getEnvVariableValue(String envVarName) {
+	Map<String, String> env = System.getenv();
+	String value = env.get(envVarName);
+	if (value == null) {
+	    throw new IllegalArgumentException("Environment variable '" + envVarName + "' must be defined");
+	}
+	return value;
+    }
+
+    private CloudDomain getDefaultDomain(List<CloudDomain> domains) {
+	for (CloudDomain domain : domains) {
+	    if (domain.getOwner().getName().equals("none")) {
+		return domain;
+	    }
+	}
+	return null;
+    }
+
+    private static URL getTargetURL(String target) {
+	try {
+	    return new URI(target).toURL();
+	} catch (Exception e) {
+	    fail("the target URL is not valid: " + e.getMessage());
+	}
+	return null;
+    }
+
+    private String computeAppUri(String subdomain) {
+	return subdomain + "." + this.defaultDomainName;
+    }
+
+    private boolean applicationExists(String appName) {
+	boolean found = false;
+	List<CloudApplication> apps = this.cfClient.getApplications();
+	app_loop: for (CloudApplication app : apps) {
+	    if (appName.equals(app.getName())) {
+		found = true;
+		break app_loop;
 	    }
 	}
 	return found;
