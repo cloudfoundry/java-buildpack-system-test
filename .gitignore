@@ -1,3 +1,5 @@
 .gradle
 bin
 build
+tasks.xml
+workspace.xml
