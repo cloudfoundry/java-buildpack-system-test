@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package com.gopivotal.cloudfoundry.buildpack.systemtest;
+package com.gopivotal.cloudfoundry.test.buildpack;
 
-import com.gopivotal.cloudfoundry.test.support.Application;
-import com.gopivotal.cloudfoundry.test.support.CloudFoundryApplication;
-import com.gopivotal.cloudfoundry.test.support.MySqlService;
-import com.gopivotal.cloudfoundry.test.support.Service;
 import com.gopivotal.cloudfoundry.test.support.TestConfiguration;
+import com.gopivotal.cloudfoundry.test.support.application.Application;
+import com.gopivotal.cloudfoundry.test.support.application.CloudFoundryApplication;
+import com.gopivotal.cloudfoundry.test.support.service.ClearDbService;
+import com.gopivotal.cloudfoundry.test.support.service.Service;
 import com.gopivotal.cloudfoundry.test.support.util.IoUtils;
 import org.cloudfoundry.client.lib.CloudFoundryOperations;
 import org.junit.After;
@@ -28,42 +28,38 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.initializer.ConfigFileApplicationContextInitializer;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 
-/**
- * Test autoreconfiguration by ensuring that a bound database service is used by: <ol> <li>pushing an application, with
- * a bound database service, which writes to a database,</li> <li>deleting the application,</li> <li>pushing an
- * application, with the same bound database service as above, which reads from the database, and</li> <li>checking that
- * the value read is the same as the value written.</li> </ol>
- */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = TestConfiguration.class)
-public final class AutoreconfigurationTest {
-
-    private volatile Application testApp;
+@ContextConfiguration(classes = TestConfiguration.class, initializers = ConfigFileApplicationContextInitializer.class)
+public final class AutoReconfigurationTest {
 
     @Autowired
     private volatile CloudFoundryOperations cloudFoundryOperations;
 
-    private volatile Service mySqlService;
+    private volatile Service clearDbService;
+
+    private volatile Application application;
 
     @Before
     public void setup() throws IOException {
-        this.mySqlService = new MySqlService(this.cloudFoundryOperations);
-        this.testApp = new CloudFoundryApplication(this.cloudFoundryOperations, "web-application");
-        this.testApp.push().bind(this.mySqlService).start();
+        this.clearDbService = new ClearDbService(this.cloudFoundryOperations);
+        this.application = new CloudFoundryApplication(this.cloudFoundryOperations, "web-application");
+        this.application.push().bind(this.clearDbService).start();
     }
 
     @After
     public void tearDown() {
-        IoUtils.deleteQuietly(this.testApp, this.mySqlService);
+        IoUtils.deleteQuietly(this.application, this.clearDbService);
     }
 
     @Test
-    public void testAutoreconfiguration() throws IOException {
+    public void autoReconfiguration() throws IOException {
+        System.out.println(this.application.getTestOperations().classPath());
     }
 
 }

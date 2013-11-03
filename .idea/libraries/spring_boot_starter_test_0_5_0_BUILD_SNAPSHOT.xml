@@ -2,6 +2,7 @@
   <library name="spring-boot-starter-test-0.5.0.BUILD-SNAPSHOT">
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/artifacts-26/filestore/org.springframework.boot/spring-boot-starter-test/0.5.0.BUILD-SNAPSHOT/jar/bcfd60adfc74134f857b3df5c245f027b9a0cec1/spring-boot-starter-test-0.5.0.BUILD-SNAPSHOT.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/artifacts-26/filestore/org.springframework.boot/spring-boot-starter-test/0.5.0.BUILD-SNAPSHOT/jar/edd1699bb873ca937f5fcb4d7a6b3d99f7c00e5b/spring-boot-starter-test-0.5.0.BUILD-SNAPSHOT.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

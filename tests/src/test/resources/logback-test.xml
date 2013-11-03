@@ -23,10 +23,11 @@
         </encoder>
     </appender>
 
-    <logger name="com.gopivotal.cloudfoundry.test" level="INFO"/>
+    <logger name="com.gopivotal.cloudfoundry.test" level="${LOGGING_LEVEL:-INFO}"/>
 
     <root level="WARN">
         <appender-ref ref="STDOUT"/>
     </root>
+
 
 </configuration>

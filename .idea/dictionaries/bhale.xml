@@ -2,13 +2,17 @@
   <dictionary name="bhale">
     <words>
       <w>buildmonitor</w>
+      <w>cleardb</w>
       <w>closeables</w>
+      <w>cloudfoundry</w>
       <w>configurer</w>
+      <w>gibi</w>
       <w>github</w>
       <w>googlecode</w>
       <w>jdbc</w>
       <w>lodash</w>
       <w>logback</w>
+      <w>mibi</w>
       <w>nebhale</w>
       <w>newrelic</w>
       <w>pageable</w>

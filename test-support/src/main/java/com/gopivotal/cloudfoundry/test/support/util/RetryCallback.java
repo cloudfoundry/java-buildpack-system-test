@@ -16,46 +16,22 @@
 
 package com.gopivotal.cloudfoundry.test.support.util;
 
-import java.io.File;
-
 /**
- * TODO Document Manifest
+ * A callback interface implemented by operations that would like to be called until they pass
  */
-public interface Manifest {
+public interface RetryCallback {
 
     /**
-     * Gets the application name.
+     * Called to attempt an operation
      *
-     * @return the application name
+     * @return {@code true} if the operations has succeeded and should not be retried, {@code false} otherwise
      */
-    String getName();
+    Boolean execute();
 
     /**
-     * Gets the memory size.
+     * Returns a message to be returned if the retry times out
      *
-     * @return the memory size in megabytes
+     * @return a message to be returned if the retry times out
      */
-    int getMemory();
-
-    /**
-     * Gets the number of instances.
-     *
-     * @return the number of instances
-     */
-    int getInstances();
-
-    /**
-     * Gets the path of the application on the file system.
-     *
-     * @return a {@link File} the path of the application
-     */
-    File getPath();
-
-    /**
-     * Gets the buildpack for the application.
-     *
-     * @return the string URL of the buildpack
-     */
-    String getBuildpack();
-
+    String getFailureMessage();
 }

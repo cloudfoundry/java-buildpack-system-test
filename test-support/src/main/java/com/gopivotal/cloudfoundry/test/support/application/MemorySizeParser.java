@@ -14,23 +14,15 @@
  * limitations under the License.
  */
 
-package com.gopivotal.cloudfoundry.test.support;
+package com.gopivotal.cloudfoundry.test.support.application;
 
-import com.gopivotal.cloudfoundry.test.support.util.Deletable;
+interface MemorySizeParser {
 
-/**
- * TODO Document Application
- */
-public interface Application extends Deletable {
-
-    Application push();
-
-    Application bind(Service... services);
-
-    Application start();
-
-    Application stop();
-
-    Application unbind(Service... services);
+    /**
+     * Convert a memory size from a string to an {@link Integer} representation of mibibytes
+     *
+     * @return the representation of mibibytes
+     */
+    Integer toMibiBytes(String raw);
 
 }

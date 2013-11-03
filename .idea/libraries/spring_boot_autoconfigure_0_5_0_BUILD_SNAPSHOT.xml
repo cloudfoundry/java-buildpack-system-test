@@ -2,10 +2,12 @@
   <library name="spring-boot-autoconfigure-0.5.0.BUILD-SNAPSHOT">
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/artifacts-26/filestore/org.springframework.boot/spring-boot-autoconfigure/0.5.0.BUILD-SNAPSHOT/jar/c4b6e6d84f275e9115997c4a15e0b8d575b314a9/spring-boot-autoconfigure-0.5.0.BUILD-SNAPSHOT.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/artifacts-26/filestore/org.springframework.boot/spring-boot-autoconfigure/0.5.0.BUILD-SNAPSHOT/jar/1b97a6c967537c8a651f7356b28127ec98e99d6b/spring-boot-autoconfigure-0.5.0.BUILD-SNAPSHOT.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
       <root url="jar://$USER_HOME$/.gradle/caches/artifacts-26/filestore/org.springframework.boot/spring-boot-autoconfigure/0.5.0.BUILD-SNAPSHOT/source/7ee5be3e55120ac374e30c07531902a9b5716bde/spring-boot-autoconfigure-0.5.0.BUILD-SNAPSHOT-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/artifacts-26/filestore/org.springframework.boot/spring-boot-autoconfigure/0.5.0.BUILD-SNAPSHOT/source/6b74c46ce0d84581ff18a7a566c78cf71fc507a5/spring-boot-autoconfigure-0.5.0.BUILD-SNAPSHOT-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

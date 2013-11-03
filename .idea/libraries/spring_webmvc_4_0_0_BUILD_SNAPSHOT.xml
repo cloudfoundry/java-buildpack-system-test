@@ -2,10 +2,12 @@
   <library name="spring-webmvc-4.0.0.BUILD-SNAPSHOT">
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/artifacts-26/filestore/org.springframework/spring-webmvc/4.0.0.BUILD-SNAPSHOT/jar/af5a2835f7d1e40e2e5de0b7383fbdb209ebcd17/spring-webmvc-4.0.0.BUILD-SNAPSHOT.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/artifacts-26/filestore/org.springframework/spring-webmvc/4.0.0.BUILD-SNAPSHOT/jar/c5da4b0bfbd2464584987164740125d9dbf57328/spring-webmvc-4.0.0.BUILD-SNAPSHOT.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
       <root url="jar://$USER_HOME$/.gradle/caches/artifacts-26/filestore/org.springframework/spring-webmvc/4.0.0.BUILD-SNAPSHOT/source/ce33891ea462532aef244ff08f5713433c3a7794/spring-webmvc-4.0.0.BUILD-SNAPSHOT-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/artifacts-26/filestore/org.springframework/spring-webmvc/4.0.0.BUILD-SNAPSHOT/source/5bfc3c2722f2f9f890bda29aa28bacfcd3b850f3/spring-webmvc-4.0.0.BUILD-SNAPSHOT-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

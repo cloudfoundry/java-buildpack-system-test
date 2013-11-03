@@ -2,10 +2,12 @@
   <library name="spring-core-4.0.0.BUILD-SNAPSHOT">
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/artifacts-26/filestore/org.springframework/spring-core/4.0.0.BUILD-SNAPSHOT/jar/9c9419a700fd0568282b773eed14439ec2b411fb/spring-core-4.0.0.BUILD-SNAPSHOT.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/artifacts-26/filestore/org.springframework/spring-core/4.0.0.BUILD-SNAPSHOT/jar/d886382a654d6f4f08683ae401e8b277697197/spring-core-4.0.0.BUILD-SNAPSHOT.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
       <root url="jar://$USER_HOME$/.gradle/caches/artifacts-26/filestore/org.springframework/spring-core/4.0.0.BUILD-SNAPSHOT/source/f5f3dfff5a8038c4521bbe44ed24ace670458675/spring-core-4.0.0.BUILD-SNAPSHOT-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/artifacts-26/filestore/org.springframework/spring-core/4.0.0.BUILD-SNAPSHOT/source/26a7a298e880734efc53c905ae23bf361260c048/spring-core-4.0.0.BUILD-SNAPSHOT-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

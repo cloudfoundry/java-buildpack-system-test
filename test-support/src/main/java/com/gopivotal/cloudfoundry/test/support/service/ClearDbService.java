@@ -14,18 +14,22 @@
  * limitations under the License.
  */
 
-package com.gopivotal.cloudfoundry.test.support;
+package com.gopivotal.cloudfoundry.test.support.service;
 
-import com.gopivotal.cloudfoundry.test.support.util.Deletable;
+import org.cloudfoundry.client.lib.CloudFoundryOperations;
 
 /**
- * TODO Document Service
+ * Represents an instance of the ClearDB service
  */
-public interface Service extends Deletable {
+public final class ClearDbService extends AbstractService {
 
     /**
-     * @return
+     * Creates an instance of the ClearDB service
+     *
+     * @param cloudFoundryOperations the {@link CloudFoundryOperations} used to create the service instance
      */
-    String getName();
+    public ClearDbService(CloudFoundryOperations cloudFoundryOperations) {
+        super(cloudFoundryOperations, "cleardb", "spark");
+    }
 
 }

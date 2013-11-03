@@ -20,42 +20,37 @@ import org.cloudfoundry.client.lib.CloudCredentials;
 import org.cloudfoundry.client.lib.CloudFoundryClient;
 import org.cloudfoundry.client.lib.CloudFoundryOperations;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 import java.net.MalformedURLException;
 import java.net.URI;
 
 /**
- * TODO Document TestConfiguration
+ * Configuration used by all tests
  */
-@Configuration
+@EnableAutoConfiguration
 public class TestConfiguration {
 
-    // TODO: Make sure that missing environment variables are diagnosed
+    @Value("${cf.org}")
+    private volatile String organization;
 
-    @Value("#{systemEnvironment['CF_ORG']}")
-    private volatile String orgName;
-
-    @Value("#{systemEnvironment['CF_PASSWORD']}")
+    @Value("${cf.password}")
     private volatile String password;
 
-    @Value("#{systemEnvironment['CF_SPACE']}")
-    private volatile String spaceName;
+    @Value("${cf.space}")
+    private volatile String space;
 
-    @Value("#{systemEnvironment['CF_TARGET']}")
+    @Value("${cf.target}")
     private volatile String target;
 
-    @Value("#{systemEnvironment['CF_USERNAME']}")
-    private volatile String user;
+    @Value("${cf.username}")
+    private volatile String username;
 
-    @Bean(destroyMethod = "logout")
+    @Bean(initMethod = "login", destroyMethod = "logout")
     CloudFoundryOperations cloudFoundryOperations() throws MalformedURLException {
-        CloudCredentials credentials = new CloudCredentials(this.user, this.password);
-        CloudFoundryOperations cloudFoundryOperations = new CloudFoundryClient(credentials, URI.create(this.target)
-                .toURL(), this.orgName, this.spaceName);
-        cloudFoundryOperations.login();
-        return cloudFoundryOperations;
+        CloudCredentials credentials = new CloudCredentials(this.username, this.password);
+        return new CloudFoundryClient(credentials, URI.create(this.target).toURL(), this.organization, this.space);
     }
 
 }
