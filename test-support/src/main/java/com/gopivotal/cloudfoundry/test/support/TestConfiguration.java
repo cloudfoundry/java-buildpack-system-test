@@ -19,17 +19,22 @@ package com.gopivotal.cloudfoundry.test.support;
 import org.cloudfoundry.client.lib.CloudCredentials;
 import org.cloudfoundry.client.lib.CloudFoundryClient;
 import org.cloudfoundry.client.lib.CloudFoundryOperations;
+import org.junit.rules.RuleChain;
+import org.junit.rules.TestRule;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.util.List;
 
 /**
  * Configuration used by all tests
  */
 @EnableAutoConfiguration
+@ComponentScan("com.gopivotal.cloudfoundry.test.support.rules")
 public class TestConfiguration {
 
     @Value("${cf.org}")
@@ -51,6 +56,17 @@ public class TestConfiguration {
     CloudFoundryOperations cloudFoundryOperations() throws MalformedURLException {
         CloudCredentials credentials = new CloudCredentials(this.username, this.password);
         return new CloudFoundryClient(credentials, URI.create(this.target).toURL(), this.organization, this.space);
+    }
+
+    @Bean
+    RuleChain ruleChain(List<TestRule> testRules) {
+        RuleChain ruleChain = RuleChain.emptyRuleChain();
+
+        for (TestRule testRule : testRules) {
+            ruleChain = ruleChain.around(testRule);
+        }
+
+        return ruleChain;
     }
 
 }

@@ -17,15 +17,13 @@
 package com.gopivotal.cloudfoundry.test.buildpack;
 
 import com.gopivotal.cloudfoundry.test.support.TestConfiguration;
-import com.gopivotal.cloudfoundry.test.support.application.Application;
-import com.gopivotal.cloudfoundry.test.support.application.CloudFoundryApplication;
+import com.gopivotal.cloudfoundry.test.support.rules.Applications;
+import com.gopivotal.cloudfoundry.test.support.rules.ApplicationsRule;
+import com.gopivotal.cloudfoundry.test.support.rules.Services;
 import com.gopivotal.cloudfoundry.test.support.service.ClearDbService;
-import com.gopivotal.cloudfoundry.test.support.service.Service;
-import com.gopivotal.cloudfoundry.test.support.util.IoUtils;
-import org.cloudfoundry.client.lib.CloudFoundryOperations;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.initializer.ConfigFileApplicationContextInitializer;
@@ -38,28 +36,18 @@ import java.io.IOException;
 @ContextConfiguration(classes = TestConfiguration.class, initializers = ConfigFileApplicationContextInitializer.class)
 public final class AutoReconfigurationTest {
 
+    @Rule
     @Autowired
-    private volatile CloudFoundryOperations cloudFoundryOperations;
+    public volatile RuleChain ruleChain;
 
-    private volatile Service clearDbService;
-
-    private volatile Application application;
-
-    @Before
-    public void setup() throws IOException {
-        this.clearDbService = new ClearDbService(this.cloudFoundryOperations);
-        this.application = new CloudFoundryApplication(this.cloudFoundryOperations, "web-application");
-        this.application.push().bind(this.clearDbService).start();
-    }
-
-    @After
-    public void tearDown() {
-        IoUtils.deleteQuietly(this.application, this.clearDbService);
-    }
+    @Autowired
+    public volatile ApplicationsRule applicationsRule;
 
     @Test
+    @Services(ClearDbService.class)
+    @Applications("web-application")
     public void autoReconfiguration() throws IOException {
-        System.out.println(this.application.getTestOperations().classPath());
+        System.out.println(this.applicationsRule.getApplication().getTestOperations().classPath());
     }
 
 }
