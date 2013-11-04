@@ -16,8 +16,6 @@
 
 package com.gopivotal.cloudfoundry.test.support.rules;
 
-import com.gopivotal.cloudfoundry.test.support.service.Service;
-
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -25,18 +23,17 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates that services should created
+ * Indicates that an application should be created
  */
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface Services {
+public @interface CreateApplication {
 
     /**
-     * Returns the types of services that should be created
+     * Returns the name of the application that should be created
      *
-     * @return the types of services that should be created
+     * @return the name of the application that should be created
      */
-    Class<? extends Service>[] value();
-
+    String value();
 }

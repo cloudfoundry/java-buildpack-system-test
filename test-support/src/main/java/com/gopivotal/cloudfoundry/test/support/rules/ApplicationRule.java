@@ -16,7 +16,8 @@
 
 package com.gopivotal.cloudfoundry.test.support.rules;
 
-import com.gopivotal.cloudfoundry.test.support.service.Service;
+import com.gopivotal.cloudfoundry.test.support.application.Application;
+import com.gopivotal.cloudfoundry.test.support.application.CloudFoundryApplication;
 import com.gopivotal.cloudfoundry.test.support.util.IoUtils;
 import org.cloudfoundry.client.lib.CloudFoundryOperations;
 import org.junit.rules.TestRule;
@@ -24,30 +25,26 @@ import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ClassUtils;
-
-import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @Component
-@Order(-1)
-final class ServiceRule implements TestRule {
+@Order(0)
+public final class ApplicationRule implements TestRule {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final CloudFoundryOperations cloudFoundryOperations;
 
-    private volatile Service[] services;
+    private final ServicesRule servicesRule;
+
+    private volatile Application application;
 
     @Autowired
-    ServiceRule(CloudFoundryOperations cloudFoundryOperations) {
+    ApplicationRule(CloudFoundryOperations cloudFoundryOperations, ServicesRule servicesRule) {
         this.cloudFoundryOperations = cloudFoundryOperations;
+        this.servicesRule = servicesRule;
     }
 
     @Override
@@ -56,38 +53,38 @@ final class ServiceRule implements TestRule {
 
             @Override
             public void evaluate() throws Throwable {
-                ServiceRule.this.services = createServices(description);
+                ApplicationRule.this.application = createApplication(description);
                 base.evaluate();
-                IoUtils.deleteQuietly(ServiceRule.this.services);
+                IoUtils.deleteQuietly(ApplicationRule.this.application);
             }
-
         };
     }
 
-    public Service[] getServices() {
-        return this.services;
+    public Application getApplication() {
+        return this.application;
     }
 
-    @SuppressWarnings("unchecked")
-    private Service[] createServices(Description description) {
-        Services annotation = description.getAnnotation(Services.class);
+    private Application createApplication(Description description) {
+        CreateApplication annotation = description.getAnnotation(CreateApplication.class);
 
-        Class<? extends Service>[] serviceClasses;
+        String name;
         if (annotation == null) {
-            this.logger.debug("No @Services annotation found");
-            serviceClasses = new Class[0];
+            this.logger.debug("No @CreateApplication annotation found");
+            name = null;
         } else {
-            serviceClasses = annotation.value();
-            this.logger.debug("Found @Services annotation with {}", Arrays.toString(serviceClasses));
+            name = annotation.value();
+            this.logger.debug("Found @CreateApplication annotation with {}", name);
         }
 
-        List<Service> services = new ArrayList<>(serviceClasses.length);
-        for (Class<? extends Service> serviceClass : serviceClasses) {
-            Constructor<? extends Service> constructor = ClassUtils.getConstructorIfAvailable(serviceClass,
-                    CloudFoundryOperations.class);
-            services.add(BeanUtils.instantiateClass(constructor, this.cloudFoundryOperations));
+        Application application;
+        if (name != null) {
+            application = new CloudFoundryApplication(this.cloudFoundryOperations, name);
+            application.push().bind(this.servicesRule.getServices()).start();
+        } else {
+            application = null;
         }
 
-        return services.toArray(new Service[services.size()]);
+        return application;
     }
+
 }

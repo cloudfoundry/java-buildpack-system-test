@@ -17,12 +17,10 @@
 package com.gopivotal.cloudfoundry.test.buildpack;
 
 import com.gopivotal.cloudfoundry.test.support.TestConfiguration;
-import com.gopivotal.cloudfoundry.test.support.rules.Applications;
-import com.gopivotal.cloudfoundry.test.support.rules.ApplicationsRule;
-import com.gopivotal.cloudfoundry.test.support.rules.Services;
-import com.gopivotal.cloudfoundry.test.support.service.ClearDbService;
+import com.gopivotal.cloudfoundry.test.support.application.Application;
+import com.gopivotal.cloudfoundry.test.support.operations.TestOperations;
+import com.gopivotal.cloudfoundry.test.support.rules.ApplicationRule;
 import org.junit.Rule;
-import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,24 +28,23 @@ import org.springframework.boot.context.initializer.ConfigFileApplicationContext
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.IOException;
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfiguration.class, initializers = ConfigFileApplicationContextInitializer.class)
-public final class AutoReconfigurationTest {
+public abstract class AbstractTest {
 
     @Rule
     @Autowired
     public volatile RuleChain ruleChain;
 
     @Autowired
-    public volatile ApplicationsRule applicationsRule;
+    private volatile ApplicationRule applicationRule;
 
-    @Test
-    @Services(ClearDbService.class)
-    @Applications("web-application")
-    public void autoReconfiguration() throws IOException {
-        System.out.println(this.applicationsRule.getApplication().getTestOperations().classPath());
+    protected final Application getApplication() {
+        return this.applicationRule.getApplication();
+    }
+
+    protected final TestOperations getTestOperations() {
+        return getApplication().getTestOperations();
     }
 
 }
