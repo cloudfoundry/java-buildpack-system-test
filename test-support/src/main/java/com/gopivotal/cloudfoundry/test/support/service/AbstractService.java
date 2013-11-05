@@ -16,6 +16,7 @@
 
 package com.gopivotal.cloudfoundry.test.support.service;
 
+import com.gopivotal.cloudfoundry.test.support.util.RandomizedNameFactory;
 import org.cloudfoundry.client.lib.CloudFoundryOperations;
 import org.cloudfoundry.client.lib.domain.CloudEntity;
 import org.cloudfoundry.client.lib.domain.CloudService;
@@ -23,12 +24,7 @@ import org.cloudfoundry.client.lib.domain.CloudServiceOffering;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.security.SecureRandom;
-import java.util.Random;
-
 abstract class AbstractService implements Service {
-
-    private static final Random RANDOM = new SecureRandom();
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -36,9 +32,10 @@ abstract class AbstractService implements Service {
 
     private final String name;
 
-    protected AbstractService(CloudFoundryOperations cloudFoundryOperations, String label, String plan) {
+    protected AbstractService(CloudFoundryOperations cloudFoundryOperations, String label, String plan,
+                              RandomizedNameFactory randomizedNameFactory) {
         this.cloudFoundryOperations = cloudFoundryOperations;
-        this.name = buildName(label);
+        this.name = randomizedNameFactory.create(label);
 
         this.logger.info("Creating service {}", this.name);
 
@@ -67,10 +64,6 @@ abstract class AbstractService implements Service {
         cloudService.setPlan(plan);
 
         cloudFoundryOperations.createService(cloudService);
-    }
-
-    private static String buildName(String label) {
-        return String.format("system-test-%s-%06d", label, RANDOM.nextInt(1000000));
     }
 
     @Override

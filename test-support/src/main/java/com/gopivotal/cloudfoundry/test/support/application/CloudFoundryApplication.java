@@ -16,11 +16,9 @@
 
 package com.gopivotal.cloudfoundry.test.support.application;
 
-import com.gopivotal.cloudfoundry.test.support.operations.RestOperationsTestOperations;
 import com.gopivotal.cloudfoundry.test.support.operations.TestOperations;
+import com.gopivotal.cloudfoundry.test.support.operations.TestOperationsFactory;
 import com.gopivotal.cloudfoundry.test.support.service.Service;
-import com.gopivotal.cloudfoundry.test.support.util.RetryCallback;
-import com.gopivotal.cloudfoundry.test.support.util.RetryTemplate;
 import org.cloudfoundry.client.lib.CloudFoundryOperations;
 import org.cloudfoundry.client.lib.domain.CloudApplication;
 import org.cloudfoundry.client.lib.domain.CloudDomain;
@@ -28,27 +26,15 @@ import org.cloudfoundry.client.lib.domain.Staging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.IOException;
-import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Random;
 
-/**
- * Represents an instance of a Cloud Foundry application
- */
-public final class CloudFoundryApplication implements Application {
-
-    private static final String JAVA_BUILDPACK_URL = "https://github.com/cloudfoundry/java-buildpack.git";
-
-    private static final Random RANDOM = new SecureRandom();
+final class CloudFoundryApplication implements Application {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final CloudFoundryOperations cloudFoundryOperations;
-
-    private final String host;
 
     private final Manifest manifest;
 
@@ -56,37 +42,27 @@ public final class CloudFoundryApplication implements Application {
 
     private final TestOperations testOperations;
 
-    /**
-     * Creates a new instance
-     *
-     * @param cloudFoundryOperations the {@link CloudFoundryOperations} used to create the application instance
-     * @param name                   the name of the application
-     */
-    public CloudFoundryApplication(CloudFoundryOperations cloudFoundryOperations, String name) {
+    CloudFoundryApplication(CloudFoundryOperations cloudFoundryOperations, Manifest manifest, String name,
+                            TestOperationsFactory testOperationsFactory) {
+        this.logger.info("Creating application {}", name);
+
         this.cloudFoundryOperations = cloudFoundryOperations;
-        this.manifest = new YamlManifest(new File(new File("../vendor/java-test-applications"), name));
-        this.name = buildName(name);
-        this.host = buildHost(this.name, getDomain(cloudFoundryOperations));
-        this.testOperations = new RestOperationsTestOperations(this.host);
+        String host = buildHost(name, getDomain(cloudFoundryOperations));
+        this.manifest = manifest;
+        this.name = name;
+        this.testOperations = testOperationsFactory.create(host);
 
-        this.logger.info("Creating application {}", this.name);
-
-        createCloudApplication(cloudFoundryOperations, this.name, this.manifest.getMemory(), this.host);
-    }
-
-    private static String buildName(String raw) {
-        return String.format("system-test-%s-%06d", raw, RANDOM.nextInt(1000000));
+        createCloudApplication(cloudFoundryOperations, host, manifest, name);
     }
 
     private static String buildHost(String name, String domain) {
         return String.format("%s.%s", name, domain);
     }
 
-    private static void createCloudApplication(CloudFoundryOperations cloudFoundryOperations, String name,
-                                               Integer memory, String host) {
-        Staging staging = new Staging(null, JAVA_BUILDPACK_URL);
-
-        cloudFoundryOperations.createApplication(name, staging, memory, Arrays.asList(host),
+    private static void createCloudApplication(CloudFoundryOperations cloudFoundryOperations, String host,
+                                               Manifest manifest, String name) {
+        Staging staging = new Staging(null, manifest.getBuildpack());
+        cloudFoundryOperations.createApplication(name, staging, manifest.getMemory(), Arrays.asList(host),
                 Collections.<String>emptyList());
     }
 
@@ -141,23 +117,7 @@ public final class CloudFoundryApplication implements Application {
     public Application start() {
         this.logger.info("Starting application {}", this.name);
         this.cloudFoundryOperations.startApplication(this.name);
-
-        RetryTemplate.retry(new RetryCallback() {
-
-            private Logger logger = LoggerFactory.getLogger(this.getClass());
-
-            @Override
-            public Boolean execute() {
-                return CloudFoundryApplication.this.testOperations.isConnected();
-            }
-
-            @Override
-            public String getFailureMessage() {
-                return "Application did not start quickly enough";
-            }
-
-        });
-
+        CloudFoundryApplication.this.testOperations.waitForStart();
         return this;
     }
 
@@ -178,6 +138,10 @@ public final class CloudFoundryApplication implements Application {
         }
 
         return this;
+    }
+
+    public String getName() {
+        return this.name;
     }
 
     private Boolean applicationExists() {

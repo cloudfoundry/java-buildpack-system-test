@@ -34,7 +34,7 @@ import java.util.List;
  * Configuration used by all tests
  */
 @EnableAutoConfiguration
-@ComponentScan("com.gopivotal.cloudfoundry.test.support.rules")
+@ComponentScan
 public class TestConfiguration {
 
     @Value("${cf.org}")

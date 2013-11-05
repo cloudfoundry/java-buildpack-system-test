@@ -46,13 +46,6 @@ public interface TestOperations {
     List<String> inputArguments();
 
     /**
-     * Returns whether the application can be connected to
-     *
-     * @return whether the application can be connected to
-     */
-    Boolean isConnected();
-
-    /**
      * Whether a JAR is on the application's classpath
      *
      * @param name the name of the jar to check for, without the {@code .jar} extension
@@ -67,5 +60,10 @@ public interface TestOperations {
      * @return the application's system properties
      */
     Map<Object, Object> systemProperties();
+
+    /**
+     * Blocks until the test application has started successfully
+     */
+    void waitForStart();
 
 }

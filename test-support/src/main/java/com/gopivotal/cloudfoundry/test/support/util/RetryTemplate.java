@@ -17,21 +17,11 @@
 package com.gopivotal.cloudfoundry.test.support.util;
 
 /**
- * A template for retrying operations
+ * An template for automating retry behavior.  The default timeout is 60s and the default interval is 5s.
  */
 public final class RetryTemplate {
 
-    private static final Integer DEFAULT_TIMEOUT = 60 * 1000;
-
-    private static final Integer DEFAULT_INTERVAL = 5 * 1000;
-
-    /**
-     * Retry an operation with the default interval and timeout
-     *
-     * @param retryCallback the callback to be retried
-     */
-    public static void retry(RetryCallback retryCallback) {
-        retry(DEFAULT_INTERVAL, DEFAULT_TIMEOUT, retryCallback);
+    private RetryTemplate() {
     }
 
     /**
@@ -41,7 +31,7 @@ public final class RetryTemplate {
      * @param timeout       how long to keep trying for
      * @param retryCallback the callback to retry
      */
-    public static void retry(Integer interval, Integer timeout, RetryCallback retryCallback) {
+    public static void retry(Long interval, Long timeout, RetryCallback retryCallback) {
         Long finishTime = System.currentTimeMillis() + timeout;
 
         try {

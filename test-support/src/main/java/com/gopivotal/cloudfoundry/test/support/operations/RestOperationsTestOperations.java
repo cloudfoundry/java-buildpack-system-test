@@ -16,52 +16,34 @@
 
 package com.gopivotal.cloudfoundry.test.support.operations;
 
+import com.gopivotal.cloudfoundry.test.support.util.RetryCallback;
+import com.gopivotal.cloudfoundry.test.support.util.RetryTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestOperations;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Map;
 
-/**
- * An implementation of {@link TestOperations} that uses a {@link RestOperations}.
- */
-public final class RestOperationsTestOperations implements TestOperations {
+final class RestOperationsTestOperations extends AbstractTestOperations {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    private final Long connectionInterval;
+
+    private final Long connectionTimeout;
 
     private final String host;
 
     private final RestOperations restOperations;
 
-    /**
-     * Creates a new instance
-     *
-     * @param host the host of the application's REST endpoints
-     */
-    public RestOperationsTestOperations(String host) {
-        this(host, createRestTemplate());
-    }
-
-    RestOperationsTestOperations(String host, RestOperations restOperations) {
+    RestOperationsTestOperations(Long connectionInterval, Long connectionTimeout, String host,
+                                 RestOperations restOperations) {
+        this.connectionInterval = connectionInterval;
+        this.connectionTimeout = connectionTimeout;
         this.host = host;
         this.restOperations = restOperations;
-    }
-
-    private static RestOperations createRestTemplate() {
-        RestTemplate restTemplate = new RestTemplate();
-        restTemplate.setErrorHandler(new DefaultResponseErrorHandler() {
-
-            @Override
-            protected boolean hasError(HttpStatus statusCode) {
-                return false;
-            }
-        });
-
-        return restTemplate;
     }
 
     @SuppressWarnings("unchecked")
@@ -86,31 +68,33 @@ public final class RestOperationsTestOperations implements TestOperations {
         return (List<String>) this.restOperations.getForObject("http://{host}/input-arguments", List.class, this.host);
     }
 
-    @Override
-    public Boolean isConnected() {
-        this.logger.debug("Checking for connection");
-        return HttpStatus.OK == this.restOperations.getForEntity("http://{host}/class-path", String.class,
-                this.host).getStatusCode();
-    }
-
-    @Override
-    public Boolean isJarOnClassPath(String name) {
-        String path = String.format("%s.jar", name);
-
-        for (String entry : classPath()) {
-            if (entry.endsWith(path)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     @SuppressWarnings("unchecked")
     @Override
     public Map<Object, Object> systemProperties() {
         this.logger.debug("Getting system properties");
         return (Map<Object, Object>) this.restOperations.getForObject("http://{host}/system-properties",
                 Map.class, this.host);
+    }
+
+    @Override
+    public void waitForStart() {
+        RetryTemplate.retry(this.connectionInterval, this.connectionTimeout, new RetryCallback() {
+
+            private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+            @Override
+            public Boolean execute() {
+                this.logger.debug("Checking for connection");
+                return HttpStatus.OK == RestOperationsTestOperations.this.restOperations.getForEntity
+                        ("http://{host}/class-path", String.class, RestOperationsTestOperations.this.host)
+                        .getStatusCode();
+            }
+
+            @Override
+            public String getFailureMessage() {
+                return "Application did not start quickly enough";
+            }
+
+        });
     }
 }

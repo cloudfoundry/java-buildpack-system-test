@@ -1,0 +1,7 @@
+---
+applications:
+- name: test-name
+  memory: 512M
+  instances: 8
+  path: test-path
+  buildpack: test-buildpack

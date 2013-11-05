@@ -1,8 +1,7 @@
 <component name="libraryTable">
   <library name="spring-boot-0.5.0.BUILD-SNAPSHOT-tests">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/artifacts-26/filestore/org.springframework.boot/spring-boot/0.5.0.BUILD-SNAPSHOT/jar/28b920b114efc3ce37dc4d18a66bf8f2b8a59933/spring-boot-0.5.0.BUILD-SNAPSHOT-tests.jar!/" />
-      <root url="jar://$USER_HOME$/.gradle/caches/artifacts-26/filestore/org.springframework.boot/spring-boot/0.5.0.BUILD-SNAPSHOT/jar/b4c15202b2f6b0620021f4d0ced8a599b6140b6d/spring-boot-0.5.0.BUILD-SNAPSHOT-tests.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/artifacts-26/filestore/org.springframework.boot/spring-boot/0.5.0.BUILD-SNAPSHOT/jar/57f4d7ec81f09b8afeb8250eeeb4788c35e914ff/spring-boot-0.5.0.BUILD-SNAPSHOT-tests.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
