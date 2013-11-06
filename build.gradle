@@ -37,6 +37,11 @@ task javaTestApplications(type: GradleBuild) {
 	dir = 'vendor/java-test-applications'
 }
 
+task cleanTestApplications(type: GradleBuild) {
+    dir = 'vendor/java-test-applications'
+    tasks = ['clean']
+}
+
 task wrapper(type: Wrapper) {
 	gradleVersion = "1.8"
 }

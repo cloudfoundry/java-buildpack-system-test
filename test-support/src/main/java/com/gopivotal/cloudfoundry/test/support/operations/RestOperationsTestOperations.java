@@ -97,4 +97,11 @@ final class RestOperationsTestOperations extends AbstractTestOperations {
 
         });
     }
+
+    @Override
+    public String datasourceClassName() {
+        this.logger.debug("Getting datasource class name");
+        return (String) this.restOperations.getForObject("http://{host}/datasource-classname",
+                String.class, this.host);
+    }
 }
