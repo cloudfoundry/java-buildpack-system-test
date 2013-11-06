@@ -29,7 +29,7 @@ public final class AutoReconfigurationTest extends AbstractTest {
 
     @Test
     @CreateServices(ClearDbService.class)
-    @CreateApplication("web-application-servlet-2")
+    @CreateApplication("web-servlet-2-application")
     public void autoReconfigurationServlet2() throws IOException {
         assertEquals("ClearDBService concrete type TBD once autoreconfiguration works",
                 getTestOperations().datasourceClassName());
