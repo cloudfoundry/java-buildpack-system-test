@@ -16,7 +16,7 @@
 
 package com.gopivotal.cloudfoundry.test.support.application;
 
-import com.gopivotal.cloudfoundry.test.support.util.IoUtils;
+import com.gopivotal.cloudfoundry.test.support.util.TcfUtils;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
@@ -28,51 +28,19 @@ import java.util.Map;
 
 final class YamlManifest implements Manifest {
 
-    private final String buildpack;
+    private final File applicationPath;
 
-    private final Integer instances;
+    private final Map<String, Object> contents;
 
-    private final Integer memory;
+    private final String defaultBuildpack;
 
-    private final String name;
+    private final MemorySizeParser memorySizeParser;
 
-    private final File path;
-
-    /**
-     * Creates a new instance
-     */
-    public YamlManifest(File applicationPath) {
-        this(applicationPath, new StandardMemorySizeParser());
-    }
-
-    YamlManifest(File applicationPath, MemorySizeParser memorySizeParser) {
-        Map<String, Object> contents = readContents(applicationPath);
-
-        this.buildpack = getBuildpack(contents);
-        this.instances = getInstances(contents);
-        this.memory = getMemory(contents, memorySizeParser);
-        this.name = getName(contents);
-        this.path = getPath(contents, applicationPath);
-    }
-
-    private static String getBuildpack(Map<String, Object> contents) {
-        return (String) contents.get("buildpack");
-    }
-
-    private static Integer getInstances(Map<String, Object> contents) {
-        return (Integer) contents.get("instances");
-    }
-
-    private static Integer getMemory(Map<String, Object> contents, MemorySizeParser memorySizeParser) {
-        return memorySizeParser.toMibiBytes((String) contents.get("memory"));
-    }
-
-    private static File getPath(Map<String, Object> contents, File applicationPath) {
-        return new File(applicationPath, (String) contents.get("path"));
-    }
-
-    private static String getName(Map<String, Object> contents) {
-        return (String) contents.get("name");
+    YamlManifest(File applicationPath, String defaultBuildpack, MemorySizeParser memorySizeParser) {
+        this.applicationPath = applicationPath;
+        this.defaultBuildpack = defaultBuildpack;
+        this.contents = readContents(applicationPath);
+        this.memorySizeParser = memorySizeParser;
     }
 
     @SuppressWarnings("unchecked")
@@ -84,57 +52,35 @@ final class YamlManifest implements Manifest {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         } finally {
-            IoUtils.closeQuietly(in);
+            TcfUtils.closeQuietly(in);
         }
     }
 
-    /**
-     * Returns the name
-     *
-     * @return the name
-     */
-    @Override
-    public String getName() {
-        return this.name;
-    }
-
-    /**
-     * Returns the memory size
-     *
-     * @return the memory size
-     */
-    @Override
-    public int getMemory() {
-        return this.memory;
-    }
-
-    /**
-     * Returns the number of instances
-     *
-     * @return the number of instances
-     */
-    @Override
-    public int getInstances() {
-        return this.instances;
-    }
-
-    /**
-     * Returns the path to the application
-     *
-     * @return the path to the application
-     */
-    @Override
-    public File getPath() {
-        return this.path;
-    }
-
-    /**
-     * Returns the URI of the buildpack
-     *
-     * @return the URI of the buildpack
-     */
     @Override
     public String getBuildpack() {
-        return this.buildpack;
+        String raw = (String) this.contents.get("buildpack");
+        return raw == null ? this.defaultBuildpack : raw;
+    }
+
+    @Override
+    public Integer getInstances() {
+        return (Integer) this.contents.get("instances");
+    }
+
+    @Override
+    public Integer getMemory() {
+        String raw = (String) this.contents.get("memory");
+        return this.memorySizeParser.toMibiBytes(raw);
+    }
+
+    @Override
+    public String getName() {
+        return (String) this.contents.get("name");
+    }
+
+    @Override
+    public File getPath() {
+        String relativePath = (String) this.contents.get("path");
+        return new File(this.applicationPath, relativePath);
     }
 }

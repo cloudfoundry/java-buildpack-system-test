@@ -18,8 +18,8 @@ package com.gopivotal.cloudfoundry.test.buildpack;
 
 import com.gopivotal.cloudfoundry.test.support.TestConfiguration;
 import com.gopivotal.cloudfoundry.test.support.application.Application;
+import com.gopivotal.cloudfoundry.test.support.application.ApplicationHolder;
 import com.gopivotal.cloudfoundry.test.support.operations.TestOperations;
-import com.gopivotal.cloudfoundry.test.support.rules.ApplicationRule;
 import org.junit.Rule;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
@@ -37,10 +37,10 @@ public abstract class AbstractTest {
     public volatile RuleChain ruleChain;
 
     @Autowired
-    private volatile ApplicationRule applicationRule;
+    private volatile ApplicationHolder applicationHolder;
 
     protected final Application getApplication() {
-        return this.applicationRule.getApplication();
+        return this.applicationHolder.get();
     }
 
     protected final TestOperations getTestOperations() {

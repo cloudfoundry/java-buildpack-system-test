@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.gopivotal.cloudfoundry.test.support.rules;
+package com.gopivotal.cloudfoundry.test.support.application;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

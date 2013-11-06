@@ -17,12 +17,18 @@
 package com.gopivotal.cloudfoundry.test.support.util;
 
 import java.io.Closeable;
+import java.util.Collection;
 
 /**
- * TODO Document IoUtils
+ * Utilities for dealing with TCF idioms
  */
-public class IoUtils {
+public class TcfUtils {
 
+    /**
+     * Close items
+     *
+     * @param closeables the items to close
+     */
     public static void closeQuietly(Closeable... closeables) {
         for (Closeable closeable : closeables) {
             if (closeable != null) {
@@ -35,8 +41,13 @@ public class IoUtils {
         }
     }
 
-    public static void deleteQuietly(Deletable... deletables) {
-        for (Deletable deletable : deletables) {
+    /**
+     * Delete items
+     *
+     * @param deleteables The items to delete
+     */
+    public static void deleteQuietly(Deletable... deleteables) {
+        for (Deletable deletable : deleteables) {
             if (deletable != null) {
                 try {
                     deletable.delete();

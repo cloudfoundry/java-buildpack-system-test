@@ -16,6 +16,9 @@
 
 package com.gopivotal.cloudfoundry.test.support.application;
 
+import org.springframework.stereotype.Component;
+
+@Component
 final class StandardMemorySizeParser implements MemorySizeParser {
 
     private static final String MEMORY_SYNTAX_MESSAGE_FORMAT = "Memory size from has bad syntax: '%s'";

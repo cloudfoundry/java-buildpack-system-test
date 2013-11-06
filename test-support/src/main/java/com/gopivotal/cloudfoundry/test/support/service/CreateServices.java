@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.gopivotal.cloudfoundry.test.support.rules;
+package com.gopivotal.cloudfoundry.test.support.service;
 
 import com.gopivotal.cloudfoundry.test.support.service.Service;
 

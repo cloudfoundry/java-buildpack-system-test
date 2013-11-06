@@ -16,6 +16,7 @@
 
 package com.gopivotal.cloudfoundry.test.support.service;
 
+import com.gopivotal.cloudfoundry.test.support.util.RandomizedNameFactory;
 import org.cloudfoundry.client.lib.CloudFoundryOperations;
 
 /**
@@ -23,13 +24,8 @@ import org.cloudfoundry.client.lib.CloudFoundryOperations;
  */
 public final class ClearDbService extends AbstractService {
 
-    /**
-     * Creates an instance of the ClearDB service
-     *
-     * @param cloudFoundryOperations the {@link CloudFoundryOperations} used to create the service instance
-     */
-    public ClearDbService(CloudFoundryOperations cloudFoundryOperations) {
-        super(cloudFoundryOperations, "cleardb", "spark");
+    ClearDbService(CloudFoundryOperations cloudFoundryOperations, RandomizedNameFactory randomizedNameFactory) {
+        super(cloudFoundryOperations, "cleardb", "spark", randomizedNameFactory);
     }
 
 }

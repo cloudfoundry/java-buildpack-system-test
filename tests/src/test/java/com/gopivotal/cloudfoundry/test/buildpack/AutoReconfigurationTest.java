@@ -16,8 +16,8 @@
 
 package com.gopivotal.cloudfoundry.test.buildpack;
 
-import com.gopivotal.cloudfoundry.test.support.rules.CreateApplication;
-import com.gopivotal.cloudfoundry.test.support.rules.CreateServices;
+import com.gopivotal.cloudfoundry.test.support.application.CreateApplication;
+import com.gopivotal.cloudfoundry.test.support.service.CreateServices;
 import com.gopivotal.cloudfoundry.test.support.service.ClearDbService;
 import org.junit.Test;
 
