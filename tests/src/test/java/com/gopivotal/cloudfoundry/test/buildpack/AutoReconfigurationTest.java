@@ -23,13 +23,25 @@ import org.junit.Test;
 
 import java.io.IOException;
 
+import static org.junit.Assert.assertEquals;
+
 public final class AutoReconfigurationTest extends AbstractTest {
 
     @Test
     @CreateServices(ClearDbService.class)
-    @CreateApplication("web-application")
-    public void autoReconfiguration() throws IOException {
-        System.out.println(getTestOperations().classPath());
+    @CreateApplication("web-application-servlet-2")
+    public void autoReconfigurationServlet2() throws IOException {
+        assertEquals("ClearDBService concrete type TBD once autoreconfiguration works",
+                getTestOperations().datasourceClassName());
     }
+
+    @Test
+    @CreateServices(ClearDbService.class)
+    @CreateApplication("web-application")
+    public void autoReconfigurationServlet3() throws IOException {
+        assertEquals("ClearDBService concrete type TBD once autoreconfiguration works for servlet 3",
+                getTestOperations().datasourceClassName());
+    }
+
 
 }

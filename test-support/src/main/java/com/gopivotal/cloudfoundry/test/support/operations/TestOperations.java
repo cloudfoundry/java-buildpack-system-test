@@ -66,4 +66,11 @@ public interface TestOperations {
      */
     void waitForStart();
 
+    /**
+     * Returns the name of the concrete class of the datasource associated with the application.
+     *
+     * @return the datasource class name
+     */
+    String datasourceClassName();
+
 }

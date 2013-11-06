@@ -10,3 +10,5 @@ dependencies {
 }
 
 test.dependsOn rootProject.javaTestApplications
+
+clean.dependsOn rootProject.cleanTestApplications
