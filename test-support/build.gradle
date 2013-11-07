@@ -7,3 +7,7 @@ dependencies {
 	compile "org.yaml:snakeyaml:$snakeyamlVersion"
 	compile "org.apache.commons:commons-lang3:3.1"
 }
+
+test {
+	excludes << '**/*$*'
+}

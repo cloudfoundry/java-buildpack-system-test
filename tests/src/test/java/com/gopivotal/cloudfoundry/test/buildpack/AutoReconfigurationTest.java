@@ -22,8 +22,6 @@ import com.gopivotal.cloudfoundry.test.support.service.ClearDbService;
 import com.gopivotal.cloudfoundry.test.support.service.CreateServices;
 import org.junit.Test;
 
-import java.io.IOException;
-
 import static org.junit.Assert.assertEquals;
 
 public final class AutoReconfigurationTest extends AbstractTest {
