@@ -63,7 +63,8 @@ public final class CloudFoundryApplicationFactoryTest {
         when(manifest.getName()).thenReturn("test-application-name");
         when(manifest.getPath()).thenReturn(new File("test-path"));
 
-        when(manifestFactory.create(new File("../vendor/java-test-applications/test-name"))).thenReturn(manifest);
+        when(manifestFactory.create(new File("../vendor/java-test-applications/test-name-application"))).thenReturn
+                (manifest);
     }
 
     @Test

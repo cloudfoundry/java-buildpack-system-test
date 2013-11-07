@@ -46,4 +46,16 @@ abstract class AbstractServicesHolder implements ServicesHolder {
             return this.services.toArray(new Service[this.services.size()]);
         }
     }
+
+    @SuppressWarnings("unchecked")
+    public final <T extends Service> T get(Class<T> klass) {
+        for (Service service : this.services) {
+            if (klass.isAssignableFrom(service.getClass())) {
+                return (T) service;
+            }
+        }
+
+        throw new IllegalStateException(String.format("No %s service currently exists", klass.getName()));
+    }
+
 }

@@ -10,12 +10,11 @@
       <module fileurl="file://$PROJECT_DIR$/vendor/java-test-applications/java-main-with-web-inf-application/java-main-with-web-inf-application.iml" filepath="$PROJECT_DIR$/vendor/java-test-applications/java-main-with-web-inf-application/java-main-with-web-inf-application.iml" group="test-applications" />
       <module fileurl="file://$PROJECT_DIR$/vendor/java-test-applications/java-test-applications.iml" filepath="$PROJECT_DIR$/vendor/java-test-applications/java-test-applications.iml" group="test-applications" />
       <module fileurl="file://$PROJECT_DIR$/vendor/java-test-applications/play-application/play-application.iml" filepath="$PROJECT_DIR$/vendor/java-test-applications/play-application/play-application.iml" group="test-applications" />
-      <module fileurl="file://$PROJECT_DIR$/vendor/java-test-applications/play-application/play-application-build.iml" filepath="$PROJECT_DIR$/vendor/java-test-applications/play-application/play-application-build.iml" group="java-test-applications" />
       <module fileurl="file://$PROJECT_DIR$/vendor/java-test-applications/spring-boot-cli-application/spring-boot-cli-application.iml" filepath="$PROJECT_DIR$/vendor/java-test-applications/spring-boot-cli-application/spring-boot-cli-application.iml" group="test-applications" />
       <module fileurl="file://$PROJECT_DIR$/test-support/test-support.iml" filepath="$PROJECT_DIR$/test-support/test-support.iml" />
       <module fileurl="file://$PROJECT_DIR$/tests/tests.iml" filepath="$PROJECT_DIR$/tests/tests.iml" />
       <module fileurl="file://$PROJECT_DIR$/vendor/java-test-applications/web-application/web-application.iml" filepath="$PROJECT_DIR$/vendor/java-test-applications/web-application/web-application.iml" group="test-applications" />
-      <module fileurl="file://$PROJECT_DIR$/vendor/java-test-applications/web-application-servlet-2/web-application-servlet-2.iml" filepath="$PROJECT_DIR$/vendor/java-test-applications/web-application-servlet-2/web-application-servlet-2.iml" group="test-applications" />
+      <module fileurl="file://$PROJECT_DIR$/vendor/java-test-applications/web-servlet-2-application/web-servlet-2-application.iml" filepath="$PROJECT_DIR$/vendor/java-test-applications/web-servlet-2-application/web-servlet-2-application.iml" group="test-applications" />
     </modules>
   </component>
 </project>

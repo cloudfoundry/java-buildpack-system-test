@@ -14,32 +14,27 @@
  * limitations under the License.
  */
 
-package com.gopivotal.cloudfoundry.test.support.application;
+package com.gopivotal.cloudfoundry.test.support.runner;
 
-abstract class AbstractApplicationHolder implements ApplicationHolder {
+import org.junit.runners.model.FrameworkMethod;
 
-    private final Object monitor = new Object();
+import java.lang.reflect.Method;
 
-    private volatile Application application;
+final class ApplicationSpecificFrameworkMethod extends FrameworkMethod {
 
-    @Override
-    public final void clear() {
-        synchronized (this.monitor) {
-            this.application = null;
-        }
+    private final String application;
+
+    ApplicationSpecificFrameworkMethod(String application, Method method) {
+        super(method);
+        this.application = application;
+    }
+
+    String getApplication() {
+        return this.application;
     }
 
     @Override
-    public final Application get() {
-        synchronized (this.monitor) {
-            return this.application;
-        }
-    }
-
-    @Override
-    public final void set(Application application) {
-        synchronized (this.monitor) {
-            this.application = application;
-        }
+    public String getName() {
+        return String.format("%s#%s", super.getName(), this.application);
     }
 }
