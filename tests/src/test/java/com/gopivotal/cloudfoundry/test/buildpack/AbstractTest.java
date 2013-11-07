@@ -16,35 +16,21 @@
 
 package com.gopivotal.cloudfoundry.test.buildpack;
 
+import com.gopivotal.cloudfoundry.test.support.runner.BuildpackClassRunner;
 import com.gopivotal.cloudfoundry.test.support.TestConfiguration;
-import com.gopivotal.cloudfoundry.test.support.application.Application;
-import com.gopivotal.cloudfoundry.test.support.application.ApplicationHolder;
-import com.gopivotal.cloudfoundry.test.support.operations.TestOperations;
 import org.junit.Rule;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.initializer.ConfigFileApplicationContextInitializer;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(BuildpackClassRunner.class)
 @ContextConfiguration(classes = TestConfiguration.class, initializers = ConfigFileApplicationContextInitializer.class)
 public abstract class AbstractTest {
 
     @Rule
     @Autowired
     public volatile RuleChain ruleChain;
-
-    @Autowired
-    private volatile ApplicationHolder applicationHolder;
-
-    protected final Application getApplication() {
-        return this.applicationHolder.get();
-    }
-
-    protected final TestOperations getTestOperations() {
-        return getApplication().getTestOperations();
-    }
 
 }

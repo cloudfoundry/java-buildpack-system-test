@@ -16,9 +16,10 @@
 
 package com.gopivotal.cloudfoundry.test.buildpack;
 
-import com.gopivotal.cloudfoundry.test.support.application.CreateApplication;
-import com.gopivotal.cloudfoundry.test.support.service.CreateServices;
+import com.gopivotal.cloudfoundry.test.support.application.Application;
+import com.gopivotal.cloudfoundry.test.support.runner.ExcludedApplications;
 import com.gopivotal.cloudfoundry.test.support.service.ClearDbService;
+import com.gopivotal.cloudfoundry.test.support.service.CreateServices;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -27,21 +28,11 @@ import static org.junit.Assert.assertEquals;
 
 public final class AutoReconfigurationTest extends AbstractTest {
 
-    @Test
     @CreateServices(ClearDbService.class)
-    @CreateApplication("web-servlet-2-application")
-    public void autoReconfigurationServlet2() throws IOException {
-        assertEquals("ClearDBService concrete type TBD once autoreconfiguration works",
-                getTestOperations().datasourceClassName());
-    }
-
+    @ExcludedApplications({"groovy", "spring-boot-cli"})
     @Test
-    @CreateServices(ClearDbService.class)
-    @CreateApplication("web-application")
-    public void autoReconfigurationServlet3() throws IOException {
-        assertEquals("ClearDBService concrete type TBD once autoreconfiguration works for servlet 3",
-                getTestOperations().datasourceClassName());
+    public void autoReconfiguration(Application application) {
+        assertEquals("Auto-reconfiguration chosen data-source", application.getTestOperations().datasourceClassName());
     }
-
 
 }

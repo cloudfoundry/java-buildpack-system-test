@@ -33,8 +33,14 @@ public final class AbstractServicesHolderTest {
         assertEquals(0, this.servicesHolder.get().length);
         this.servicesHolder.add(this.service);
         assertSame(this.service, this.servicesHolder.get()[0]);
+        assertSame(this.service, this.servicesHolder.get(this.service.getClass()));
         this.servicesHolder.clear();
         assertEquals(0, this.servicesHolder.get().length);
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void getNonExistentService() {
+        this.servicesHolder.get(AbstractService.class);
     }
 
     private static class StubServicesHolder extends AbstractServicesHolder {

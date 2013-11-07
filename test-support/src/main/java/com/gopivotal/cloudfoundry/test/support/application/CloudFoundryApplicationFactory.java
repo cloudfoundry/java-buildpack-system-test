@@ -55,7 +55,7 @@ final class CloudFoundryApplicationFactory implements ApplicationFactory {
     }
 
     private File applicationPath(String name) {
-        return new File(new File("../vendor/java-test-applications"), name);
+        return new File(new File("../vendor/java-test-applications"), String.format("%s-application", name));
     }
 
 }

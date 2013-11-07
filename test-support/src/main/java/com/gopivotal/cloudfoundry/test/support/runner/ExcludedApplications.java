@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.gopivotal.cloudfoundry.test.support.application;
+package com.gopivotal.cloudfoundry.test.support.runner;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -23,17 +23,18 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates that an application should be created
+ * Indicates that a collection of applications should be excluded
  */
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface CreateApplication {
+public @interface ExcludedApplications {
 
     /**
-     * Returns the name of the application that should be created
+     * The names of the applications that should be excluded
      *
-     * @return the name of the application that should be created
+     * @return the names of the applications that should be excluded
      */
-    String value();
+    String[] value();
+
 }

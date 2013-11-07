@@ -39,4 +39,15 @@ public interface ServicesHolder {
      * @return the services held by this holder
      */
     Service[] get();
+
+    /**
+     * Returns a service of a particular type from the services held by this holder
+     *
+     * @param klass the type of the service to return
+     * @param <T>   the type of the service to return
+     *
+     * @return a service of a particular type from the services held by this holder
+     */
+    <T extends Service> T get(Class<T> klass);
+
 }
