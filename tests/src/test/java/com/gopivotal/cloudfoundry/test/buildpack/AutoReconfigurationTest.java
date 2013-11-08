@@ -27,10 +27,9 @@ import static org.junit.Assert.assertEquals;
 public final class AutoReconfigurationTest extends AbstractTest {
 
     @CreateServices(ClearDbService.class)
-    @ExcludedApplications({"groovy", "spring-boot-cli"})
     @Test
     public void autoReconfiguration(Application application) {
-        assertEquals("Auto-reconfiguration chosen data-source", application.getTestOperations().datasourceClassName());
+        assertEquals("org.apache.tomcat.dbcp.dbcp.BasicDataSource", application.getTestOperations().datasourceClassName());
     }
 
 }
