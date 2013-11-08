@@ -29,7 +29,7 @@ public final class AutoReconfigurationTest extends AbstractTest {
     @CreateServices(ClearDbService.class)
     @Test
     public void autoReconfiguration(Application application) {
-        assertEquals("Auto-reconfiguration chosen data-source", application.getTestOperations().datasourceClassName());
+        assertEquals("org.apache.tomcat.dbcp.dbcp.BasicDataSource", application.getTestOperations().datasourceClassName());
     }
 
 }
