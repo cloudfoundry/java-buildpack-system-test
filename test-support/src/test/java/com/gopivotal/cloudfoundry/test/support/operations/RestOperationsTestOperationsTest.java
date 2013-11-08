@@ -27,9 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.mockito.Mockito.mock;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 public final class RestOperationsTestOperationsTest {
@@ -62,6 +60,15 @@ public final class RestOperationsTestOperationsTest {
     }
 
     @Test
+    public void health() throws Exception {
+        when(this.restOperations.getForObject("http://{host}/", String.class, "test-host")).thenReturn("test-health");
+
+        String value = this.testOperations.health();
+
+        assertSame("test-health", value);
+    }
+
+    @Test
     public void inputArguments() throws Exception {
         List<String> inputArguments = Arrays.asList();
         when(this.restOperations.getForObject("http://{host}/input-arguments", List.class,
@@ -85,7 +92,7 @@ public final class RestOperationsTestOperationsTest {
 
     @Test
     public void waitForStart() throws Exception {
-        when(this.restOperations.getForEntity("http://{host}/class-path", String.class,
+        when(this.restOperations.getForEntity("http://{host}/", String.class,
                 "test-host")).thenReturn(new ResponseEntity<String>(HttpStatus.OK));
 
         this.testOperations.waitForStart();
@@ -93,7 +100,7 @@ public final class RestOperationsTestOperationsTest {
 
     @Test(expected = IllegalStateException.class)
     public void waitForStartTimeout() throws Exception {
-        when(this.restOperations.getForEntity("http://{host}/class-path", String.class,
+        when(this.restOperations.getForEntity("http://{host}/", String.class,
                 "test-host")).thenReturn(new ResponseEntity<String>(HttpStatus.BAD_REQUEST));
 
         this.testOperations.waitForStart();

@@ -18,6 +18,7 @@ package com.gopivotal.cloudfoundry.test.support.runner;
 
 import com.gopivotal.cloudfoundry.test.support.application.Application;
 import com.gopivotal.cloudfoundry.test.support.application.ApplicationFactory;
+import com.gopivotal.cloudfoundry.test.support.operations.TestOperations;
 import com.gopivotal.cloudfoundry.test.support.service.Service;
 import com.gopivotal.cloudfoundry.test.support.service.ServicesHolder;
 import org.junit.Test;
@@ -57,6 +58,7 @@ public final class MethodInvokerTest {
         when(application.bind(service)).thenReturn(application);
         when(application.push()).thenReturn(application);
         when(application.start()).thenReturn(application);
+        when(application.getTestOperations()).thenReturn(mock(TestOperations.class));
     }
 
     private static ApplicationContext createApplicationContext(ApplicationFactory applicationFactory,

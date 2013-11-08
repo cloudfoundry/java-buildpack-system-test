@@ -46,7 +46,7 @@ public class TestConfiguration {
     @Value("${cf.space}")
     private volatile String space;
 
-    @Value("${cf.target}")
+    @Value("${cf.target:https://api.run.pivotal.io}")
     private volatile String target;
 
     @Value("${cf.username}")

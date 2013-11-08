@@ -50,6 +50,8 @@ final class MethodInvoker extends Statement implements TestExecutionListener {
 
         try {
             application = createApplication();
+            application.getTestOperations().waitForStart();
+
             this.frameworkMethod.invokeExplosively(this.instance, application);
         } finally {
             TcfUtils.deleteQuietly(application);
