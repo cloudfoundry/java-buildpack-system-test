@@ -61,6 +61,12 @@ final class RestOperationsTestOperations extends AbstractTestOperations {
                 Map.class, this.host);
     }
 
+    @Override
+    public String health() {
+        this.logger.debug("Getting health");
+        return this.restOperations.getForObject("http://{host}/", String.class, this.host);
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public List<String> inputArguments() {
@@ -86,8 +92,7 @@ final class RestOperationsTestOperations extends AbstractTestOperations {
             public Boolean execute() {
                 this.logger.debug("Checking for connection");
                 return HttpStatus.OK == RestOperationsTestOperations.this.restOperations.getForEntity
-                        ("http://{host}/class-path", String.class, RestOperationsTestOperations.this.host)
-                        .getStatusCode();
+                        ("http://{host}/", String.class, RestOperationsTestOperations.this.host).getStatusCode();
             }
 
             @Override

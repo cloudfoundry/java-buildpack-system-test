@@ -39,6 +39,13 @@ public interface TestOperations {
     Map<String, String> environmentVariables();
 
     /**
+     * Returns the application's health
+     *
+     * @return the application's health
+     */
+    String health();
+
+    /**
      * Returns the application's input arguments
      *
      * @return the application's input arguments

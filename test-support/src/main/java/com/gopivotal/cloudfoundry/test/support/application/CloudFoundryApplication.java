@@ -117,7 +117,6 @@ final class CloudFoundryApplication implements Application {
     public Application start() {
         this.logger.info("Starting application {}", this.name);
         this.cloudFoundryOperations.startApplication(this.name);
-        CloudFoundryApplication.this.testOperations.waitForStart();
         return this;
     }
 

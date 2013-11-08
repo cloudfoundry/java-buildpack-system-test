@@ -9,6 +9,11 @@ dependencies {
 	testCompile "org.springframework:spring-test:3.2.4.RELEASE"
 }
 
-test.dependsOn rootProject.javaTestApplications
+test {
+	dependsOn rootProject.javaTestApplications
+
+	forkEvery = 1
+	maxParallelForks = 10
+}
 
 clean.dependsOn rootProject.cleanTestApplications

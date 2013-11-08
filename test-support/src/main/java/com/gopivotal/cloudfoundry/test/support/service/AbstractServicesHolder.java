@@ -24,32 +24,39 @@ abstract class AbstractServicesHolder implements ServicesHolder {
 
     private final Object monitor = new Object();
 
-    private final Set<Service> services = new HashSet<>();
+    private final ThreadLocal<Set<Service>> services = new ThreadLocal<Set<Service>>() {
+
+        @Override
+        protected Set<Service> initialValue() {
+            return new HashSet<>();
+        }
+
+    };
 
     @Override
     public final void add(Service... services) {
         synchronized (this.monitor) {
-            Collections.addAll(this.services, services);
+            Collections.addAll(this.services.get(), services);
         }
     }
 
     @Override
     public final void clear() {
         synchronized (this.monitor) {
-            this.services.clear();
+            this.services.get().clear();
         }
     }
 
     @Override
     public final Service[] get() {
         synchronized (this.monitor) {
-            return this.services.toArray(new Service[this.services.size()]);
+            return this.services.get().toArray(new Service[this.services.get().size()]);
         }
     }
 
     @SuppressWarnings("unchecked")
     public final <T extends Service> T get(Class<T> klass) {
-        for (Service service : this.services) {
+        for (Service service : this.services.get()) {
             if (klass.isAssignableFrom(service.getClass())) {
                 return (T) service;
             }
