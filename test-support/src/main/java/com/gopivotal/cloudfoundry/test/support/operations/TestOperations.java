@@ -16,6 +16,7 @@
 
 package com.gopivotal.cloudfoundry.test.support.operations;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +31,19 @@ public interface TestOperations {
      * @return the application's classpath
      */
     List<String> classPath();
+
+    /**
+     * Returns whether the DataSource can access the database
+     * @return whether the DataSource can access the database
+     */
+    String dataSourceCheckAccess();
+
+    /**
+     * Returns the URL that the DataSource is connected to
+     *
+     * @return the URL that the DataSource is connected to
+     */
+    URI dataSourceUrl();
 
     /**
      * Returns the application's environment variables
@@ -73,11 +87,5 @@ public interface TestOperations {
      */
     void waitForStart();
 
-    /**
-     * Returns the name of the concrete class of the datasource associated with the application.
-     *
-     * @return the datasource class name
-     */
-    String datasourceClassName();
 
 }

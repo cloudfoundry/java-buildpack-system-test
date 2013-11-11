@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.RestOperations;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
@@ -51,6 +52,16 @@ final class RestOperationsTestOperations extends AbstractTestOperations {
     public List<String> classPath() {
         this.logger.debug("Getting class path");
         return (List<String>) this.restOperations.getForObject("http://{host}/class-path", List.class, this.host);
+    }
+
+    @Override
+    public String dataSourceCheckAccess() {
+        return this.restOperations.getForObject("http://{host}/datasource-check-access", String.class, this.host);
+    }
+
+    @Override
+    public URI dataSourceUrl() {
+        return URI.create(this.restOperations.getForObject("http://{host}/datasource-url", String.class, this.host));
     }
 
     @SuppressWarnings("unchecked")
@@ -104,12 +115,5 @@ final class RestOperationsTestOperations extends AbstractTestOperations {
             }
 
         });
-    }
-
-    @Override
-    public String datasourceClassName() {
-        this.logger.debug("Getting datasource class name");
-        return (String) this.restOperations.getForObject("http://{host}/datasource-classname",
-                String.class, this.host);
     }
 }

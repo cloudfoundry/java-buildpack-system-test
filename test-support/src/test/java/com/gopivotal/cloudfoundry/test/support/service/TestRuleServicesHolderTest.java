@@ -24,6 +24,9 @@ import org.junit.runners.model.Statement;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import java.net.URI;
+import java.util.Map;
+
 import static org.mockito.Mockito.mock;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -101,6 +104,11 @@ public final class TestRuleServicesHolderTest {
         @Override
         public String getName() {
             return "stub-service";
+        }
+
+        @Override
+        public URI getEndpoint(Map<String, String> environmentVariables) {
+            throw new UnsupportedOperationException();
         }
 
         @Override

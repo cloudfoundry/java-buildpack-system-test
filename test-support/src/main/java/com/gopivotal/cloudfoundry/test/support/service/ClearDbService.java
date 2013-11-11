@@ -19,6 +19,9 @@ package com.gopivotal.cloudfoundry.test.support.service;
 import com.gopivotal.cloudfoundry.test.support.util.RandomizedNameFactory;
 import org.cloudfoundry.client.lib.CloudFoundryOperations;
 
+import java.net.URI;
+import java.util.Map;
+
 /**
  * Represents an instance of the ClearDB service
  */
@@ -26,6 +29,12 @@ public final class ClearDbService extends AbstractService {
 
     ClearDbService(CloudFoundryOperations cloudFoundryOperations, RandomizedNameFactory randomizedNameFactory) {
         super(cloudFoundryOperations, "cleardb", "spark", randomizedNameFactory);
+    }
+
+    @Override
+    public URI getEndpoint(Map<String, String> environmentVariables) {
+        Map<String, Object> credentials = getCredentials(environmentVariables);
+        return URI.create((String) credentials.get("jdbcUrl"));
     }
 
 }
