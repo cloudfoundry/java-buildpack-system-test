@@ -5,7 +5,6 @@ dependencies {
 	compile "org.springframework.boot:spring-boot-autoconfigure:$springBootVersion"
 	compile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
 	compile "org.yaml:snakeyaml:$snakeyamlVersion"
-	compile "org.apache.commons:commons-lang3:3.1"
 }
 
 test {

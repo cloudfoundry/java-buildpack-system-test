@@ -21,12 +21,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestOperations;
 
+import java.net.URI;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static org.mockito.Mockito.mock;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.when;
 
@@ -46,6 +48,27 @@ public final class RestOperationsTestOperationsTest {
         List<String> value = this.testOperations.classPath();
 
         assertSame(classPath, value);
+    }
+
+    @Test
+    public void dataSourceCheckAccess() throws Exception {
+        when(this.restOperations.getForObject("http://{host}/datasource-check-access", String.class,
+                "test-host")).thenReturn("test-check-access");
+
+        String value = this.testOperations.dataSourceCheckAccess();
+
+        assertSame("test-check-access", value);
+
+    }
+
+    @Test
+    public void dataSourceUrl() throws Exception {
+        when(this.restOperations.getForObject("http://{host}/datasource-url", String.class,
+                "test-host")).thenReturn("http://test.host");
+
+        URI value = this.testOperations.dataSourceUrl();
+
+        assertEquals(URI.create("http://test.host"), value);
     }
 
     @Test

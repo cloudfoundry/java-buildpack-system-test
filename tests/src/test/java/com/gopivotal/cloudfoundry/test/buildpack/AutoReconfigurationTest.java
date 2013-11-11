@@ -17,19 +17,33 @@
 package com.gopivotal.cloudfoundry.test.buildpack;
 
 import com.gopivotal.cloudfoundry.test.support.application.Application;
+import com.gopivotal.cloudfoundry.test.support.operations.TestOperations;
 import com.gopivotal.cloudfoundry.test.support.runner.ExcludedApplications;
 import com.gopivotal.cloudfoundry.test.support.service.ClearDbService;
 import com.gopivotal.cloudfoundry.test.support.service.CreateServices;
+import com.gopivotal.cloudfoundry.test.support.service.ServicesHolder;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
 public final class AutoReconfigurationTest extends AbstractTest {
 
+    @Autowired
+    private volatile ServicesHolder servicesHolder;
+
     @CreateServices(ClearDbService.class)
     @Test
+    @ExcludedApplications({"grails", "groovy", "java-main", "java-main-with-web-inf", "spring-boot-cli", "web", "web-servlet-2"})
     public void autoReconfiguration(Application application) {
-        assertEquals("org.apache.tomcat.dbcp.dbcp.BasicDataSource", application.getTestOperations().datasourceClassName());
+        TestOperations testOperations = application.getTestOperations();
+        Map<String, String> environmentVariables = testOperations.environmentVariables();
+
+        assertEquals(this.servicesHolder.get(ClearDbService.class).getEndpoint(environmentVariables),
+                testOperations.dataSourceUrl());
+        assertEquals("ok", testOperations.dataSourceCheckAccess());
     }
 
 }

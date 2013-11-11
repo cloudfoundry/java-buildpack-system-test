@@ -1,16 +1,22 @@
 <component name="ProjectDictionaryState">
   <dictionary name="bhale">
     <words>
+      <w>bonecp</w>
       <w>buildmonitor</w>
       <w>cleardb</w>
       <w>closeables</w>
       <w>cloudfoundry</w>
       <w>configurer</w>
+      <w>databind</w>
+      <w>datasource</w>
+      <w>dbcp</w>
       <w>deleteables</w>
+      <w>fasterxml</w>
       <w>gibi</w>
       <w>github</w>
       <w>googlecode</w>
       <w>jdbc</w>
+      <w>jolbox</w>
       <w>klass</w>
       <w>lodash</w>
       <w>logback</w>
@@ -23,6 +29,7 @@
       <w>sockjs</w>
       <w>springframework</w>
       <w>stdout</w>
+      <w>vcap</w>
       <w>webhook</w>
       <w>webjars</w>
       <w>websocket</w>

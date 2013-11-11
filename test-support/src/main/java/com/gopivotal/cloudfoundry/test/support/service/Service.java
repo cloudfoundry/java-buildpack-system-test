@@ -18,15 +18,27 @@ package com.gopivotal.cloudfoundry.test.support.service;
 
 import com.gopivotal.cloudfoundry.test.support.util.Deletable;
 
+import java.net.URI;
+import java.util.Map;
+
 /**
  * Represents a service in Cloud Foundry
  */
 public interface Service extends Deletable {
 
     /**
+     * Return the endpoint of the service
+     *
+     * @param environmentVariables The environment variables of the application
+     *
+     * @return the endpoint of the service
+     */
+    URI getEndpoint(Map<String, String> environmentVariables);
+
+    /**
      * Returns the name of the service
+     *
      * @return the name of the service
      */
     String getName();
-
 }

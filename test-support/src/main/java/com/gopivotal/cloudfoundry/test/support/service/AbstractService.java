@@ -21,8 +21,13 @@ import org.cloudfoundry.client.lib.CloudFoundryOperations;
 import org.cloudfoundry.client.lib.domain.CloudEntity;
 import org.cloudfoundry.client.lib.domain.CloudService;
 import org.cloudfoundry.client.lib.domain.CloudServiceOffering;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 abstract class AbstractService implements Service {
 
@@ -31,6 +36,8 @@ abstract class AbstractService implements Service {
     private final CloudFoundryOperations cloudFoundryOperations;
 
     private final String name;
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     protected AbstractService(CloudFoundryOperations cloudFoundryOperations, String label, String plan,
                               RandomizedNameFactory randomizedNameFactory) {
@@ -75,6 +82,31 @@ abstract class AbstractService implements Service {
     public final void delete() {
         this.logger.debug("Deleting service {}", this.name);
         this.cloudFoundryOperations.deleteService(this.name);
+    }
+
+    @SuppressWarnings("unchecked")
+    protected final Map<String, Object> getCredentials(Map<String, String> environmentVariables) {
+        try {
+            Map<String, List<Map<String, Object>>> vcapServices = this.objectMapper.readValue(environmentVariables.get
+                    ("VCAP_SERVICES"), Map.class);
+            Map<String, Object> servicePayload = getServicePayload(vcapServices);
+
+            return (Map<String, Object>) servicePayload.get("credentials");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Map<String, Object> getServicePayload(Map<String, List<Map<String, Object>>> vcapServices) {
+        for (List<Map<String, Object>> serviceTypePayload : vcapServices.values()) {
+            for (Map<String, Object> servicePayload : serviceTypePayload) {
+                if (this.name.equals(servicePayload.get("name"))) {
+                    return servicePayload;
+                }
+            }
+        }
+
+        throw new IllegalStateException(String.format("Cannot find VCAP_SERVICES payload for service %s", this.name));
     }
 
 }

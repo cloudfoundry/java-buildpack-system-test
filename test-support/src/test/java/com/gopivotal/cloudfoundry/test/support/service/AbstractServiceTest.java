@@ -23,11 +23,15 @@ import org.cloudfoundry.client.lib.domain.CloudServiceOffering;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
+import java.net.URI;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.mockito.Mockito.mock;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -93,11 +97,37 @@ public final class AbstractServiceTest {
         verify(this.cloudFoundryOperations).deleteService("randomized-name");
     }
 
+    @Test
+    public void getCredentials() throws Exception {
+        Map<String, String> environmentVariables = new HashMap<>();
+        environmentVariables.put("VCAP_SERVICES", "{\"service-n/a\":[{\"name\":\"randomized-name\"," +
+                "\"label\":\"service-n/a\",\"tags\":[\"test-tag\"],\"plan\":\"test-plan\"," +
+                "\"credentials\":{\"type\":\"value\"}}]}");
+
+        Map<String, Object> credentials = this.service.getCredentials(environmentVariables);
+        assertTrue(credentials.containsKey("type"));
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void getCredentialsNoService() {
+        Map<String, String> environmentVariables = new HashMap<>();
+        environmentVariables.put("VCAP_SERVICES", "{\"service-n/a\":[{\"name\":\"test-name\"," +
+                "\"label\":\"service-n/a\",\"tags\":[\"test-tag\"],\"plan\":\"test-plan\"," +
+                "\"credentials\":{\"type\":\"value\"}}]}");
+
+        this.service.getCredentials(environmentVariables);
+    }
+
     private static final class StubService extends AbstractService {
 
         private StubService(CloudFoundryOperations cloudFoundryOperations, String label, String plan,
                             RandomizedNameFactory randomizedNameFactory) {
             super(cloudFoundryOperations, label, plan, randomizedNameFactory);
+        }
+
+        @Override
+        public URI getEndpoint(Map<String, String> environmentVariables) {
+            throw new UnsupportedOperationException();
         }
     }
 }
