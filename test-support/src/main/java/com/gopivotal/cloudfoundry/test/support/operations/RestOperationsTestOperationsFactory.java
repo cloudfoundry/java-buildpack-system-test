@@ -27,9 +27,11 @@ final class RestOperationsTestOperationsFactory implements TestOperationsFactory
 
     private static final Long SECOND = 1000L;
 
+    private static final Long MINUTE = 60 * SECOND;
+
     private static final Long INTERVAL = 5 * SECOND;
 
-    private static final Long TIMEOUT = 60 * SECOND;
+    private static final Long TIMEOUT = 5 * MINUTE;
 
     private final RestOperations restOperations;
 
