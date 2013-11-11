@@ -3,7 +3,7 @@ allprojects {
 	ext {
 		cloudFoundryClientLibVersion = '1.0.0'
 		snakeyamlVersion = '1.13'
-		springBootVersion = '0.5.0.BUILD-SNAPSHOT'
+		springBootVersion = '0.5.0.M6'
 	}
 
 	repositories {
