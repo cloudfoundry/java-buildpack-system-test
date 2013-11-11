@@ -14,6 +14,10 @@ test {
 
 	forkEvery = 1
 	maxParallelForks = 10
+
+	testLogging {
+		exceptionFormat = 'full'
+	}
 }
 
 clean.dependsOn rootProject.cleanTestApplications
