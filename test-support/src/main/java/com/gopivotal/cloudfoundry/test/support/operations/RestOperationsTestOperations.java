@@ -90,9 +90,12 @@ final class RestOperationsTestOperations extends AbstractTestOperations {
 
             @Override
             public Boolean execute() {
-                this.logger.debug("Checking for connection");
-                return HttpStatus.OK == RestOperationsTestOperations.this.restOperations.getForEntity
+                this.logger.debug("Checking for connection to http://{}/", RestOperationsTestOperations.this.host);
+                HttpStatus statusCode = RestOperationsTestOperations.this.restOperations.getForEntity
                         ("http://{host}/", String.class, RestOperationsTestOperations.this.host).getStatusCode();
+                this.logger.debug("Received {} from http://{}/", statusCode, RestOperationsTestOperations.this.host);
+
+                return HttpStatus.OK == statusCode;
             }
 
             @Override

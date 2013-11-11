@@ -15,6 +15,6 @@ before_install:
   - "unzip -qd /tmp /tmp/play.zip"
   - "curl https://repo.spring.io/milestone/org/springframework/boot/spring-boot-cli/0.5.0.M6/spring-boot-cli-0.5.0.M6-bin.tar.gz -s | tar xzf - -C /tmp"
 install: true
-script: TERM=dumb ./gradlew
+script: LOGGING_LEVEL=DEBUG TERM=dumb ./gradlew
 notifications:
   webhooks: "https://build-monitor.cfapps.io:4443/projects/JBST/webhook"
