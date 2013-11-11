@@ -36,7 +36,6 @@ public final class AutoReconfigurationTest extends AbstractTest {
 
     @CreateServices(ClearDbService.class)
     @Test
-    @ExcludedApplications({"grails", "groovy", "java-main", "java-main-with-web-inf", "spring-boot-cli", "web", "web-servlet-2"})
     public void autoReconfiguration(Application application) {
         TestOperations testOperations = application.getTestOperations();
         Map<String, String> environmentVariables = testOperations.environmentVariables();
