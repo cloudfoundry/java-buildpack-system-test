@@ -35,12 +35,16 @@ buildscript {
 
 task javaTestApplications(type: GradleBuild) {
 	dir = 'vendor/java-test-applications'
+	tasks = ['build']
 }
 
 task cleanTestApplications(type: GradleBuild) {
-    dir = 'vendor/java-test-applications'
-    tasks = ['clean']
+	dir = 'vendor/java-test-applications'
+	tasks = ['clean']
 }
+
+build.dependsOn javaTestApplications
+clean.dependsOn cleanTestApplications
 
 task wrapper(type: Wrapper) {
 	gradleVersion = "1.8"
