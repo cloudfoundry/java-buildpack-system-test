@@ -72,6 +72,16 @@ public final class RestOperationsTestOperationsTest {
     }
 
     @Test
+    public void dataSourceUrlUserInfoRemoval() throws Exception {
+        when(this.restOperations.getForObject("http://{host}/datasource-url", String.class,
+                "test-host")).thenReturn("http://user:password@test.host");
+
+        URI value = this.testOperations.dataSourceUrl();
+
+        assertEquals(URI.create("http://test.host"), value);
+    }
+
+    @Test
     public void environmentVariables() throws Exception {
         Map<String, String> environmentVariables = new HashMap<>();
         when(this.restOperations.getForObject("http://{host}/environment-variables", Map.class,

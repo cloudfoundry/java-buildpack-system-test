@@ -69,7 +69,9 @@ final class RestOperationsTestOperations extends AbstractTestOperations {
         int doubleSlashIndex = url.indexOf("//");
         if (doubleSlashIndex != -1) {
             int at = url.indexOf("@");
-            result = url.substring(0, doubleSlashIndex + 2) + url.substring(at + 1);
+            if (at != -1) {
+                result = url.substring(0, doubleSlashIndex + 2) + url.substring(at + 1);
+            }
         }
         return result;
     }
