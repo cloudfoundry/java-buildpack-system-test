@@ -109,4 +109,15 @@ abstract class AbstractService implements Service {
         throw new IllegalStateException(String.format("Cannot find VCAP_SERVICES payload for service %s", this.name));
     }
 
+    protected final String removeUserInfoFromUrl(String url) {
+        String result = url;
+        int doubleSlashIndex = url.indexOf("//");
+        if (doubleSlashIndex != -1) {
+            int at = url.indexOf("@");
+            if (at != -1) {
+                result = url.substring(0, doubleSlashIndex + 2) + url.substring(at + 1);
+            }
+        }
+        return result;
+    }
 }

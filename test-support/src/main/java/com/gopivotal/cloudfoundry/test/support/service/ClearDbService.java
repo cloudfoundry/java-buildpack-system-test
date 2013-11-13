@@ -34,7 +34,7 @@ public final class ClearDbService extends AbstractService {
     @Override
     public URI getEndpoint(Map<String, String> environmentVariables) {
         Map<String, Object> credentials = getCredentials(environmentVariables);
-        return URI.create((String) credentials.get("jdbcUrl"));
+        return URI.create(removeUserInfoFromUrl((String) credentials.get("jdbcUrl")));
     }
 
 }
