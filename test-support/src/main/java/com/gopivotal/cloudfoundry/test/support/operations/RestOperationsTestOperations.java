@@ -61,19 +61,7 @@ final class RestOperationsTestOperations extends AbstractTestOperations {
 
     @Override
     public URI dataSourceUrl() {
-        return URI.create(withoutUserInfo(this.restOperations.getForObject("http://{host}/datasource-url", String.class, this.host)));
-    }
-
-    private String withoutUserInfo(String url) {
-        String result = url;
-        int doubleSlashIndex = url.indexOf("//");
-        if (doubleSlashIndex != -1) {
-            int at = url.indexOf("@");
-            if (at != -1) {
-                result = url.substring(0, doubleSlashIndex + 2) + url.substring(at + 1);
-            }
-        }
-        return result;
+        return URI.create(this.restOperations.getForObject("http://{host}/datasource-url", String.class, this.host));
     }
 
     @SuppressWarnings("unchecked")
