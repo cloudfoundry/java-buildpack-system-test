@@ -28,11 +28,11 @@ public final class YamlManifestFactoryTest {
     private final MemorySizeParser memorySizeParser = mock(MemorySizeParser.class);
 
     private final YamlManifestFactory manifestFactory = new YamlManifestFactory("default-buildpack",
-            this.memorySizeParser, null);
+            this.memorySizeParser);
 
     @Test
     public void create() throws Exception {
-        assertTrue(this.manifestFactory.create(new File("src/test/resources/manifest-with-buildpack")) instanceof
+        assertTrue(this.manifestFactory.create(new File("src/test/resources/manifest")) instanceof
                 YamlManifest);
     }
 
