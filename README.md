@@ -21,7 +21,14 @@ The following environment variables must be set before building this project or 
 | `CF_TARGET` | The Cloud Foundry instance to use, e.g. `https://api.run.pivotal.io`.
 | `CF_USERNAME` | A Cloud Foundry username, which often consists of an email address.
 
-Note: when running tests in Eclipse, you can set environment variables in a run configuration.
+The following environment variables may be set before building this project or running the tests.
+
+| Environment Variable | Value
+| -------------------- | -----
+| `DEFAULT_BUILDPACK` | The buildpack to use if one is not specified in the test applications' `manifest.yml`. This defaults to the Java buildpack if not specified.
+| `OVERRIDE_BUILDPACK` | The buildpack to use regardless of whether one is specified in the test applications' `manifest.yml`. If not specified, the buildpack specified in `manifest.yml` (or the default buildpack if that is not specified) is used.
+
+Note: when running tests in Eclipse or IntelliJ IDEA, you can set environment variables in a run configuration.
 
 ## Building
 

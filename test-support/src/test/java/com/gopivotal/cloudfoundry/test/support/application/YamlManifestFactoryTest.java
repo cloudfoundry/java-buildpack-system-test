@@ -28,7 +28,7 @@ public final class YamlManifestFactoryTest {
     private final MemorySizeParser memorySizeParser = mock(MemorySizeParser.class);
 
     private final YamlManifestFactory manifestFactory = new YamlManifestFactory("default-buildpack",
-            this.memorySizeParser);
+            this.memorySizeParser, null);
 
     @Test
     public void create() throws Exception {
