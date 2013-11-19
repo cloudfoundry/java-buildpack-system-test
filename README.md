@@ -22,7 +22,7 @@ The following environment variables must be set before building this project or 
 | `CF_TARGET` | The Cloud Foundry instance to use, e.g. `https://api.run.pivotal.io`.
 | `CF_USERNAME` | A Cloud Foundry username, which often consists of an email address.
 
-Note: when running tests in Eclipse, you can set environment variables in a run configuration.
+Note: when running tests in Eclipse or IntelliJ IDEA, you can set environment variables in a run configuration.
 
 ## Building
 
