@@ -1,4 +1,4 @@
-# Cloud Foundry Java Buildpack System Test
+# Cloud Foundry Java Buildpack System Tests
 
 The purpose of this repository is to exercise the [Cloud Foundry Java Buildpack][] together with its dependencies and associated services to ensure that the whole works together correctly.
 
