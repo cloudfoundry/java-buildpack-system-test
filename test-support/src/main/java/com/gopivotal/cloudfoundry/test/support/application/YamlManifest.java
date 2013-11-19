@@ -17,6 +17,8 @@
 package com.gopivotal.cloudfoundry.test.support.application;
 
 import com.gopivotal.cloudfoundry.test.support.util.TcfUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
@@ -36,11 +38,17 @@ final class YamlManifest implements Manifest {
 
     private final MemorySizeParser memorySizeParser;
 
-    YamlManifest(File applicationPath, String defaultBuildpack, MemorySizeParser memorySizeParser) {
+    private final String overrideBuildpack;
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    YamlManifest(File applicationPath, String defaultBuildpack, MemorySizeParser memorySizeParser,
+                 String overrideBuildpack) {
         this.applicationPath = applicationPath;
         this.defaultBuildpack = defaultBuildpack;
         this.contents = readContents(applicationPath);
         this.memorySizeParser = memorySizeParser;
+        this.overrideBuildpack = overrideBuildpack;
     }
 
     @SuppressWarnings("unchecked")
@@ -59,7 +67,9 @@ final class YamlManifest implements Manifest {
     @Override
     public String getBuildpack() {
         String raw = (String) this.contents.get("buildpack");
-        return raw == null ? this.defaultBuildpack : raw;
+        String buildpack = this.overrideBuildpack == null ? (raw == null ? this.defaultBuildpack : raw) : this.overrideBuildpack;
+        this.logger.debug("Using buildpack '{}'", buildpack);
+        return buildpack;
     }
 
     @Override
