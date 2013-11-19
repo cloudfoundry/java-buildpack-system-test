@@ -41,34 +41,13 @@ public final class YamlManifestTest {
     }
 
     private static YamlManifest createManifest(MemorySizeParser memorySizeParser) {
-        return new YamlManifest(new File("src/test/resources/manifest-with-buildpack"), "test-default-buildpack",
-                memorySizeParser, null);
+        return new YamlManifest(new File("src/test/resources/manifest"), "test-buildpack",
+                memorySizeParser);
     }
 
     @Test
-    public void getBuildpackSpecified() {
+    public void getBuildpack() {
         assertEquals("test-buildpack", this.manifest.getBuildpack());
-    }
-
-    @Test
-    public void getBuildpackNotSpecified() {
-        Manifest manifest = new YamlManifest(new File("src/test/resources/manifest-without-buildpack"),
-                "test-default-buildpack", null, null);
-        assertEquals("test-default-buildpack", manifest.getBuildpack());
-    }
-
-    @Test
-    public void getBuildpackOverrideWhenSpecifiedInManifest() {
-        Manifest manifest = new YamlManifest(new File("src/test/resources/manifest-with-buildpack"),
-                "test-default-buildpack", null, "test-override-buildpack");
-        assertEquals("test-override-buildpack", manifest.getBuildpack());
-    }
-
-    @Test
-    public void getBuildpackOverrideWhenNotSpecifiedInManifest() {
-        Manifest manifest = new YamlManifest(new File("src/test/resources/manifest-without-buildpack"),
-                "test-default-buildpack", null, "test-override-buildpack");
-        assertEquals("test-override-buildpack", manifest.getBuildpack());
     }
 
     @Test
@@ -88,7 +67,7 @@ public final class YamlManifestTest {
 
     @Test
     public void getPath() {
-        assertEquals(new File("src/test/resources/manifest-with-buildpack/test-path"), this.manifest.getPath());
+        assertEquals(new File("src/test/resources/manifest/test-path"), this.manifest.getPath());
     }
 
 }

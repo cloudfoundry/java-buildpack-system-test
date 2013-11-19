@@ -25,24 +25,19 @@ import java.io.File;
 @Component
 final class YamlManifestFactory implements ManifestFactory {
 
-    private final String defaultBuildpack;
+    private final String buildpack;
 
     private final MemorySizeParser memorySizeParser;
 
-    private final String overrideBuildpack;
-
     @Autowired
-    YamlManifestFactory(@Value("${default.buildpack:https://github.com/cloudfoundry/java-buildpack.git}") String
-                                defaultBuildpack, MemorySizeParser memorySizeParser,
-                        @Value("${override.buildpack:#{null}}") String
-            overrideBuildpack) {
-        this.defaultBuildpack = defaultBuildpack;
+    YamlManifestFactory(@Value("${cf.buildpack:https://github.com/cloudfoundry/java-buildpack.git}") String
+                                buildpack, MemorySizeParser memorySizeParser) {
+        this.buildpack = buildpack;
         this.memorySizeParser = memorySizeParser;
-        this.overrideBuildpack = overrideBuildpack;
     }
 
     @Override
     public Manifest create(File applicationPath) {
-        return new YamlManifest(applicationPath, this.defaultBuildpack, this.memorySizeParser, this.overrideBuildpack);
+        return new YamlManifest(applicationPath, this.buildpack, this.memorySizeParser);
     }
 }
