@@ -4,3 +4,7 @@ build
 out
 tasks.xml
 workspace.xml
+.classpath
+.project
+.settings
+
