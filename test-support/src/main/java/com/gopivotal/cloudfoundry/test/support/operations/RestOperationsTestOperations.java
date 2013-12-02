@@ -61,7 +61,15 @@ final class RestOperationsTestOperations extends AbstractTestOperations {
 
     @Override
     public URI dataSourceUrl() {
-        return URI.create(this.restOperations.getForObject("http://{host}/datasource-url", String.class, this.host));
+        String uriString = this.restOperations.getForObject("http://{host}/datasource-url", String.class, this.host);
+        // depending on how uri is created, it may (when using spring-cloud) or may not (when using cloudfoundry-runtime) 
+        // have the query string with user credentials. So chop off any query parameters so that tests can verify the core
+        // part of the uri (host, port, etc.)
+        int queryStringStart = uriString.indexOf('?');
+        if (queryStringStart != -1) {
+            uriString = uriString.substring(0, queryStringStart);
+        }
+        return URI.create(uriString);
     }
 
     @SuppressWarnings("unchecked")
