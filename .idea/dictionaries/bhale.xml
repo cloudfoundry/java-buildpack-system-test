@@ -29,6 +29,7 @@
       <w>sockjs</w>
       <w>springframework</w>
       <w>stdout</w>
+      <w>tcftc</w>
       <w>vcap</w>
       <w>webhook</w>
       <w>webjars</w>

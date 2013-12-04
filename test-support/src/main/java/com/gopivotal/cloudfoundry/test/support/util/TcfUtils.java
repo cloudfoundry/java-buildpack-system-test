@@ -17,7 +17,6 @@
 package com.gopivotal.cloudfoundry.test.support.util;
 
 import java.io.Closeable;
-import java.util.Collection;
 
 /**
  * Utilities for dealing with TCF idioms
