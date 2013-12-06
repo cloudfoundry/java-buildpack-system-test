@@ -23,10 +23,10 @@ import org.cloudfoundry.client.lib.CloudFoundryOperations;
 /**
  * Represents an instance of the ClearDB service
  */
-public final class ClearDbService extends RelationalDbService {
+public final class ElephantSqlDbService extends RelationalDbService {
 
-    ClearDbService(CloudFoundryOperations cloudFoundryOperations, RandomizedNameFactory randomizedNameFactory) {
-        super(cloudFoundryOperations, "cleardb", "spark", randomizedNameFactory);
+    ElephantSqlDbService(CloudFoundryOperations cloudFoundryOperations, RandomizedNameFactory randomizedNameFactory) {
+        super(cloudFoundryOperations, "elephantsql", "turtle", randomizedNameFactory);
     }
 
 }
