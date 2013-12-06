@@ -36,6 +36,8 @@ final class CloudFoundryApplication implements Application {
 
     private final CloudFoundryOperations cloudFoundryOperations;
 
+    private final String domain;
+
     private final Manifest manifest;
 
     private final String name;
@@ -47,9 +49,11 @@ final class CloudFoundryApplication implements Application {
         this.logger.info("Creating application {}", name);
 
         this.cloudFoundryOperations = cloudFoundryOperations;
-        String host = buildHost(name, getDomain(cloudFoundryOperations));
+        this.domain = getDomain(cloudFoundryOperations);
         this.manifest = manifest;
         this.name = name;
+
+        String host = buildHost(name, this.domain);
         this.testOperations = testOperationsFactory.create(host);
 
         createCloudApplication(cloudFoundryOperations, host, manifest, name);
@@ -92,6 +96,7 @@ final class CloudFoundryApplication implements Application {
     public void delete() {
         if (applicationExists()) {
             this.logger.debug("Deleting application {}", this.name);
+            this.cloudFoundryOperations.deleteRoute(this.name, this.domain);
             this.cloudFoundryOperations.deleteApplication(this.name);
         }
     }
