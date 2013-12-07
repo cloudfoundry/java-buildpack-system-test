@@ -109,15 +109,32 @@ abstract class AbstractService implements Service {
         throw new IllegalStateException(String.format("Cannot find VCAP_SERVICES payload for service %s", this.name));
     }
 
-    protected final String removeUserInfoFromUrl(String url) {
-        String result = url;
+    /**
+     * Create a testable url suitable of the form &lt;scheme&gt;://&lt;host&gt;:&lt;port&gt;/&lt;path&gt;
+     * from a url (typically created by accessing the "uri" attribute of a service data from the VCAP_SERVICE 
+     * env variable) that might include user credentials and query params
+     * 
+     * @param url url that might include username and password (...://&lt;username&gt;@&lt;password&gt;...)
+     *                and query parameters (.../path?&lt;query&gt;)
+     * @return
+     */
+    protected final String getTestableUrl(String url) {
         int doubleSlashIndex = url.indexOf("//");
         if (doubleSlashIndex != -1) {
             int at = url.indexOf("@");
             if (at != -1) {
-                result = url.substring(0, doubleSlashIndex + 2) + url.substring(at + 1);
+                url = url.substring(0, doubleSlashIndex + 2) + url.substring(at + 1);
             }
         }
-        return result;
+        int queryIndex = url.indexOf('?');
+        if (queryIndex != -1) {
+            url = url.substring(0, queryIndex);
+        }
+        
+        // Special processing for postgresql. The "uri" in the environment uses "postgres" as the scheme,
+        // whereas the driver needs (and hence the endpoint returns) "postgresql"
+        url = url.replaceFirst("postgres:", "postgresql:");
+        
+        return url;
     }
 }

@@ -82,7 +82,7 @@ public final class ClearDbServiceTest {
         Map<String, String> environmentVariables = new HashMap<>();
         environmentVariables.put("VCAP_SERVICES", "{\"cleardb-n/a\":[{\"name\":\"randomized-name\"," +
                 "\"label\":\"cleardb-n/a\",\"tags\":[\"mysql\",\"relational\"],\"plan\":\"spark\"," +
-                "\"credentials\":{\"jdbcUrl\":\"http://test.jdbc.url\",\"uri\":\"test-uri\",\"name\":\"test-name\"," +
+                "\"credentials\":{\"jdbcUrl\":\"http://test.jdbc.url\",\"uri\":\"http://test.jdbc.url\",\"name\":\"test-name\"," +
                 "\"hostname\":\"test-host-name\",\"port\":\"3306\",\"username\":\"test-username\"," +
                 "\"password\":\"test-password\"}}]}");
 
@@ -97,7 +97,7 @@ public final class ClearDbServiceTest {
         Map<String, String> environmentVariables = new HashMap<>();
         environmentVariables.put("VCAP_SERVICES", "{\"cleardb-n/a\":[{\"name\":\"randomized-name\"," +
                 "\"label\":\"cleardb-n/a\",\"tags\":[\"mysql\",\"relational\"],\"plan\":\"spark\"," +
-                "\"credentials\":{\"jdbcUrl\":\"http://test-user:test-password@test.jdbc.url\",\"uri\":\"test-uri\"," +
+                "\"credentials\":{\"jdbcUrl\":\"http://test-user:test-password@test.jdbc.url\",\"uri\":\"http://test-user:test-password@test.jdbc.url\"," +
                 "\"name\":\"test-name\"," +
                 "\"hostname\":\"test-host-name\",\"port\":\"3306\",\"username\":\"test-username\"," +
                 "\"password\":\"test-password\"}}]}");
