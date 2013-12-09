@@ -36,8 +36,8 @@ public final class RestOperationsTestOperationsTest {
 
     private final RestOperations restOperations = mock(RestOperations.class);
 
-    private final RestOperationsTestOperations testOperations = new RestOperationsTestOperations(0L, 10L, "test-host",
-            this.restOperations);
+    private final RestOperationsTestOperations testOperations = new RestOperationsTestOperations(0L, 10L,
+            "test-host", this.restOperations);
 
     @Test
     public void classPath() throws Exception {
@@ -64,11 +64,11 @@ public final class RestOperationsTestOperationsTest {
     @Test
     public void dataSourceUrl() throws Exception {
         when(this.restOperations.getForObject("http://{host}/datasource-url", String.class,
-                "test-host")).thenReturn("http://test.host");
+                "test-host")).thenReturn("http://test.url");
 
         URI value = this.testOperations.dataSourceUrl();
 
-        assertEquals(URI.create("http://test.host"), value);
+        assertEquals(URI.create("http://test.url"), value);
     }
 
     @Test

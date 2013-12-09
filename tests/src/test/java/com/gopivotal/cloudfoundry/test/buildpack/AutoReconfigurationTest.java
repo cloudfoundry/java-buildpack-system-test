@@ -20,6 +20,8 @@ import com.gopivotal.cloudfoundry.test.support.application.Application;
 import com.gopivotal.cloudfoundry.test.support.operations.TestOperations;
 import com.gopivotal.cloudfoundry.test.support.service.ClearDbService;
 import com.gopivotal.cloudfoundry.test.support.service.CreateServices;
+import com.gopivotal.cloudfoundry.test.support.service.ElephantSqlService;
+import com.gopivotal.cloudfoundry.test.support.service.RelationalDatabaseService;
 import com.gopivotal.cloudfoundry.test.support.service.ServicesHolder;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,11 +37,22 @@ public final class AutoReconfigurationTest extends AbstractTest {
 
     @CreateServices(ClearDbService.class)
     @Test
-    public void autoReconfiguration(Application application) {
+    public void mysqlReconfiguration(Application application) {
+        relationalAutoReconfiguration(application);
+    }
+
+    @CreateServices(ElephantSqlService.class)
+    @Test
+    public void postgresReconfiguration(Application application) {
+        relationalAutoReconfiguration(application);
+    }
+
+    private void relationalAutoReconfiguration(Application application) {
+
         TestOperations testOperations = application.getTestOperations();
         Map<String, String> environmentVariables = testOperations.environmentVariables();
 
-        assertEquals(this.servicesHolder.get(ClearDbService.class).getEndpoint(environmentVariables),
+        assertEquals(this.servicesHolder.get(RelationalDatabaseService.class).getEndpoint(environmentVariables),
                 testOperations.dataSourceUrl());
         assertEquals("ok", testOperations.dataSourceCheckAccess());
     }

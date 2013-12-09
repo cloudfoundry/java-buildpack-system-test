@@ -34,14 +34,17 @@ public interface TestOperations {
 
     /**
      * Returns whether the DataSource can access the database
+     *
      * @return whether the DataSource can access the database
      */
     String dataSourceCheckAccess();
 
     /**
-     * Returns the URL that the DataSource is connected to
+     * Returns the URL that the DataSource is connected to.  The URL is normalized to account for differences in
+     * underlying implementations.
      *
      * @return the URL that the DataSource is connected to
+     * @see com.gopivotal.cloudfoundry.test.support.util.JdbcUrlNormalizer
      */
     URI dataSourceUrl();
 
@@ -86,6 +89,5 @@ public interface TestOperations {
      * Blocks until the test application has started successfully
      */
     void waitForStart();
-
 
 }

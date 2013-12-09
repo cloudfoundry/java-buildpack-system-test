@@ -16,11 +16,9 @@
 
 package com.gopivotal.cloudfoundry.test.support.operations;
 
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestOperations;
-import org.springframework.web.client.RestTemplate;
 
 @Component
 final class RestOperationsTestOperationsFactory implements TestOperationsFactory {
@@ -35,28 +33,14 @@ final class RestOperationsTestOperationsFactory implements TestOperationsFactory
 
     private final RestOperations restOperations;
 
-    RestOperationsTestOperationsFactory() {
-        this.restOperations = createRestOperations();
-    }
-
-    private static RestOperations createRestOperations() {
-        RestTemplate restTemplate = new RestTemplate();
-        restTemplate.setErrorHandler(new NoErrorResponseErrorHandler());
-
-        return restTemplate;
+    @Autowired
+    RestOperationsTestOperationsFactory(RestOperations restOperations) {
+        this.restOperations = restOperations;
     }
 
     @Override
     public TestOperations create(String host) {
         return new RestOperationsTestOperations(INTERVAL, TIMEOUT, host, this.restOperations);
-    }
-
-    private static final class NoErrorResponseErrorHandler extends DefaultResponseErrorHandler {
-
-        @Override
-        protected boolean hasError(HttpStatus statusCode) {
-            return false;
-        }
     }
 
 }
