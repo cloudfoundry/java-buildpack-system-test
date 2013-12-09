@@ -16,20 +16,19 @@
 
 package com.gopivotal.cloudfoundry.test.buildpack;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.Map;
-
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.gopivotal.cloudfoundry.test.support.application.Application;
 import com.gopivotal.cloudfoundry.test.support.operations.TestOperations;
 import com.gopivotal.cloudfoundry.test.support.service.ClearDbService;
 import com.gopivotal.cloudfoundry.test.support.service.CreateServices;
-import com.gopivotal.cloudfoundry.test.support.service.ElephantSqlDbService;
-import com.gopivotal.cloudfoundry.test.support.service.RelationalDbService;
+import com.gopivotal.cloudfoundry.test.support.service.ElephantSqlService;
+import com.gopivotal.cloudfoundry.test.support.service.RelationalDatabaseService;
 import com.gopivotal.cloudfoundry.test.support.service.ServicesHolder;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
 
 public final class AutoReconfigurationTest extends AbstractTest {
 
@@ -39,20 +38,21 @@ public final class AutoReconfigurationTest extends AbstractTest {
     @CreateServices(ClearDbService.class)
     @Test
     public void mysqlReconfiguration(Application application) {
-        relationalAutoReconfiguration(application, ClearDbService.class);
+        relationalAutoReconfiguration(application);
     }
 
-    @CreateServices(ElephantSqlDbService.class)
+    @CreateServices(ElephantSqlService.class)
     @Test
     public void postgresReconfiguration(Application application) {
-        relationalAutoReconfiguration(application, ElephantSqlDbService.class);
+        relationalAutoReconfiguration(application);
     }
-    
-    private void relationalAutoReconfiguration(Application application, Class<? extends RelationalDbService> serviceClass) {
+
+    private void relationalAutoReconfiguration(Application application) {
+
         TestOperations testOperations = application.getTestOperations();
         Map<String, String> environmentVariables = testOperations.environmentVariables();
 
-        assertEquals(this.servicesHolder.get(serviceClass).getEndpoint(environmentVariables),
+        assertEquals(this.servicesHolder.get(RelationalDatabaseService.class).getEndpoint(environmentVariables),
                 testOperations.dataSourceUrl());
         assertEquals("ok", testOperations.dataSourceCheckAccess());
     }

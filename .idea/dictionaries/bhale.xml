@@ -30,6 +30,7 @@
       <w>springframework</w>
       <w>stdout</w>
       <w>tcftc</w>
+      <w>testdb</w>
       <w>vcap</w>
       <w>webhook</w>
       <w>webjars</w>

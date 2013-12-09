@@ -17,15 +17,14 @@
 package com.gopivotal.cloudfoundry.test.support.service;
 
 import com.gopivotal.cloudfoundry.test.support.util.RandomizedNameFactory;
-
 import org.cloudfoundry.client.lib.CloudFoundryOperations;
 
 /**
- * Represents an instance of the ClearDB service
+ * Represents an instance of the ElephantSQL service
  */
-public final class ElephantSqlDbService extends RelationalDbService {
+public final class ElephantSqlService extends RelationalDatabaseService {
 
-    ElephantSqlDbService(CloudFoundryOperations cloudFoundryOperations, RandomizedNameFactory randomizedNameFactory) {
+    ElephantSqlService(CloudFoundryOperations cloudFoundryOperations, RandomizedNameFactory randomizedNameFactory) {
         super(cloudFoundryOperations, "elephantsql", "turtle", randomizedNameFactory);
     }
 

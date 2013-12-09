@@ -30,11 +30,11 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public final class ClearDbServiceTest {
+public final class ElephantSqlServiceTest {
 
     private final CloudService cloudService;
 
-    public ClearDbServiceTest() {
+    public ElephantSqlServiceTest() {
         CloudFoundryOperations cloudFoundryOperations = createCloudFoundryOperations();
         RandomizedNameFactory randomizedNameFactory = createRandomizedNameFactory();
         createService(cloudFoundryOperations, randomizedNameFactory);
@@ -44,7 +44,7 @@ public final class ClearDbServiceTest {
     private static CloudFoundryOperations createCloudFoundryOperations() {
         CloudFoundryOperations cloudFoundryOperations = mock(CloudFoundryOperations.class);
 
-        CloudServiceOffering cloudServiceOffering = new CloudServiceOffering(null, "cleardb");
+        CloudServiceOffering cloudServiceOffering = new CloudServiceOffering(null, "elephantsql");
         when(cloudFoundryOperations.getServiceOfferings()).thenReturn(Arrays.asList(cloudServiceOffering));
 
         return cloudFoundryOperations;
@@ -52,14 +52,14 @@ public final class ClearDbServiceTest {
 
     private static RandomizedNameFactory createRandomizedNameFactory() {
         RandomizedNameFactory randomizedNameFactory = mock(RandomizedNameFactory.class);
-        when(randomizedNameFactory.create("cleardb")).thenReturn("randomized-name");
+        when(randomizedNameFactory.create("elephantsql")).thenReturn("randomized-name");
 
         return randomizedNameFactory;
     }
 
-    private static ClearDbService createService(CloudFoundryOperations cloudFoundryOperations,
-                                                RandomizedNameFactory randomizedNameFactory) {
-        return new ClearDbService(cloudFoundryOperations, randomizedNameFactory);
+    private static ElephantSqlService createService(CloudFoundryOperations cloudFoundryOperations,
+                                                    RandomizedNameFactory randomizedNameFactory) {
+        return new ElephantSqlService(cloudFoundryOperations, randomizedNameFactory);
     }
 
     private static CloudService createCloudService(CloudFoundryOperations cloudFoundryOperations) {
@@ -71,8 +71,8 @@ public final class ClearDbServiceTest {
 
     @Test
     public void test() {
-        assertEquals("cleardb", this.cloudService.getLabel());
-        assertEquals("spark", this.cloudService.getPlan());
+        assertEquals("elephantsql", this.cloudService.getLabel());
+        assertEquals("turtle", this.cloudService.getPlan());
     }
 
 }

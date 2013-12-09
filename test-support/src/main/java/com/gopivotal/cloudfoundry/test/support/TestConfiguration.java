@@ -25,6 +25,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.client.DefaultResponseErrorHandler;
+import org.springframework.web.client.RestOperations;
+import org.springframework.web.client.RestTemplate;
 
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -59,6 +63,14 @@ public class TestConfiguration {
     }
 
     @Bean
+    RestOperations restOperations() {
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.setErrorHandler(new NoErrorResponseErrorHandler());
+
+        return restTemplate;
+    }
+
+    @Bean
     RuleChain ruleChain(List<TestRule> testRules) {
         RuleChain ruleChain = RuleChain.emptyRuleChain();
 
@@ -67,6 +79,14 @@ public class TestConfiguration {
         }
 
         return ruleChain;
+    }
+
+    private static final class NoErrorResponseErrorHandler extends DefaultResponseErrorHandler {
+
+        @Override
+        protected boolean hasError(HttpStatus statusCode) {
+            return false;
+        }
     }
 
 }

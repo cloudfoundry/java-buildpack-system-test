@@ -104,7 +104,7 @@ public final class AbstractServiceTest {
                 "\"label\":\"service-n/a\",\"tags\":[\"test-tag\"],\"plan\":\"test-plan\"," +
                 "\"credentials\":{\"type\":\"value\"}}]}");
 
-        Map<String, Object> credentials = this.service.getCredentials(environmentVariables);
+        Map<String, ?> credentials = this.service.getCredentials(environmentVariables);
         assertTrue(credentials.containsKey("type"));
     }
 

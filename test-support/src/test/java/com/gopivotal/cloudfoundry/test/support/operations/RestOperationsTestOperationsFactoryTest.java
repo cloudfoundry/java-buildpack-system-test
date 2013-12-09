@@ -17,16 +17,21 @@
 package com.gopivotal.cloudfoundry.test.support.operations;
 
 import org.junit.Test;
+import org.springframework.web.client.RestOperations;
 
+import static org.mockito.Mockito.mock;
 import static org.junit.Assert.assertTrue;
 
 public final class RestOperationsTestOperationsFactoryTest {
 
+    private final RestOperations restOperations = mock(RestOperations.class);
+
     private final RestOperationsTestOperationsFactory testOperationsFactory = new RestOperationsTestOperationsFactory
-            ();
+            (this.restOperations);
 
     @Test
     public void create() throws Exception {
         assertTrue(this.testOperationsFactory.create("test-host") instanceof RestOperationsTestOperations);
     }
+
 }

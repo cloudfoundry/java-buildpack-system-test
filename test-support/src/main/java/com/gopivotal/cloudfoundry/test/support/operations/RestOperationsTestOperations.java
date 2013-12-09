@@ -18,7 +18,7 @@ package com.gopivotal.cloudfoundry.test.support.operations;
 
 import com.gopivotal.cloudfoundry.test.support.util.RetryCallback;
 import com.gopivotal.cloudfoundry.test.support.util.RetryTemplate;
-
+import com.gopivotal.cloudfoundry.test.support.util.JdbcUrlNormalizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -62,20 +62,8 @@ final class RestOperationsTestOperations extends AbstractTestOperations {
 
     @Override
     public URI dataSourceUrl() {
-        String uriString = this.restOperations.getForObject("http://{host}/datasource-url", String.class, this.host);
-        // depending on how uri is created, it may (when using spring-cloud) or may not (when using cloudfoundry-runtime) 
-        // have the query string with user credentials. So chop off any query parameters so that tests can verify the core
-        // part of the uri (host, port, etc.)
-        // Also, to match the uri form expected by AbstractService.getTestableUrl(String), remove any leading "jdbc:"
-        String jdbcStart = "jdbc:";
-        if (uriString.startsWith(jdbcStart)) {
-            uriString = uriString.substring(jdbcStart.length());
-        }
-        int queryStringStart = uriString.indexOf('?');
-        if (queryStringStart != -1) {
-            uriString = uriString.substring(0, queryStringStart);
-        }
-        return URI.create(uriString);
+        String urlString = this.restOperations.getForObject("http://{host}/datasource-url", String.class, this.host);
+        return JdbcUrlNormalizer.normalize(urlString);
     }
 
     @SuppressWarnings("unchecked")

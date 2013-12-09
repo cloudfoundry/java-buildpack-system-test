@@ -17,13 +17,12 @@
 package com.gopivotal.cloudfoundry.test.support.service;
 
 import com.gopivotal.cloudfoundry.test.support.util.RandomizedNameFactory;
-
 import org.cloudfoundry.client.lib.CloudFoundryOperations;
 
 /**
  * Represents an instance of the ClearDB service
  */
-public final class ClearDbService extends RelationalDbService {
+public final class ClearDbService extends RelationalDatabaseService {
 
     ClearDbService(CloudFoundryOperations cloudFoundryOperations, RandomizedNameFactory randomizedNameFactory) {
         super(cloudFoundryOperations, "cleardb", "spark", randomizedNameFactory);
