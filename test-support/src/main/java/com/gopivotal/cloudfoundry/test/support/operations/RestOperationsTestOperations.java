@@ -57,12 +57,12 @@ final class RestOperationsTestOperations extends AbstractTestOperations {
 
     @Override
     public String dataSourceCheckAccess() {
-        return this.restOperations.getForObject("http://{host}/datasource-check-access", String.class, this.host);
+        return this.restOperations.getForObject("http://{host}/datasource/check-access", String.class, this.host);
     }
 
     @Override
     public URI dataSourceUrl() {
-        String urlString = this.restOperations.getForObject("http://{host}/datasource-url", String.class, this.host);
+        String urlString = this.restOperations.getForObject("http://{host}/datasource/url", String.class, this.host);
         return JdbcUrlNormalizer.normalize(urlString);
     }
 
