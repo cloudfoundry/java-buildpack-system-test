@@ -62,6 +62,15 @@ public final class BuildpackClassRunnerTest {
     }
 
     @Test
+    public void isTestMethodIgnoredExcludedClassApplications() throws Exception {
+        BuildpackClassRunner classRunner = new BuildpackClassRunner(IgnoredTestMethods.class);
+        FrameworkMethod method = new ApplicationSpecificFrameworkMethod("grails",
+                IgnoredTestMethods.class.getMethod("excluded", Application.class));
+
+        assertTrue(classRunner.isTestMethodIgnored(method));
+    }
+
+    @Test
     public void isTestMethodIgnoredExcludedApplicationsNotExcluded() throws Exception {
         BuildpackClassRunner classRunner = new BuildpackClassRunner(IgnoredTestMethods.class);
         FrameworkMethod method = new ApplicationSpecificFrameworkMethod("web", IgnoredTestMethods.class.getMethod
@@ -98,6 +107,7 @@ public final class BuildpackClassRunnerTest {
 
     }
 
+    @ExcludedApplications("grails")
     static final class IgnoredTestMethods {
 
         public IgnoredTestMethods() {

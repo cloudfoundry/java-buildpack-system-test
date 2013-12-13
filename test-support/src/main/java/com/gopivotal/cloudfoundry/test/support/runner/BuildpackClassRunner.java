@@ -21,12 +21,17 @@ import org.junit.Test;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.Statement;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.File;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -100,6 +105,16 @@ public final class BuildpackClassRunner extends SpringJUnit4ClassRunner {
         return ((ApplicationSpecificFrameworkMethod) method).getApplication();
     }
 
+    private Set<String> getExcludedApplicationNames(Method method) {
+        Set<String> names = new HashSet<>();
+
+        names.addAll(nullSafeValue(AnnotationUtils.findAnnotation(method, ExcludedApplications.class)));
+        names.addAll(nullSafeValue(AnnotationUtils.findAnnotation(method.getDeclaringClass(),
+                ExcludedApplications.class)));
+
+        return names;
+    }
+
     private boolean hasValidParameters(FrameworkMethod method) {
         Class<?>[] parameterTypes = method.getMethod().getParameterTypes();
         return parameterTypes.length == 1 && Application.class.isAssignableFrom(parameterTypes[0]);
@@ -107,9 +122,11 @@ public final class BuildpackClassRunner extends SpringJUnit4ClassRunner {
 
     private boolean isExcludedApplication(FrameworkMethod frameworkMethod) {
         ApplicationSpecificFrameworkMethod method = (ApplicationSpecificFrameworkMethod) frameworkMethod;
+        return getExcludedApplicationNames(method.getMethod()).contains(method.getApplication());
+    }
 
-        ExcludedApplications annotation = method.getAnnotation(ExcludedApplications.class);
-        return annotation != null && Arrays.asList(annotation.value()).contains(method.getApplication());
+    private List<String> nullSafeValue(ExcludedApplications annotation) {
+        return annotation == null ? Collections.<String>emptyList() : Arrays.asList(annotation.value());
     }
 
 }
