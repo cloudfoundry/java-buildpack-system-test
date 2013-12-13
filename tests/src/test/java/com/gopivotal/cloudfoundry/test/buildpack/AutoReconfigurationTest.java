@@ -18,6 +18,7 @@ package com.gopivotal.cloudfoundry.test.buildpack;
 
 import com.gopivotal.cloudfoundry.test.support.application.Application;
 import com.gopivotal.cloudfoundry.test.support.operations.TestOperations;
+import com.gopivotal.cloudfoundry.test.support.runner.ExcludedApplications;
 import com.gopivotal.cloudfoundry.test.support.service.ClearDbService;
 import com.gopivotal.cloudfoundry.test.support.service.CreateServices;
 import com.gopivotal.cloudfoundry.test.support.service.ElephantSqlService;
@@ -30,6 +31,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
+@ExcludedApplications({"grails", "groovy", "java-main", "java-main-with-web-inf", "spring-boot-cli", "web"})
 public final class AutoReconfigurationTest extends AbstractTest {
 
     @Autowired
