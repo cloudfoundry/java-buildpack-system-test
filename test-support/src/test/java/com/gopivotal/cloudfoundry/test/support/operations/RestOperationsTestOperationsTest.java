@@ -52,7 +52,7 @@ public final class RestOperationsTestOperationsTest {
 
     @Test
     public void dataSourceCheckAccess() throws Exception {
-        when(this.restOperations.getForObject("http://{host}/datasource-check-access", String.class,
+        when(this.restOperations.getForObject("http://{host}/datasource/check-access", String.class,
                 "test-host")).thenReturn("test-check-access");
 
         String value = this.testOperations.dataSourceCheckAccess();
@@ -63,7 +63,7 @@ public final class RestOperationsTestOperationsTest {
 
     @Test
     public void dataSourceUrl() throws Exception {
-        when(this.restOperations.getForObject("http://{host}/datasource-url", String.class,
+        when(this.restOperations.getForObject("http://{host}/datasource/url", String.class,
                 "test-host")).thenReturn("http://test.url");
 
         URI value = this.testOperations.dataSourceUrl();
