@@ -17,6 +17,7 @@
 package com.gopivotal.cloudfoundry.test.support.application;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -30,9 +31,8 @@ final class YamlManifestFactory implements ManifestFactory {
     private final MemorySizeParser memorySizeParser;
 
     @Autowired
-    YamlManifestFactory(@Value("${cf.buildpack:https://github.com/cloudfoundry/java-buildpack.git}") String
-                                buildpack, MemorySizeParser memorySizeParser) {
-        this.buildpack = buildpack;
+    YamlManifestFactory(@Value("${cf.buildpack:}") String buildpack, MemorySizeParser memorySizeParser) {
+        this.buildpack = buildpack.isEmpty() ? null : buildpack;
         this.memorySizeParser = memorySizeParser;
     }
 
