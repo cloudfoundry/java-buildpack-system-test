@@ -39,22 +39,86 @@ public final class AbstractServiceTest {
 
     private final CloudFoundryOperations cloudFoundryOperations = mock(CloudFoundryOperations.class);
 
-    private final StubService service;
-
-    public AbstractServiceTest() {
-        mockCloudFoundryOperations(this.cloudFoundryOperations);
+    @Test(expected = IllegalArgumentException.class)
+    public void noServiceOffering() {
+        when(this.cloudFoundryOperations.getServiceOfferings()).thenReturn(Arrays.<CloudServiceOffering>asList());
         RandomizedNameFactory randomizedNameFactory = createRandomizedNameFactory();
-        this.service = createService(this.cloudFoundryOperations, randomizedNameFactory);
+        createService(this.cloudFoundryOperations, randomizedNameFactory);
     }
 
-    private static void mockCloudFoundryOperations(CloudFoundryOperations cloudFoundryOperations) {
+    @Test
+    public void preferDevServices() {
+        ArgumentCaptor<CloudService> cloudServiceCaptor = ArgumentCaptor.forClass(CloudService.class);
+        when(this.cloudFoundryOperations.getServiceOfferings()).thenReturn(Arrays.asList(
+                new CloudServiceOffering(null, "test-label"), new CloudServiceOffering(null, "test-label-dev")));
+        RandomizedNameFactory randomizedNameFactory = createRandomizedNameFactory();
+
+        new StubService(this.cloudFoundryOperations, "test-label", "test-plan", randomizedNameFactory);
+
+        verify(this.cloudFoundryOperations).createService(cloudServiceCaptor.capture());
+        assertEquals("test-label-dev", cloudServiceCaptor.getValue().getLabel());
+    }
+
+    @Test
+    public void fallbackToNonDevServices() {
+        ArgumentCaptor<CloudService> cloudServiceCaptor = ArgumentCaptor.forClass(CloudService.class);
+        when(this.cloudFoundryOperations.getServiceOfferings()).thenReturn(Arrays.asList(
+                new CloudServiceOffering(null, "test-label")));
+        RandomizedNameFactory randomizedNameFactory = createRandomizedNameFactory();
+
+        new StubService(this.cloudFoundryOperations, "test-label", "test-plan", randomizedNameFactory);
+
+        verify(this.cloudFoundryOperations).createService(cloudServiceCaptor.capture());
+        assertEquals("test-label", cloudServiceCaptor.getValue().getLabel());
+    }
+
+    @Test
+    public void getName() throws Exception {
+        assertEquals("randomized-name", getService().getName());
+    }
+
+    @Test
+    public void delete() throws Exception {
+        getService().delete();
+
+        verify(this.cloudFoundryOperations).deleteService("randomized-name");
+    }
+
+    @Test
+    public void getCredentials() throws Exception {
+        Map<String, String> environmentVariables = new HashMap<>();
+        environmentVariables.put("VCAP_SERVICES", "{\"service-n/a\":[{\"name\":\"randomized-name\"," +
+                "\"label\":\"service-n/a\",\"tags\":[\"test-tag\"],\"plan\":\"test-plan\"," +
+                "\"credentials\":{\"type\":\"value\"}}]}");
+
+        Map<String, ?> credentials = getService().getCredentials(environmentVariables);
+        assertTrue(credentials.containsKey("type"));
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void getCredentialsNoService() {
+        Map<String, String> environmentVariables = new HashMap<>();
+        environmentVariables.put("VCAP_SERVICES", "{\"service-n/a\":[{\"name\":\"test-name\"," +
+                "\"label\":\"service-n/a\",\"tags\":[\"test-tag\"],\"plan\":\"test-plan\"," +
+                "\"credentials\":{\"type\":\"value\"}}]}");
+
+        getService().getCredentials(environmentVariables);
+    }
+
+    private AbstractService getService() {
+        mockCloudFoundryOperations(this.cloudFoundryOperations);
+        RandomizedNameFactory randomizedNameFactory = createRandomizedNameFactory();
+        return createService(this.cloudFoundryOperations, randomizedNameFactory);
+    }
+
+    private void mockCloudFoundryOperations(CloudFoundryOperations cloudFoundryOperations) {
         CloudServiceOffering cloudServiceOffering1 = new CloudServiceOffering(null, "other-label");
-        CloudServiceOffering cloudServiceOffering2 = new CloudServiceOffering(null, "test-label");
+        CloudServiceOffering cloudServiceOffering2 = new CloudServiceOffering(null, "test-label-dev");
         when(cloudFoundryOperations.getServiceOfferings()).thenReturn(Arrays.asList(cloudServiceOffering1,
                 cloudServiceOffering2));
     }
 
-    private static RandomizedNameFactory createRandomizedNameFactory() {
+    private RandomizedNameFactory createRandomizedNameFactory() {
         RandomizedNameFactory randomizedNameFactory = mock(RandomizedNameFactory.class);
         when(randomizedNameFactory.create("test-label")).thenReturn("randomized-name");
 
@@ -71,51 +135,11 @@ public final class AbstractServiceTest {
         CloudService cloudService = cloudServiceCaptor.getValue();
         assertEquals("randomized-name", cloudService.getName());
         assertEquals("core", cloudService.getProvider());
-        assertEquals("test-label", cloudService.getLabel());
+        assertEquals("test-label-dev", cloudService.getLabel());
         assertNull(cloudService.getVersion());
         assertEquals("test-plan", cloudService.getPlan());
 
         return service;
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void noServiceOffering() {
-        when(this.cloudFoundryOperations.getServiceOfferings()).thenReturn(Arrays.<CloudServiceOffering>asList());
-        RandomizedNameFactory randomizedNameFactory = createRandomizedNameFactory();
-        createService(this.cloudFoundryOperations, randomizedNameFactory);
-    }
-
-    @Test
-    public void getName() throws Exception {
-        assertEquals("randomized-name", this.service.getName());
-    }
-
-    @Test
-    public void delete() throws Exception {
-        this.service.delete();
-
-        verify(this.cloudFoundryOperations).deleteService("randomized-name");
-    }
-
-    @Test
-    public void getCredentials() throws Exception {
-        Map<String, String> environmentVariables = new HashMap<>();
-        environmentVariables.put("VCAP_SERVICES", "{\"service-n/a\":[{\"name\":\"randomized-name\"," +
-                "\"label\":\"service-n/a\",\"tags\":[\"test-tag\"],\"plan\":\"test-plan\"," +
-                "\"credentials\":{\"type\":\"value\"}}]}");
-
-        Map<String, ?> credentials = this.service.getCredentials(environmentVariables);
-        assertTrue(credentials.containsKey("type"));
-    }
-
-    @Test(expected = IllegalStateException.class)
-    public void getCredentialsNoService() {
-        Map<String, String> environmentVariables = new HashMap<>();
-        environmentVariables.put("VCAP_SERVICES", "{\"service-n/a\":[{\"name\":\"test-name\"," +
-                "\"label\":\"service-n/a\",\"tags\":[\"test-tag\"],\"plan\":\"test-plan\"," +
-                "\"credentials\":{\"type\":\"value\"}}]}");
-
-        this.service.getCredentials(environmentVariables);
     }
 
     private static final class StubService extends AbstractService {
