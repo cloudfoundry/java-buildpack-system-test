@@ -15,8 +15,8 @@ The following environment variables must be set before building this project or 
 
 | Environment Variable | Value
 | -------------------- | -----
-| `CF_BUILDPACK` | The URI of the buildpack to use.  Defaults to <`https://github.com/cloudfoundry/java-buildpack.git`>.
-| `CF_ORG` | The Cloud Foundry organisation to use.
+| `CF_BUILDPACK` | The URI of the buildpack to use.  Defaults to the "blessed buildpack" installed on the DEAs if it is not specified.
+| `CF_ORG` | The Cloud Foundry organization to use.
 | `CF_PASSWORD` | The password corresponding to the Cloud Foundry username.
 | `CF_SPACE` | The Cloud Foundry space to use.
 | `CF_TARGET` | The Cloud Foundry instance to use, Defaults to <`https://api.run.pivotal.io`>.

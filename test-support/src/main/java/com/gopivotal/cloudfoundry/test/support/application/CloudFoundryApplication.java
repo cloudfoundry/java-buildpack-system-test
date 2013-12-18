@@ -65,7 +65,13 @@ final class CloudFoundryApplication implements Application {
 
     private static void createCloudApplication(CloudFoundryOperations cloudFoundryOperations, String host,
                                                Manifest manifest, String name) {
-        Staging staging = new Staging(null, manifest.getBuildpack());
+
+        String buildpack = manifest.getBuildpack();
+
+        LoggerFactory.getLogger(CloudFoundryApplication.class).debug("Using buildpack {}",
+                buildpack == null ? "built-in" : buildpack);
+        Staging staging = new Staging(null, buildpack);
+
         cloudFoundryOperations.createApplication(name, staging, manifest.getMemory(), Arrays.asList(host),
                 Collections.<String>emptyList());
     }
