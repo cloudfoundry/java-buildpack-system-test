@@ -58,6 +58,7 @@
     <orderEntry type="library" exported="" name="Gradle: jcl-over-slf4j-1.7.5" level="project" />
     <orderEntry type="library" exported="" name="Gradle: spring-web-3.2.2.RELEASE" level="project" />
     <orderEntry type="library" exported="" name="Gradle: jackson-mapper-asl-1.9.2" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: spring-boot-0.5.0.M6-tests" level="project" />
   </component>
 </module>
 

@@ -44,33 +44,52 @@ abstract class AbstractService implements Service {
         this.cloudFoundryOperations = cloudFoundryOperations;
         this.name = randomizedNameFactory.create(label);
 
-        this.logger.info("Creating service {}", this.name);
-
         CloudServiceOffering cloudServiceOffering = getServiceOffering(cloudFoundryOperations, label);
-        createCloudService(cloudFoundryOperations, cloudServiceOffering, this.name, label, plan);
+
+        this.logger.info("Creating service {} ({}/{})", this.name, cloudServiceOffering.getLabel(), plan);
+
+        createCloudService(cloudFoundryOperations, cloudServiceOffering, this.name, plan);
     }
 
     private static CloudServiceOffering getServiceOffering(CloudFoundryOperations cloudFoundryOperations,
                                                            String label) {
-        for (CloudServiceOffering cloudServiceOffering : cloudFoundryOperations.getServiceOfferings()) {
+        List<CloudServiceOffering> cloudServiceOfferings = cloudFoundryOperations.getServiceOfferings();
+
+        CloudServiceOffering cloudServiceOffering = findServiceOffering(cloudServiceOfferings,
+                String.format("%s-dev", label));
+
+        if (cloudServiceOffering == null) {
+            cloudServiceOffering = findServiceOffering(cloudServiceOfferings, label);
+        }
+
+        if (cloudServiceOffering == null) {
+            throw new IllegalArgumentException(String.format("No service type with a label of %s", label));
+        }
+
+        return cloudServiceOffering;
+    }
+
+    private static void createCloudService(CloudFoundryOperations cloudFoundryOperations,
+                                           CloudServiceOffering cloudServiceOffering, String name, String plan) {
+        CloudService cloudService = new CloudService(CloudEntity.Meta.defaultMeta(), name);
+        cloudService.setProvider("core");
+        cloudService.setLabel(cloudServiceOffering.getLabel());
+        cloudService.setVersion(cloudServiceOffering.getVersion());
+        cloudService.setPlan(plan);
+
+        cloudFoundryOperations.createService(cloudService);
+    }
+
+    private static CloudServiceOffering findServiceOffering(List<CloudServiceOffering> cloudServiceOfferings,
+                                                            String label) {
+
+        for (CloudServiceOffering cloudServiceOffering : cloudServiceOfferings) {
             if (label.equals(cloudServiceOffering.getLabel())) {
                 return cloudServiceOffering;
             }
         }
 
-        throw new IllegalArgumentException(String.format("No service type with a label of %s", label));
-    }
-
-    private static void createCloudService(CloudFoundryOperations cloudFoundryOperations,
-                                           CloudServiceOffering cloudServiceOffering, String name, String label,
-                                           String plan) {
-        CloudService cloudService = new CloudService(CloudEntity.Meta.defaultMeta(), name);
-        cloudService.setProvider("core");
-        cloudService.setLabel(label);
-        cloudService.setVersion(cloudServiceOffering.getVersion());
-        cloudService.setPlan(plan);
-
-        cloudFoundryOperations.createService(cloudService);
+        return null;
     }
 
     @Override
