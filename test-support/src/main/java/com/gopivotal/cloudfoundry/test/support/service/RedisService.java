@@ -16,18 +16,27 @@
 
 package com.gopivotal.cloudfoundry.test.support.service;
 
+import java.net.URI;
+import java.util.Map;
+
 import org.cloudfoundry.client.lib.CloudFoundryOperations;
 
 import com.gopivotal.cloudfoundry.test.support.util.RandomizedNameFactory;
 
-public final class ClearDbServiceTest extends AbstractServiceTest<ClearDbService> {
+/**
+ * Represents an instance of the Redis service
+ */
+public final class RedisService extends AbstractService {
 
-    public ClearDbServiceTest() {
-        super("cleardb", "spark");
+    RedisService(CloudFoundryOperations cloudFoundryOperations, RandomizedNameFactory randomizedNameFactory) {
+        super(cloudFoundryOperations, "rediscloud", "25mb", randomizedNameFactory);
     }
 
-    protected ClearDbService createService(CloudFoundryOperations cloudFoundryOperations,
-                                           RandomizedNameFactory randomizedNameFactory) {
-        return new ClearDbService(cloudFoundryOperations, randomizedNameFactory);
+    @Override
+    public final URI getEndpoint(Map<String, String> environmentVariables) {
+        Map<String, ?> credentials = getCredentials(environmentVariables);
+        String host = credentials.get("hostname").toString();
+        int port = Integer.parseInt(credentials.get("port").toString());
+        return URI.create(String.format("redis://%s:%d", host, port));
     }
 }

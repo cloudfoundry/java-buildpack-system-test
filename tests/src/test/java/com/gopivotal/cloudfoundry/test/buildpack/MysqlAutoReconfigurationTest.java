@@ -14,20 +14,18 @@
  * limitations under the License.
  */
 
-package com.gopivotal.cloudfoundry.test.support.service;
+package com.gopivotal.cloudfoundry.test.buildpack;
 
-import org.cloudfoundry.client.lib.CloudFoundryOperations;
+import org.junit.Test;
 
-import com.gopivotal.cloudfoundry.test.support.util.RandomizedNameFactory;
+import com.gopivotal.cloudfoundry.test.support.application.Application;
+import com.gopivotal.cloudfoundry.test.support.service.ClearDbService;
+import com.gopivotal.cloudfoundry.test.support.service.CreateServices;
 
-public final class ClearDbServiceTest extends AbstractServiceTest<ClearDbService> {
-
-    public ClearDbServiceTest() {
-        super("cleardb", "spark");
-    }
-
-    protected ClearDbService createService(CloudFoundryOperations cloudFoundryOperations,
-                                           RandomizedNameFactory randomizedNameFactory) {
-        return new ClearDbService(cloudFoundryOperations, randomizedNameFactory);
+public class MysqlAutoReconfigurationTest extends RelationalAutoReconfigurationTest {
+    @CreateServices(ClearDbService.class)
+    @Test
+    public void mysqlReconfiguration(Application application) {
+        assertRelationalAutoReconfiguration(application);
     }
 }

@@ -14,20 +14,17 @@
  * limitations under the License.
  */
 
-package com.gopivotal.cloudfoundry.test.support.service;
+package com.gopivotal.cloudfoundry.test.buildpack;
 
-import org.cloudfoundry.client.lib.CloudFoundryOperations;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import com.gopivotal.cloudfoundry.test.support.util.RandomizedNameFactory;
+import com.gopivotal.cloudfoundry.test.support.runner.ExcludedApplications;
+import com.gopivotal.cloudfoundry.test.support.service.ServicesHolder;
 
-public final class ClearDbServiceTest extends AbstractServiceTest<ClearDbService> {
+@ExcludedApplications({"grails", "groovy", "java-main", "java-main-with-web-inf", "spring-boot-cli", "web"})
+public abstract class AbstractAutoReconfigurationTest extends AbstractTest {
 
-    public ClearDbServiceTest() {
-        super("cleardb", "spark");
-    }
+    @Autowired
+    protected volatile ServicesHolder servicesHolder;
 
-    protected ClearDbService createService(CloudFoundryOperations cloudFoundryOperations,
-                                           RandomizedNameFactory randomizedNameFactory) {
-        return new ClearDbService(cloudFoundryOperations, randomizedNameFactory);
-    }
 }

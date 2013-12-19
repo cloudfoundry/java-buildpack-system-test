@@ -16,63 +16,17 @@
 
 package com.gopivotal.cloudfoundry.test.support.service;
 
-import com.gopivotal.cloudfoundry.test.support.util.RandomizedNameFactory;
 import org.cloudfoundry.client.lib.CloudFoundryOperations;
-import org.cloudfoundry.client.lib.domain.CloudService;
-import org.cloudfoundry.client.lib.domain.CloudServiceOffering;
-import org.junit.Test;
-import org.mockito.ArgumentCaptor;
 
-import java.util.Arrays;
+import com.gopivotal.cloudfoundry.test.support.util.RandomizedNameFactory;
 
-import static org.mockito.Mockito.mock;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-public final class ElephantSqlServiceTest {
-
-    private final CloudService cloudService;
-
+public final class ElephantSqlServiceTest extends AbstractServiceTest<ElephantSqlService> {
     public ElephantSqlServiceTest() {
-        CloudFoundryOperations cloudFoundryOperations = createCloudFoundryOperations();
-        RandomizedNameFactory randomizedNameFactory = createRandomizedNameFactory();
-        createService(cloudFoundryOperations, randomizedNameFactory);
-        this.cloudService = createCloudService(cloudFoundryOperations);
+        super("elephantsql", "turtle");
     }
 
-    private static CloudFoundryOperations createCloudFoundryOperations() {
-        CloudFoundryOperations cloudFoundryOperations = mock(CloudFoundryOperations.class);
-
-        CloudServiceOffering cloudServiceOffering = new CloudServiceOffering(null, "elephantsql");
-        when(cloudFoundryOperations.getServiceOfferings()).thenReturn(Arrays.asList(cloudServiceOffering));
-
-        return cloudFoundryOperations;
-    }
-
-    private static RandomizedNameFactory createRandomizedNameFactory() {
-        RandomizedNameFactory randomizedNameFactory = mock(RandomizedNameFactory.class);
-        when(randomizedNameFactory.create("elephantsql")).thenReturn("randomized-name");
-
-        return randomizedNameFactory;
-    }
-
-    private static ElephantSqlService createService(CloudFoundryOperations cloudFoundryOperations,
-                                                    RandomizedNameFactory randomizedNameFactory) {
+    protected ElephantSqlService createService(CloudFoundryOperations cloudFoundryOperations,
+                                               RandomizedNameFactory randomizedNameFactory) {
         return new ElephantSqlService(cloudFoundryOperations, randomizedNameFactory);
     }
-
-    private static CloudService createCloudService(CloudFoundryOperations cloudFoundryOperations) {
-        ArgumentCaptor<CloudService> cloudService = ArgumentCaptor.forClass(CloudService.class);
-        verify(cloudFoundryOperations).createService(cloudService.capture());
-
-        return cloudService.getValue();
-    }
-
-    @Test
-    public void test() {
-        assertEquals("elephantsql", this.cloudService.getLabel());
-        assertEquals("turtle", this.cloudService.getPlan());
-    }
-
 }
