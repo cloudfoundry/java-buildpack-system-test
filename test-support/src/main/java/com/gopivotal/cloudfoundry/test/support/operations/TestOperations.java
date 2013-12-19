@@ -90,4 +90,14 @@ public interface TestOperations {
      */
     void waitForStart();
 
+    /**
+     * Returns whether the service connector can access the redis service
+     */
+    String redisCheckAccess();
+
+    /**
+     * Returns the URL that the Redis service is connected to
+     */
+    URI redisUrl();
+
 }

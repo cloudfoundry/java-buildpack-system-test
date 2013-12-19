@@ -20,14 +20,14 @@ import org.cloudfoundry.client.lib.CloudFoundryOperations;
 
 import com.gopivotal.cloudfoundry.test.support.util.RandomizedNameFactory;
 
-public final class ClearDbServiceTest extends AbstractServiceTest<ClearDbService> {
+public final class RedisServiceTest extends AbstractServiceTest<RedisService> {
 
-    public ClearDbServiceTest() {
-        super("cleardb", "spark");
+    public RedisServiceTest() {
+        super("rediscloud", "25mb");
     }
 
-    protected ClearDbService createService(CloudFoundryOperations cloudFoundryOperations,
-                                           RandomizedNameFactory randomizedNameFactory) {
-        return new ClearDbService(cloudFoundryOperations, randomizedNameFactory);
+    protected RedisService createService(CloudFoundryOperations cloudFoundryOperations,
+                                         RandomizedNameFactory randomizedNameFactory) {
+        return new RedisService(cloudFoundryOperations, randomizedNameFactory);
     }
 }
