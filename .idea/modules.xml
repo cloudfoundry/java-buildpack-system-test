@@ -11,7 +11,7 @@
       <module fileurl="file://$PROJECT_DIR$/vendor/java-test-applications/java-test-applications.iml" filepath="$PROJECT_DIR$/vendor/java-test-applications/java-test-applications.iml" group="test-applications" />
       <module fileurl="file://$PROJECT_DIR$/vendor/java-test-applications/play-application/play-application.iml" filepath="$PROJECT_DIR$/vendor/java-test-applications/play-application/play-application.iml" group="test-applications" />
       <module fileurl="file://$PROJECT_DIR$/vendor/java-test-applications/spring-boot-cli-application/spring-boot-cli-application.iml" filepath="$PROJECT_DIR$/vendor/java-test-applications/spring-boot-cli-application/spring-boot-cli-application.iml" group="test-applications" />
-      <module fileurl="file://$PROJECT_DIR$/vendor/java-test-applications/spring-common/spring-common.iml" filepath="$PROJECT_DIR$/vendor/java-test-applications/spring-common/spring-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vendor/java-test-applications/spring-common/spring-common.iml" filepath="$PROJECT_DIR$/vendor/java-test-applications/spring-common/spring-common.iml" group="test-applications" />
       <module fileurl="file://$PROJECT_DIR$/test-support/test-support.iml" filepath="$PROJECT_DIR$/test-support/test-support.iml" />
       <module fileurl="file://$PROJECT_DIR$/tests/tests.iml" filepath="$PROJECT_DIR$/tests/tests.iml" />
       <module fileurl="file://$PROJECT_DIR$/vendor/java-test-applications/web-application/web-application.iml" filepath="$PROJECT_DIR$/vendor/java-test-applications/web-application/web-application.iml" group="test-applications" />

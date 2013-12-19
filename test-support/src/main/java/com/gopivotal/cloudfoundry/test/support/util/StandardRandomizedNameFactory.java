@@ -23,12 +23,12 @@ import java.security.SecureRandom;
 @Component
 final class StandardRandomizedNameFactory implements RandomizedNameFactory {
 
-    private static final String FORMAT = "system-test-%s-%06d";
+    private static final String FORMAT = "system-test-%s-%s-%06d";
 
     private static final SecureRandom RANDOM = new SecureRandom();
 
     @Override
     public String create(String stem) {
-        return String.format(FORMAT, stem, RANDOM.nextInt(1000000));
+        return String.format(FORMAT, System.getProperty("user.name"), stem, RANDOM.nextInt(1000000));
     }
 }

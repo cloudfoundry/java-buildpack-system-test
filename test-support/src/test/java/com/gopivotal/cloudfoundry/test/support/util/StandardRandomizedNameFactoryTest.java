@@ -24,7 +24,8 @@ import static org.junit.Assert.assertTrue;
 
 public final class StandardRandomizedNameFactoryTest {
 
-    private static final Pattern NAME_PATTERN = Pattern.compile("system-test-stem-[\\d]{6}");
+    private static final Pattern NAME_PATTERN = Pattern.compile(String.format("system-test-%s-stem-[\\d]{6}",
+            System.getProperty("user.name")));
 
     private final StandardRandomizedNameFactory randomizedNameFactory = new StandardRandomizedNameFactory();
 
