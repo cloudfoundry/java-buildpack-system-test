@@ -50,7 +50,7 @@ public final class JdbcUrlNormalizer {
             modified = modified.replaceFirst("/[^/@]*@", "/");
         }
 
-        if(modified.contains("?")) {
+        if (modified.contains("?")) {
             modified = modified.substring(0, modified.indexOf('?'));
         }
 

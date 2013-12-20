@@ -16,9 +16,8 @@
 
 package com.gopivotal.cloudfoundry.test.support.service;
 
-import org.cloudfoundry.client.lib.CloudFoundryOperations;
-
 import com.gopivotal.cloudfoundry.test.support.util.RandomizedNameFactory;
+import org.cloudfoundry.client.lib.CloudFoundryOperations;
 
 public final class RedisServiceTest extends AbstractServiceTest<RedisService> {
 

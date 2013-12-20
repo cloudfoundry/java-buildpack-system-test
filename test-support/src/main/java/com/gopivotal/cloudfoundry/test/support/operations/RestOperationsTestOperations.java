@@ -16,10 +16,9 @@
 
 package com.gopivotal.cloudfoundry.test.support.operations;
 
+import com.gopivotal.cloudfoundry.test.support.util.JdbcUrlNormalizer;
 import com.gopivotal.cloudfoundry.test.support.util.RetryCallback;
 import com.gopivotal.cloudfoundry.test.support.util.RetryTemplate;
-import com.gopivotal.cloudfoundry.test.support.util.JdbcUrlNormalizer;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -66,7 +65,6 @@ final class RestOperationsTestOperations extends AbstractTestOperations {
         String urlString = this.restOperations.getForObject("http://{host}/datasource/url", String.class, this.host);
         return JdbcUrlNormalizer.normalize(urlString);
     }
-
 
     @Override
     public String redisCheckAccess() {

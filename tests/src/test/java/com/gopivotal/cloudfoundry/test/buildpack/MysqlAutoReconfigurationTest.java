@@ -16,13 +16,13 @@
 
 package com.gopivotal.cloudfoundry.test.buildpack;
 
-import org.junit.Test;
-
 import com.gopivotal.cloudfoundry.test.support.application.Application;
 import com.gopivotal.cloudfoundry.test.support.service.ClearDbService;
 import com.gopivotal.cloudfoundry.test.support.service.CreateServices;
+import org.junit.Test;
 
 public class MysqlAutoReconfigurationTest extends RelationalAutoReconfigurationTest {
+
     @CreateServices(ClearDbService.class)
     @Test
     public void mysqlReconfiguration(Application application) {
