@@ -16,12 +16,11 @@
 
 package com.gopivotal.cloudfoundry.test.buildpack;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.gopivotal.cloudfoundry.test.support.runner.ExcludedApplications;
 import com.gopivotal.cloudfoundry.test.support.service.ServicesHolder;
+import org.springframework.beans.factory.annotation.Autowired;
 
-@ExcludedApplications({"grails", "groovy", "java-main", "java-main-with-web-inf", "spring-boot-cli", "web"})
+@ExcludedApplications({"grails", "groovy", "java-main", "java-main-with-web-inf", "spring-boot-cli", "web", "play"})
 public abstract class AbstractAutoReconfigurationTest extends AbstractTest {
 
     @Autowired

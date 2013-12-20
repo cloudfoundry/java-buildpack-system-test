@@ -25,6 +25,11 @@ import com.gopivotal.cloudfoundry.test.support.util.Deletable;
  */
 public interface Application extends Deletable {
 
+    /**
+     * Pushes the contents of an application
+     *
+     * @return this {@link Application}
+     */
     Application push();
 
     /**

@@ -16,11 +16,11 @@
 
 package com.gopivotal.cloudfoundry.test.support.service;
 
+import com.gopivotal.cloudfoundry.test.support.util.RandomizedNameFactory;
 import org.cloudfoundry.client.lib.CloudFoundryOperations;
 
-import com.gopivotal.cloudfoundry.test.support.util.RandomizedNameFactory;
-
 public final class ElephantSqlServiceTest extends AbstractServiceTest<ElephantSqlService> {
+
     public ElephantSqlServiceTest() {
         super("elephantsql", "turtle");
     }

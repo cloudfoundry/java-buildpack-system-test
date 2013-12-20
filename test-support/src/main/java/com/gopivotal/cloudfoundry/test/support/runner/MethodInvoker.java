@@ -46,11 +46,13 @@ final class MethodInvoker extends Statement implements TestExecutionListener {
 
     @Override
     public void evaluate() throws Throwable {
-        Application application = null;
+        ApplicationContext applicationContext = getApplicationContext();
 
+        Application application = null;
         try {
-            application = createApplication();
-            application.getTestOperations().waitForStart();
+            application = applicationContext.getBean(ApplicationFactory.class).create(this.name);
+            application.push().bind(applicationContext.getBean(ServicesHolder.class).get());
+            application.start().getTestOperations().waitForStart();
 
             this.frameworkMethod.invokeExplosively(this.instance, application);
         } finally {
@@ -58,14 +60,9 @@ final class MethodInvoker extends Statement implements TestExecutionListener {
         }
     }
 
-    private Application createApplication() {
+    private ApplicationContext getApplicationContext() {
         synchronized (this.monitor) {
-            ApplicationContext applicationContext = this.testContext.getApplicationContext();
-            ServicesHolder servicesHolder = applicationContext.getBean(ServicesHolder.class);
-            ApplicationFactory applicationFactory = applicationContext.getBean(ApplicationFactory.class);
-
-            Application application = applicationFactory.create(this.name);
-            return application.push().bind(servicesHolder.get()).start();
+            return this.testContext.getApplicationContext();
         }
     }
 

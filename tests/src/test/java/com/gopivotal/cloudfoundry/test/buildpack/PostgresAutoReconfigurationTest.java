@@ -16,13 +16,13 @@
 
 package com.gopivotal.cloudfoundry.test.buildpack;
 
-import org.junit.Test;
-
 import com.gopivotal.cloudfoundry.test.support.application.Application;
 import com.gopivotal.cloudfoundry.test.support.service.CreateServices;
 import com.gopivotal.cloudfoundry.test.support.service.ElephantSqlService;
+import org.junit.Test;
 
 public class PostgresAutoReconfigurationTest extends RelationalAutoReconfigurationTest {
+
     @CreateServices(ElephantSqlService.class)
     @Test
     public void postgresReconfiguration(Application application) {

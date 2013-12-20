@@ -16,24 +16,24 @@
 
 package com.gopivotal.cloudfoundry.test.support.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.Arrays;
-
+import com.gopivotal.cloudfoundry.test.support.util.RandomizedNameFactory;
 import org.cloudfoundry.client.lib.CloudFoundryOperations;
 import org.cloudfoundry.client.lib.domain.CloudService;
 import org.cloudfoundry.client.lib.domain.CloudServiceOffering;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
-import com.gopivotal.cloudfoundry.test.support.util.RandomizedNameFactory;
+import java.util.Arrays;
+
+import static org.mockito.Mockito.mock;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public abstract class AbstractServiceTest<T extends AbstractService> {
 
     private final String serviceLabel;
+
     private final String servicePlan;
 
     private final CloudService cloudService;
@@ -41,30 +41,11 @@ public abstract class AbstractServiceTest<T extends AbstractService> {
     public AbstractServiceTest(String serviceLabel, String servicePlan) {
         this.serviceLabel = serviceLabel;
         this.servicePlan = servicePlan;
-        
+
         CloudFoundryOperations cloudFoundryOperations = createCloudFoundryOperations();
         RandomizedNameFactory randomizedNameFactory = createRandomizedNameFactory();
         createService(cloudFoundryOperations, randomizedNameFactory);
         this.cloudService = createCloudService(cloudFoundryOperations);
-    }
-
-    protected abstract T createService(CloudFoundryOperations cloudFoundryOperations, 
-                                       RandomizedNameFactory randomizedNameFactory);
-    
-    private RandomizedNameFactory createRandomizedNameFactory() {
-        RandomizedNameFactory randomizedNameFactory = mock(RandomizedNameFactory.class);
-        when(randomizedNameFactory.create(serviceLabel)).thenReturn("randomized-name");
-    
-        return randomizedNameFactory;
-    }
-
-    private CloudFoundryOperations createCloudFoundryOperations() {
-        CloudFoundryOperations cloudFoundryOperations = mock(CloudFoundryOperations.class);
-
-        CloudServiceOffering cloudServiceOffering = new CloudServiceOffering(null, serviceLabel);
-        when(cloudFoundryOperations.getServiceOfferings()).thenReturn(Arrays.asList(cloudServiceOffering));
-
-        return cloudFoundryOperations;
     }
 
     private static CloudService createCloudService(CloudFoundryOperations cloudFoundryOperations) {
@@ -74,10 +55,29 @@ public abstract class AbstractServiceTest<T extends AbstractService> {
         return cloudService.getValue();
     }
 
+    protected abstract T createService(CloudFoundryOperations cloudFoundryOperations,
+                                       RandomizedNameFactory randomizedNameFactory);
+
+    private RandomizedNameFactory createRandomizedNameFactory() {
+        RandomizedNameFactory randomizedNameFactory = mock(RandomizedNameFactory.class);
+        when(randomizedNameFactory.create(this.serviceLabel)).thenReturn("randomized-name");
+
+        return randomizedNameFactory;
+    }
+
+    private CloudFoundryOperations createCloudFoundryOperations() {
+        CloudFoundryOperations cloudFoundryOperations = mock(CloudFoundryOperations.class);
+
+        CloudServiceOffering cloudServiceOffering = new CloudServiceOffering(null, this.serviceLabel);
+        when(cloudFoundryOperations.getServiceOfferings()).thenReturn(Arrays.asList(cloudServiceOffering));
+
+        return cloudFoundryOperations;
+    }
+
     @Test
     public void test() {
-        assertEquals(serviceLabel, this.cloudService.getLabel());
-        assertEquals(servicePlan, this.cloudService.getPlan());
+        assertEquals(this.serviceLabel, this.cloudService.getLabel());
+        assertEquals(this.servicePlan, this.cloudService.getPlan());
     }
-    
+
 }

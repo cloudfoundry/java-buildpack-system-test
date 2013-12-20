@@ -16,18 +16,19 @@
 
 package com.gopivotal.cloudfoundry.test.buildpack;
 
-import static org.junit.Assert.assertEquals;
+import com.gopivotal.cloudfoundry.test.support.application.Application;
+import com.gopivotal.cloudfoundry.test.support.operations.TestOperations;
+import com.gopivotal.cloudfoundry.test.support.runner.ExcludedApplications;
+import com.gopivotal.cloudfoundry.test.support.service.RelationalDatabaseService;
 
 import java.util.Map;
 
-import com.gopivotal.cloudfoundry.test.support.application.Application;
-import com.gopivotal.cloudfoundry.test.support.operations.TestOperations;
-import com.gopivotal.cloudfoundry.test.support.service.RelationalDatabaseService;
+import static org.junit.Assert.assertEquals;
 
+@ExcludedApplications({"grails", "groovy", "java-main", "java-main-with-web-inf", "spring-boot-cli", "web"})
 public abstract class RelationalAutoReconfigurationTest extends AbstractAutoReconfigurationTest {
 
     protected void assertRelationalAutoReconfiguration(Application application) {
-
         TestOperations testOperations = application.getTestOperations();
         Map<String, String> environmentVariables = testOperations.environmentVariables();
 

@@ -16,8 +16,8 @@
 
 package com.gopivotal.cloudfoundry.test.buildpack;
 
-import com.gopivotal.cloudfoundry.test.support.runner.BuildpackClassRunner;
 import com.gopivotal.cloudfoundry.test.support.TestConfiguration;
+import com.gopivotal.cloudfoundry.test.support.runner.BuildpackClassRunner;
 import org.junit.Rule;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;

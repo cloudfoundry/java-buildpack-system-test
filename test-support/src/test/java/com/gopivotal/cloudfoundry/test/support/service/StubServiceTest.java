@@ -39,6 +39,23 @@ public final class StubServiceTest {
 
     private final CloudFoundryOperations cloudFoundryOperations = mock(CloudFoundryOperations.class);
 
+    private static StubService createService(CloudFoundryOperations cloudFoundryOperations,
+                                             RandomizedNameFactory randomizedNameFactory) {
+        StubService service = new StubService(cloudFoundryOperations, "test-label", "test-plan", randomizedNameFactory);
+
+        ArgumentCaptor<CloudService> cloudServiceCaptor = ArgumentCaptor.forClass(CloudService.class);
+        verify(cloudFoundryOperations).createService(cloudServiceCaptor.capture());
+
+        CloudService cloudService = cloudServiceCaptor.getValue();
+        assertEquals("randomized-name", cloudService.getName());
+        assertEquals("core", cloudService.getProvider());
+        assertEquals("test-label-dev", cloudService.getLabel());
+        assertNull(cloudService.getVersion());
+        assertEquals("test-plan", cloudService.getPlan());
+
+        return service;
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void noServiceOffering() {
         when(this.cloudFoundryOperations.getServiceOfferings()).thenReturn(Arrays.<CloudServiceOffering>asList());
@@ -123,23 +140,6 @@ public final class StubServiceTest {
         when(randomizedNameFactory.create("test-label")).thenReturn("randomized-name");
 
         return randomizedNameFactory;
-    }
-
-    private static StubService createService(CloudFoundryOperations cloudFoundryOperations,
-                                             RandomizedNameFactory randomizedNameFactory) {
-        StubService service = new StubService(cloudFoundryOperations, "test-label", "test-plan", randomizedNameFactory);
-
-        ArgumentCaptor<CloudService> cloudServiceCaptor = ArgumentCaptor.forClass(CloudService.class);
-        verify(cloudFoundryOperations).createService(cloudServiceCaptor.capture());
-
-        CloudService cloudService = cloudServiceCaptor.getValue();
-        assertEquals("randomized-name", cloudService.getName());
-        assertEquals("core", cloudService.getProvider());
-        assertEquals("test-label-dev", cloudService.getLabel());
-        assertNull(cloudService.getVersion());
-        assertEquals("test-plan", cloudService.getPlan());
-
-        return service;
     }
 
     private static final class StubService extends AbstractService {

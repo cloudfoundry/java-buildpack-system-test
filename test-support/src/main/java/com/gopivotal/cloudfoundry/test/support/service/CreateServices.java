@@ -16,8 +16,6 @@
 
 package com.gopivotal.cloudfoundry.test.support.service;
 
-import com.gopivotal.cloudfoundry.test.support.service.Service;
-
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
