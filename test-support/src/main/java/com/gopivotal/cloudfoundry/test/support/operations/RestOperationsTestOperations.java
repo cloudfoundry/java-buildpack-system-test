@@ -76,6 +76,16 @@ final class RestOperationsTestOperations extends AbstractTestOperations {
         return URI.create(this.restOperations.getForObject("http://{host}/redis/url", String.class, this.host));
     }
 
+    @Override
+    public String mongoDbCheckAccess() {
+        return this.restOperations.getForObject("http://{host}/mongodb/check-access", String.class, this.host);
+    }
+
+    @Override
+    public URI mongoDbUrl() {
+        return URI.create(this.restOperations.getForObject("http://{host}/mongodb/url", String.class, this.host));
+    }
+    
     @SuppressWarnings("unchecked")
     @Override
     public Map<String, String> environmentVariables() {
