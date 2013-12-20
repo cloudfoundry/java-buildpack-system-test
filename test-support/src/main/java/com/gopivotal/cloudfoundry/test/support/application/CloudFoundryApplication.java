@@ -21,7 +21,6 @@ import com.gopivotal.cloudfoundry.test.support.operations.TestOperationsFactory;
 import com.gopivotal.cloudfoundry.test.support.service.Service;
 import org.cloudfoundry.client.lib.CloudFoundryOperations;
 import org.cloudfoundry.client.lib.domain.CloudApplication;
-import org.cloudfoundry.client.lib.domain.CloudDomain;
 import org.cloudfoundry.client.lib.domain.Staging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,12 +43,12 @@ final class CloudFoundryApplication implements Application {
 
     private final TestOperations testOperations;
 
-    CloudFoundryApplication(CloudFoundryOperations cloudFoundryOperations, Manifest manifest, String name,
-                            TestOperationsFactory testOperationsFactory) {
+    CloudFoundryApplication(CloudFoundryOperations cloudFoundryOperations, String domain, Manifest manifest,
+                            String name, TestOperationsFactory testOperationsFactory) {
         this.logger.info("Creating application {}", name);
 
         this.cloudFoundryOperations = cloudFoundryOperations;
-        this.domain = getDomain(cloudFoundryOperations);
+        this.domain = domain;
         this.manifest = manifest;
         this.name = name;
 
@@ -74,16 +73,6 @@ final class CloudFoundryApplication implements Application {
 
         cloudFoundryOperations.createApplication(name, staging, manifest.getMemory(), Arrays.asList(host),
                 Collections.<String>emptyList());
-    }
-
-    private static String getDomain(CloudFoundryOperations cloudFoundryOperations) {
-        for (CloudDomain domain : cloudFoundryOperations.getDomainsForOrg()) {
-            if (domain.getOwner().getName().equals("none")) {
-                return domain.getName();
-            }
-        }
-
-        throw new IllegalStateException("No default domain found");
     }
 
     @Override

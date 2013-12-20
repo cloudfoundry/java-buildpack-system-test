@@ -99,16 +99,15 @@ public interface TestOperations {
      * Returns the URL that the Redis service is connected to
      */
     URI redisUrl();
-    
+
     /**
      * Returns whether the service connector can access the mongodb service
      */
     String mongoDbCheckAccess();
-    
+
     /**
      * Returns the URL that the mongodb service is connected to
      */
     URI mongoDbUrl();
-    
 
 }

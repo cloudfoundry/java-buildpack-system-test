@@ -30,4 +30,11 @@ public interface RandomizedNameFactory {
      */
     String create(String stem);
 
+    /**
+     * Returns whether the name is a valid randomized name
+     *
+     * @return {@code true} if the name if a valid randomized name, {@code false} otherwise
+     */
+    Boolean matches(String name);
+
 }

@@ -21,8 +21,6 @@ import com.gopivotal.cloudfoundry.test.support.operations.TestOperationsFactory;
 import com.gopivotal.cloudfoundry.test.support.service.Service;
 import org.cloudfoundry.client.lib.CloudFoundryOperations;
 import org.cloudfoundry.client.lib.domain.CloudApplication;
-import org.cloudfoundry.client.lib.domain.CloudDomain;
-import org.cloudfoundry.client.lib.domain.CloudOrganization;
 import org.cloudfoundry.client.lib.domain.Staging;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -55,16 +53,9 @@ public final class CloudFoundryApplicationTest {
     private final CloudFoundryApplication application;
 
     public CloudFoundryApplicationTest() {
-        mockDomain(this.cloudFoundryOperations);
         mockManifest(this.manifest);
         mockTestOperationsFactory(this.testOperationsFactory);
         this.application = createApplication(this.cloudFoundryOperations, this.manifest, this.testOperationsFactory);
-    }
-
-    private static void mockDomain(CloudFoundryOperations cloudFoundryOperations) {
-        CloudDomain ownedDomain = new CloudDomain(null, "owned.domain", new CloudOrganization(null, "test-org"));
-        CloudDomain defaultDomain = new CloudDomain(null, "test.domain", new CloudOrganization(null, "none"));
-        when(cloudFoundryOperations.getDomainsForOrg()).thenReturn(Arrays.asList(ownedDomain, defaultDomain));
     }
 
     private static void mockManifest(Manifest manifest) {
@@ -84,8 +75,8 @@ public final class CloudFoundryApplicationTest {
     private static CloudFoundryApplication createApplication(CloudFoundryOperations cloudFoundryOperations,
                                                              Manifest manifest,
                                                              TestOperationsFactory testOperationsFactory) {
-        CloudFoundryApplication application = new CloudFoundryApplication(cloudFoundryOperations, manifest, "test-name",
-                testOperationsFactory);
+        CloudFoundryApplication application = new CloudFoundryApplication(cloudFoundryOperations, "test.domain",
+                manifest, "test-name", testOperationsFactory);
 
         ArgumentCaptor<Staging> staging = ArgumentCaptor.forClass(Staging.class);
         ArgumentCaptor<List> uris = ArgumentCaptor.forClass(List.class);
@@ -174,14 +165,6 @@ public final class CloudFoundryApplicationTest {
 
         verify(this.cloudFoundryOperations).unbindService("test-name", "service-name-1");
         verify(this.cloudFoundryOperations).unbindService("test-name", "service-name-2");
-    }
-
-    @Test(expected = IllegalStateException.class)
-    public void noDefaultDomain() {
-        CloudFoundryOperations cloudFoundryOperations = mock(CloudFoundryOperations.class);
-        when(cloudFoundryOperations.getDomainsForOrg()).thenReturn(Collections.<CloudDomain>emptyList());
-
-        new CloudFoundryApplication(cloudFoundryOperations, this.manifest, "test-name", this.testOperationsFactory);
     }
 
 }

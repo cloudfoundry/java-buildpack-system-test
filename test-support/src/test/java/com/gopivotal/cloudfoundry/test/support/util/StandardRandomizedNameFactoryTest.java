@@ -20,18 +20,31 @@ import org.junit.Test;
 
 import java.util.regex.Pattern;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public final class StandardRandomizedNameFactoryTest {
 
+    public static final String USER_NAME = System.getProperty("user.name");
+
     private static final Pattern NAME_PATTERN = Pattern.compile(String.format("system-test-%s-stem-[\\d]{6}",
-            System.getProperty("user.name")));
+            USER_NAME));
 
     private final StandardRandomizedNameFactory randomizedNameFactory = new StandardRandomizedNameFactory();
 
     @Test
     public void create() {
         assertTrue(NAME_PATTERN.matcher(this.randomizedNameFactory.create("stem")).matches());
+    }
+
+    @Test
+    public void doesMatch() {
+        assertTrue(this.randomizedNameFactory.matches(String.format("system-test-%s-stem-012345", USER_NAME)));
+    }
+
+    @Test
+    public void doesNotMatch() {
+        assertFalse(this.randomizedNameFactory.matches("system-test-not-user-stem-012345"));
     }
 
 }

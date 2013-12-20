@@ -16,13 +16,12 @@
 
 package com.gopivotal.cloudfoundry.test.support.service;
 
-import java.net.URI;
-import java.util.Map;
-
-import org.cloudfoundry.client.lib.CloudFoundryOperations;
-
 import com.gopivotal.cloudfoundry.test.support.util.MongoDbUrlNormalizer;
 import com.gopivotal.cloudfoundry.test.support.util.RandomizedNameFactory;
+import org.cloudfoundry.client.lib.CloudFoundryOperations;
+
+import java.net.URI;
+import java.util.Map;
 
 /**
  * Represents an instance of the Redis service

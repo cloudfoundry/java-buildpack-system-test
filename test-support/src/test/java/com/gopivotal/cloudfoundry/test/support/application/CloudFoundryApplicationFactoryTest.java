@@ -19,12 +19,9 @@ package com.gopivotal.cloudfoundry.test.support.application;
 import com.gopivotal.cloudfoundry.test.support.operations.TestOperationsFactory;
 import com.gopivotal.cloudfoundry.test.support.util.RandomizedNameFactory;
 import org.cloudfoundry.client.lib.CloudFoundryOperations;
-import org.cloudfoundry.client.lib.domain.CloudDomain;
-import org.cloudfoundry.client.lib.domain.CloudOrganization;
 import org.junit.Test;
 
 import java.io.File;
-import java.util.Arrays;
 
 import static org.mockito.Mockito.mock;
 import static org.junit.Assert.assertTrue;
@@ -41,18 +38,11 @@ public final class CloudFoundryApplicationFactoryTest {
     private final TestOperationsFactory testOperationsFactory = mock(TestOperationsFactory.class);
 
     private final CloudFoundryApplicationFactory applicationFactory = new CloudFoundryApplicationFactory
-            (this.cloudFoundryOperations, this.manifestFactory, this.randomizedNameFactory,
+            (this.cloudFoundryOperations, "test.domain", this.manifestFactory, this.randomizedNameFactory,
                     this.testOperationsFactory);
 
     public CloudFoundryApplicationFactoryTest() {
-        mockCloudFoundryOperations(this.cloudFoundryOperations);
         mockManifestFactory(this.manifestFactory);
-    }
-
-    private static void mockCloudFoundryOperations(CloudFoundryOperations cloudFoundryOperations) {
-        CloudDomain ownedDomain = new CloudDomain(null, "owned.domain", new CloudOrganization(null, "test-org"));
-        CloudDomain defaultDomain = new CloudDomain(null, "test.domain", new CloudOrganization(null, "none"));
-        when(cloudFoundryOperations.getDomainsForOrg()).thenReturn(Arrays.asList(ownedDomain, defaultDomain));
     }
 
     private static void mockManifestFactory(ManifestFactory manifestFactory) {
