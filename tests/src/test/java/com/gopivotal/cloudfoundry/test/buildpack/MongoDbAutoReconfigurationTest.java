@@ -16,26 +16,24 @@
 
 package com.gopivotal.cloudfoundry.test.buildpack;
 
-import static org.junit.Assert.assertEquals;
+import com.gopivotal.cloudfoundry.test.support.application.Application;
+import com.gopivotal.cloudfoundry.test.support.operations.TestOperations;
+import com.gopivotal.cloudfoundry.test.support.service.CreateServices;
+import com.gopivotal.cloudfoundry.test.support.service.MongoDbService;
+import org.junit.Test;
 
 import java.util.Map;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
-import com.gopivotal.cloudfoundry.test.support.application.Application;
-import com.gopivotal.cloudfoundry.test.support.operations.TestOperations;
-import com.gopivotal.cloudfoundry.test.support.runner.ExcludedApplications;
-import com.gopivotal.cloudfoundry.test.support.service.CreateServices;
-import com.gopivotal.cloudfoundry.test.support.service.MongoDbService;
-
-@ExcludedApplications({"grails", "groovy", "java-main", "java-main-with-web-inf", "spring-boot-cli", "web", "play"})
 public class MongoDbAutoReconfigurationTest extends AbstractAutoReconfigurationTest {
+
     @CreateServices(MongoDbService.class)
     @Test
     public void mongoDbReconfiguration(Application application) {
         assertMongoDbAutoReconfiguration(application);
     }
-    
+
     private void assertMongoDbAutoReconfiguration(Application application) {
         TestOperations testOperations = application.getTestOperations();
         Map<String, String> environmentVariables = testOperations.environmentVariables();

@@ -24,9 +24,8 @@ public final class MongoDbUrlNormalizer {
     }
 
     /**
-     * Normalize a MongoDb URL to account for differences in underlying implementations when testing.  
-     * The normalization removes credentials, leaving the core part of the URL
-     * (i.e. scheme, host, port, and path).
+     * Normalize a MongoDb URL to account for differences in underlying implementations when testing. The normalization
+     * removes credentials, leaving the core part of the URL (i.e. scheme, host, port, and path).
      *
      * @param raw the raw URL
      *
