@@ -16,27 +16,21 @@
 
 package com.gopivotal.cloudfoundry.test.buildpack;
 
-import static org.junit.Assert.assertEquals;
+import com.gopivotal.cloudfoundry.test.support.application.Application;
+import com.gopivotal.cloudfoundry.test.support.operations.TestOperations;
+import com.gopivotal.cloudfoundry.test.support.service.CreateServices;
+import com.gopivotal.cloudfoundry.test.support.service.RedisService;
+import org.junit.Test;
 
 import java.util.Map;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
-import com.gopivotal.cloudfoundry.test.support.application.Application;
-import com.gopivotal.cloudfoundry.test.support.operations.TestOperations;
-import com.gopivotal.cloudfoundry.test.support.runner.ExcludedApplications;
-import com.gopivotal.cloudfoundry.test.support.service.CreateServices;
-import com.gopivotal.cloudfoundry.test.support.service.RedisService;
-
-@ExcludedApplications({"grails", "groovy", "java-main", "java-main-with-web-inf", "spring-boot-cli", "web", "play"})
 public class RedisAutoReconfigurationTest extends AbstractAutoReconfigurationTest {
+
     @CreateServices(RedisService.class)
     @Test
     public void redisReconfiguration(Application application) {
-        assertRedisAutoReconfiguration(application);
-    }
-    
-    private void assertRedisAutoReconfiguration(Application application) {
         TestOperations testOperations = application.getTestOperations();
         Map<String, String> environmentVariables = testOperations.environmentVariables();
 
@@ -44,4 +38,5 @@ public class RedisAutoReconfigurationTest extends AbstractAutoReconfigurationTes
                 testOperations.redisUrl());
         assertEquals("ok", testOperations.redisCheckAccess());
     }
+
 }
