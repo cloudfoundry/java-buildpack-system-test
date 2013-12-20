@@ -29,6 +29,8 @@ final class CloudFoundryApplicationFactory implements ApplicationFactory {
 
     private final CloudFoundryOperations cloudFoundryOperations;
 
+    private final String domain;
+
     private final ManifestFactory manifestFactory;
 
     private final RandomizedNameFactory randomizedNameFactory;
@@ -36,10 +38,11 @@ final class CloudFoundryApplicationFactory implements ApplicationFactory {
     private final TestOperationsFactory testOperationsFactory;
 
     @Autowired
-    CloudFoundryApplicationFactory(CloudFoundryOperations cloudFoundryOperations, ManifestFactory manifestFactory,
-                                   RandomizedNameFactory randomizedNameFactory,
+    CloudFoundryApplicationFactory(CloudFoundryOperations cloudFoundryOperations, String domain,
+                                   ManifestFactory manifestFactory, RandomizedNameFactory randomizedNameFactory,
                                    TestOperationsFactory testOperationsFactory) {
         this.cloudFoundryOperations = cloudFoundryOperations;
+        this.domain = domain;
         this.manifestFactory = manifestFactory;
         this.randomizedNameFactory = randomizedNameFactory;
         this.testOperationsFactory = testOperationsFactory;
@@ -50,7 +53,7 @@ final class CloudFoundryApplicationFactory implements ApplicationFactory {
         Manifest manifest = this.manifestFactory.create(applicationPath(name));
         String randomizedName = this.randomizedNameFactory.create(name);
 
-        return new CloudFoundryApplication(this.cloudFoundryOperations, manifest, randomizedName,
+        return new CloudFoundryApplication(this.cloudFoundryOperations, this.domain, manifest, randomizedName,
                 this.testOperationsFactory);
     }
 

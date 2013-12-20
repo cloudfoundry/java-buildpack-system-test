@@ -19,6 +19,7 @@ package com.gopivotal.cloudfoundry.test.support;
 import org.cloudfoundry.client.lib.CloudCredentials;
 import org.cloudfoundry.client.lib.CloudFoundryClient;
 import org.cloudfoundry.client.lib.CloudFoundryOperations;
+import org.cloudfoundry.client.lib.domain.CloudDomain;
 import org.junit.rules.RuleChain;
 import org.junit.rules.TestRule;
 import org.springframework.beans.factory.annotation.Value;
@@ -60,6 +61,17 @@ public class TestConfiguration {
     CloudFoundryOperations cloudFoundryOperations() throws MalformedURLException {
         CloudCredentials credentials = new CloudCredentials(this.username, this.password);
         return new CloudFoundryClient(credentials, URI.create(this.target).toURL(), this.organization, this.space);
+    }
+
+    @Bean
+    String domain() throws MalformedURLException {
+        for (CloudDomain domain : cloudFoundryOperations().getDomainsForOrg()) {
+            if (domain.getOwner().getName().equals("none")) {
+                return domain.getName();
+            }
+        }
+
+        throw new IllegalStateException("No default domain found");
     }
 
     @Bean
