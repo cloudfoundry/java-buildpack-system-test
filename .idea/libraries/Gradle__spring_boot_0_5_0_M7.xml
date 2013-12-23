@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: spring-boot-0.5.0.M7">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/artifacts-26/filestore/org.springframework.boot/spring-boot/0.5.0.M7/jar/1849a2da9d8746bad410faf1b99d527ee7c3714c/spring-boot-0.5.0.M7.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/artifacts-26/filestore/org.springframework.boot/spring-boot/0.5.0.M7/source/e3c08f3deb81a6a764f811db0683ff8d4eacf16a/spring-boot-0.5.0.M7-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -74,8 +74,8 @@ final class ApplicationCleanupTestRule implements TestRule {
 
         private final RandomizedNameFactory randomizedNameFactory;
 
-        private Wrapper(Statement base, CloudFoundryOperations cloudFoundryOperations, String domain, AtomicBoolean finished,
-                        Object monitor, RandomizedNameFactory randomizedNameFactory) {
+        private Wrapper(Statement base, CloudFoundryOperations cloudFoundryOperations, String domain,
+                        AtomicBoolean finished, Object monitor, RandomizedNameFactory randomizedNameFactory) {
             this.base = base;
             this.cloudFoundryOperations = cloudFoundryOperations;
             this.domain = domain;
