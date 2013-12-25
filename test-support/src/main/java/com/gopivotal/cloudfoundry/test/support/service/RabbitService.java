@@ -16,26 +16,26 @@
 
 package com.gopivotal.cloudfoundry.test.support.service;
 
-import com.gopivotal.cloudfoundry.test.support.util.UrlNormalizer;
 import com.gopivotal.cloudfoundry.test.support.util.RandomizedNameFactory;
+import com.gopivotal.cloudfoundry.test.support.util.UrlNormalizer;
+
 import org.cloudfoundry.client.lib.CloudFoundryOperations;
 
 import java.net.URI;
 import java.util.Map;
 
 /**
- * Represents an instance of the Redis service
+ * Represents an instance of the rabbit service
  */
-public final class MongoDbService extends AbstractService {
+public final class RabbitService extends AbstractService {
 
-    MongoDbService(CloudFoundryOperations cloudFoundryOperations, RandomizedNameFactory randomizedNameFactory) {
-        super(cloudFoundryOperations, "mongolab", "sandbox", randomizedNameFactory);
+    RabbitService(CloudFoundryOperations cloudFoundryOperations, RandomizedNameFactory randomizedNameFactory) {
+        super(cloudFoundryOperations, "cloudamqp", "lemur", randomizedNameFactory);
     }
 
     @Override
     public final URI getEndpoint(Map<String, String> environmentVariables) {
         Map<String, ?> credentials = getCredentials(environmentVariables);
-        String uriString = credentials.get("uri").toString();
-        return UrlNormalizer.normalize(uriString);
+        return UrlNormalizer.normalize(credentials.get("uri").toString());
     }
 }
