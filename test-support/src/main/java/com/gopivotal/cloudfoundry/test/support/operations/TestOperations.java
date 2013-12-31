@@ -110,4 +110,14 @@ public interface TestOperations {
      */
     URI mongoDbUrl();
 
+    /**
+     * Returns whether the service connector can access the rabbit service
+     */
+    String rabbitCheckAccess();
+
+    /**
+     * Returns the URL that the rabbit service is connected to
+     */
+    URI rabbitUrl();
+
 }

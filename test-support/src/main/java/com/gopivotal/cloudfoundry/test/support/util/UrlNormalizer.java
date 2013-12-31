@@ -18,18 +18,17 @@ package com.gopivotal.cloudfoundry.test.support.util;
 
 import java.net.URI;
 
-public final class MongoDbUrlNormalizer {
+public final class UrlNormalizer {
 
-    private MongoDbUrlNormalizer() {
+    private UrlNormalizer() {
     }
 
     /**
-     * Normalize a MongoDb URL to account for differences in underlying implementations when testing. The normalization
-     * removes credentials, leaving the core part of the URL (i.e. scheme, host, port, and path).
+     * Normalize a MongoDb or Rabbit URL to removes credentials, leaving the core part of the URL (i.e. scheme, host, port, and path).
      *
-     * @param raw the raw URL
+     * @param raw the raw URL string
      *
-     * @return a normalized URL
+     * @return a normalized URL string
      */
     public static URI normalize(String raw) {
         String modified = raw;
