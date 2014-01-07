@@ -16,6 +16,8 @@
 
 package com.gopivotal.cloudfoundry.test.support.util;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.SecureRandom;
@@ -24,21 +26,25 @@ import java.util.regex.Pattern;
 @Component
 final class StandardRandomizedNameFactory implements RandomizedNameFactory {
 
-    public static final String USER_NAME = System.getProperty("user.name");
-
-    private static final String FORMAT = "system-test-%s-%s-%06d";
-
-    private static final Pattern NAME_PATTERN = Pattern.compile(String.format("system-test-%s-.*-[\\d]{6}", USER_NAME));
-
     private static final SecureRandom RANDOM = new SecureRandom();
+
+    private final String nameFormat;
+
+    private final Pattern namePattern;
+
+    @Autowired
+    StandardRandomizedNameFactory(@Value("${cf.discriminator:${user.name}}") String discriminator) {
+        this.nameFormat = String.format("system-test-%s-%%s-%%06d", discriminator);
+        this.namePattern = Pattern.compile(String.format("system-test-%s-.*-[\\d]{6}", discriminator));
+    }
 
     @Override
     public String create(String stem) {
-        return String.format(FORMAT, USER_NAME, stem, RANDOM.nextInt(1000000));
+        return String.format(this.nameFormat, stem, RANDOM.nextInt(1000000));
     }
 
     @Override
     public Boolean matches(String name) {
-        return NAME_PATTERN.matcher(name).matches();
+        return this.namePattern.matcher(name).matches();
     }
 }

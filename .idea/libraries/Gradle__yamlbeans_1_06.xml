@@ -2,10 +2,11 @@
   <library name="Gradle: yamlbeans-1.06">
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/artifacts-26/filestore/com.esotericsoftware.yamlbeans/yamlbeans/1.06/jar/52bbb25465e93308038a6a7401899a06407b98cd/yamlbeans-1.06.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.esotericsoftware.yamlbeans/yamlbeans/1.06/52bbb25465e93308038a6a7401899a06407b98cd/yamlbeans-1.06.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://$USER_HOME$/.gradle/caches/artifacts-26/filestore/com.esotericsoftware.yamlbeans/yamlbeans/1.06/source/9f531b295477c042ff807424b73d9684752994bb/yamlbeans-1.06-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.esotericsoftware.yamlbeans/yamlbeans/1.06/9f531b295477c042ff807424b73d9684752994bb/yamlbeans-1.06-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

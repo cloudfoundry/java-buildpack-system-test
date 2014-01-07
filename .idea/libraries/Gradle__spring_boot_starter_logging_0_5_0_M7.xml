@@ -2,10 +2,11 @@
   <library name="Gradle: spring-boot-starter-logging-0.5.0.M7">
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/artifacts-26/filestore/org.springframework.boot/spring-boot-starter-logging/0.5.0.M7/jar/a96c31b9751dfffe02335ed819c0b74e15b1d76a/spring-boot-starter-logging-0.5.0.M7.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-logging/0.5.0.M7/a96c31b9751dfffe02335ed819c0b74e15b1d76a/spring-boot-starter-logging-0.5.0.M7.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://$USER_HOME$/.gradle/caches/artifacts-26/filestore/org.springframework.boot/spring-boot-starter-logging/0.5.0.M7/source/da19e1d81aa8f5067be9515f91abf5ef5482d2f6/spring-boot-starter-logging-0.5.0.M7-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-logging/0.5.0.M7/da19e1d81aa8f5067be9515f91abf5ef5482d2f6/spring-boot-starter-logging-0.5.0.M7-sources.jar!/" />
     </SOURCES>
   </library>
 </component>
