@@ -25,12 +25,10 @@ import static org.junit.Assert.assertTrue;
 
 public final class StandardRandomizedNameFactoryTest {
 
-    public static final String USER_NAME = System.getProperty("user.name");
+    private static final Pattern NAME_PATTERN = Pattern.compile("system-test-discriminator-stem-[\\d]{6}");
 
-    private static final Pattern NAME_PATTERN = Pattern.compile(String.format("system-test-%s-stem-[\\d]{6}",
-            USER_NAME));
-
-    private final StandardRandomizedNameFactory randomizedNameFactory = new StandardRandomizedNameFactory();
+    private final StandardRandomizedNameFactory randomizedNameFactory = new StandardRandomizedNameFactory
+            ("discriminator");
 
     @Test
     public void create() {
@@ -39,12 +37,12 @@ public final class StandardRandomizedNameFactoryTest {
 
     @Test
     public void doesMatch() {
-        assertTrue(this.randomizedNameFactory.matches(String.format("system-test-%s-stem-012345", USER_NAME)));
+        assertTrue(this.randomizedNameFactory.matches("system-test-discriminator-stem-012345"));
     }
 
     @Test
     public void doesNotMatch() {
-        assertFalse(this.randomizedNameFactory.matches("system-test-not-user-stem-012345"));
+        assertFalse(this.randomizedNameFactory.matches("system-test-not-discriminator-stem-012345"));
     }
 
 }

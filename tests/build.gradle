@@ -5,8 +5,8 @@ dependencies {
 	testCompile "org.springframework.boot:spring-boot:$springBootVersion"
 	testCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
 	testCompile "org.yaml:snakeyaml:$snakeyamlVersion"
-	testCompile "org.apache.commons:commons-lang3:3.1"
-	testCompile "org.springframework:spring-test:4.0.0.RELEASE"
+	testCompile "org.apache.commons:commons-lang3:$commonsLangVersion"
+	testCompile "org.springframework:spring-test:$springVersion"
 }
 
 test {
