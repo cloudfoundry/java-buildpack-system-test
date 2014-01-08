@@ -109,11 +109,14 @@ final class MethodInvoker extends Statement implements TestExecutionListener {
         Map<String, String> crashLogs = new TreeMap<>(application.getCrashLogs());
         for (Map.Entry<String, String> entry : crashLogs.entrySet()) {
             String key = entry.getKey();
-
             sb.append(key).append('\n');
             sb.append(separator(key.length())).append('\n');
 
-            sb.append(entry.getValue()).append('\n');
+            String value = entry.getValue();
+            if (value != null) {
+                sb.append(entry.getValue());
+            }
+            sb.append('\n');
         }
 
         return sb.toString();
