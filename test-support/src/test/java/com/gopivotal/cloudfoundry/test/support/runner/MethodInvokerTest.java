@@ -26,14 +26,21 @@ import org.junit.runners.model.FrameworkMethod;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.TestContext;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.mockito.Mockito.mock;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public final class MethodInvokerTest {
 
     private final Application application = mock(Application.class);
+
+    private final ApplicationFactory applicationFactory;
 
     private final TestContext testContext = mock(TestContext.class);
 
@@ -45,7 +52,7 @@ public final class MethodInvokerTest {
 
     public MethodInvokerTest() throws NoSuchMethodException {
         mockApplication(this.application, this.service);
-        ApplicationFactory applicationFactory = createApplicationFactory(this.application);
+        this.applicationFactory = createApplicationFactory(this.application);
         ServicesHolder servicesHolder = createServicesHolder(this.service);
         ApplicationContext applicationContext = createApplicationContext(applicationFactory, servicesHolder);
         mockTestContext(applicationContext, this.testContext);
@@ -100,6 +107,39 @@ public final class MethodInvokerTest {
         verify(this.application).delete();
 
         assertSame(this.application, this.stub.application);
+    }
+
+    @Test
+    public void evaluateFailureBeforeApplicationCreated() {
+        when(this.applicationFactory.create("test-name")).thenThrow(new RuntimeException());
+
+        this.methodInvoker.beforeTestMethod(this.testContext);
+
+        try {
+            this.methodInvoker.evaluate();
+            fail();
+        } catch (Throwable throwable) {
+            verify(this.application, never()).getCrashLogs();
+            verify(this.application, never()).delete();
+        }
+    }
+
+    @Test
+    public void evaluateFailureAfterApplicationCreated() {
+        when(this.application.start()).thenThrow(new RuntimeException());
+        Map<String, String> crashLogs = new HashMap<>();
+        crashLogs.put("key", "value");
+        when(this.application.getCrashLogs()).thenReturn(crashLogs);
+
+        this.methodInvoker.beforeTestMethod(this.testContext);
+
+        try {
+            this.methodInvoker.evaluate();
+            fail();
+        } catch (Throwable throwable) {
+            verify(this.application).getCrashLogs();
+            verify(this.application).delete();
+        }
     }
 
     @Test

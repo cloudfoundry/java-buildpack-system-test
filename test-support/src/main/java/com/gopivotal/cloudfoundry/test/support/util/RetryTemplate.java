@@ -17,7 +17,7 @@
 package com.gopivotal.cloudfoundry.test.support.util;
 
 /**
- * An template for automating retry behavior.  The default timeout is 60s and the default interval is 5s.
+ * An template for automating retry behavior
  */
 public final class RetryTemplate {
 
