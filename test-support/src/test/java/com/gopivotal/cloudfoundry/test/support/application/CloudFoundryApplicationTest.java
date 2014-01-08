@@ -29,12 +29,15 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.mockito.Mockito.mock;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doThrow;
@@ -120,6 +123,24 @@ public final class CloudFoundryApplicationTest {
         this.application.delete();
 
         verify(this.cloudFoundryOperations, never()).deleteApplication(anyString());
+    }
+
+    @Test
+    public void getCrashLogsApplicationExists() {
+        CloudApplication cloudApplication = new CloudApplication(null, this.application.getName());
+        when(this.cloudFoundryOperations.getApplications()).thenReturn(Arrays.asList(cloudApplication));
+        Map<String, String> crashLogs = new HashMap<>();
+        when(this.cloudFoundryOperations.getCrashLogs(this.application.getName())).thenReturn(crashLogs);
+
+        assertSame(this.application.getCrashLogs(), crashLogs);
+    }
+
+    @Test
+    public void getCrashLogsApplicationDoesNotExist() {
+        when(this.cloudFoundryOperations.getApplications()).thenReturn(Collections.<CloudApplication>emptyList());
+
+        assertEquals(this.application.getCrashLogs(), Collections.<String, String>emptyMap());
+        verify(this.cloudFoundryOperations, never()).getCrashLogs("test-name");
     }
 
     @Test

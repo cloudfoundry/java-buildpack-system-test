@@ -20,6 +20,8 @@ import com.gopivotal.cloudfoundry.test.support.operations.TestOperations;
 import com.gopivotal.cloudfoundry.test.support.service.Service;
 import com.gopivotal.cloudfoundry.test.support.util.Deletable;
 
+import java.util.Map;
+
 /**
  * Represents an application in Cloud Foundry
  */
@@ -40,6 +42,13 @@ public interface Application extends Deletable {
      * @return this {@link Application}
      */
     Application bind(Service... services);
+
+    /**
+     * Returns logs from the most recent crashed instance of the application.
+     *
+     * @return a map keyed by the path to the log file an the full contents of the log as the value
+     */
+    Map<String, String> getCrashLogs();
 
     /**
      * Returns a {@link TestOperations} that communicates with the application's endpoint

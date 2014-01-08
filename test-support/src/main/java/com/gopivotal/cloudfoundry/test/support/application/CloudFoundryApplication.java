@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Map;
 
 final class CloudFoundryApplication implements Application {
 
@@ -98,6 +99,15 @@ final class CloudFoundryApplication implements Application {
     }
 
     @Override
+    public Map<String, String> getCrashLogs() {
+        if (applicationExists()) {
+            return this.cloudFoundryOperations.getCrashLogs(this.name);
+        }
+
+        return Collections.emptyMap();
+    }
+
+    @Override
     public TestOperations getTestOperations() {
         return this.testOperations;
     }
@@ -118,9 +128,7 @@ final class CloudFoundryApplication implements Application {
     public Application start() {
         this.logger.info("Starting application {}", this.name);
         StartingInfo startingInfo = this.cloudFoundryOperations.startApplication(this.name);
-
-        String stagingContent = this.cloudFoundryOperations.getStagingLogs(startingInfo, 0);
-        this.logger.debug(stagingContent.replaceAll("\n", "\n                   "));
+        this.logger.debug(this.cloudFoundryOperations.getStagingLogs(startingInfo, 0));
 
         return this;
     }

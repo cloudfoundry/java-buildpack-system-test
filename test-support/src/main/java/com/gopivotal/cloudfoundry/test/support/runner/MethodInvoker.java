@@ -22,11 +22,19 @@ import com.gopivotal.cloudfoundry.test.support.service.ServicesHolder;
 import com.gopivotal.cloudfoundry.test.support.util.TcfUtils;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.TestContext;
 import org.springframework.test.context.TestExecutionListener;
 
+import java.util.Arrays;
+import java.util.Map;
+import java.util.TreeMap;
+
 final class MethodInvoker extends Statement implements TestExecutionListener {
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final FrameworkMethod frameworkMethod;
 
@@ -55,6 +63,12 @@ final class MethodInvoker extends Statement implements TestExecutionListener {
             application.start().getTestOperations().waitForStart();
 
             this.frameworkMethod.invokeExplosively(this.instance, application);
+        } catch (Exception e) {
+            if (application != null) {
+                this.logger.error(getCrashLogs(application));
+            }
+
+            throw e;
         } finally {
             TcfUtils.deleteQuietly(application);
         }
@@ -87,6 +101,28 @@ final class MethodInvoker extends Statement implements TestExecutionListener {
 
     @Override
     public void afterTestClass(TestContext testContext) {
+    }
+
+    private String getCrashLogs(Application application) {
+        StringBuilder sb = new StringBuilder();
+
+        Map<String, String> crashLogs = new TreeMap<>(application.getCrashLogs());
+        for (Map.Entry<String, String> entry : crashLogs.entrySet()) {
+            String key = entry.getKey();
+
+            sb.append(key).append('\n');
+            sb.append(separator(key.length())).append('\n');
+
+            sb.append(entry.getValue()).append('\n');
+        }
+
+        return sb.toString();
+    }
+
+    private String separator(int length) {
+        char[] separator = new char[length];
+        Arrays.fill(separator, '=');
+        return new String(separator);
     }
 
 }
