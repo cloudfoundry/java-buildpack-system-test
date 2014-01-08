@@ -20,6 +20,7 @@ import com.gopivotal.cloudfoundry.test.support.operations.TestOperations;
 import com.gopivotal.cloudfoundry.test.support.operations.TestOperationsFactory;
 import com.gopivotal.cloudfoundry.test.support.service.Service;
 import org.cloudfoundry.client.lib.CloudFoundryOperations;
+import org.cloudfoundry.client.lib.StartingInfo;
 import org.cloudfoundry.client.lib.domain.CloudApplication;
 import org.cloudfoundry.client.lib.domain.Staging;
 import org.slf4j.Logger;
@@ -116,7 +117,11 @@ final class CloudFoundryApplication implements Application {
     @Override
     public Application start() {
         this.logger.info("Starting application {}", this.name);
-        this.cloudFoundryOperations.startApplication(this.name);
+        StartingInfo startingInfo = this.cloudFoundryOperations.startApplication(this.name);
+
+        String stagingContent = this.cloudFoundryOperations.getStagingLogs(startingInfo, 0);
+        this.logger.debug(stagingContent.replaceAll("\n", "\n                   "));
+
         return this;
     }
 
