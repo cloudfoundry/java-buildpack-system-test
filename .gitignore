@@ -1,10 +1,7 @@
 .gradle
+.idea/libraries
+.idea/tasks.xml
+.idea/workspace.xml
 bin
 build
 out
-tasks.xml
-workspace.xml
-.classpath
-.project
-.settings
-
