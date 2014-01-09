@@ -27,7 +27,6 @@
     <orderEntry type="library" exported="" name="Gradle: snakeyaml-1.13" level="project" />
     <orderEntry type="library" exported="" name="Gradle: yamlbeans-1.06" level="project" />
     <orderEntry type="library" exported="" name="Gradle: spring-security-config-3.1.3.RELEASE" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: cloudfoundry-client-lib-1.0.0" level="project" />
     <orderEntry type="library" exported="" name="Gradle: junit-4.11" level="project" />
     <orderEntry type="library" exported="" name="Gradle: httpclient-4.2.5" level="project" />
     <orderEntry type="library" exported="" name="Gradle: spring-security-oauth2-1.0.0.RELEASE" level="project" />
@@ -60,6 +59,7 @@
     <orderEntry type="library" exported="" name="Gradle: spring-core-4.0.0.RELEASE" level="project" />
     <orderEntry type="library" exported="" name="Gradle: spring-boot-0.5.0.M7-tests" level="project" />
     <orderEntry type="library" exported="" name="Gradle: spring-test-4.0.0.RELEASE" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: cloudfoundry-client-lib-1.0.2.BUILD-SNAPSHOT" level="project" />
   </component>
 </module>
 
