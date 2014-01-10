@@ -54,7 +54,7 @@ public final class MethodInvokerTest {
         mockApplication(this.application, this.service);
         this.applicationFactory = createApplicationFactory(this.application);
         ServicesHolder servicesHolder = createServicesHolder(this.service);
-        ApplicationContext applicationContext = createApplicationContext(applicationFactory, servicesHolder);
+        ApplicationContext applicationContext = createApplicationContext(this.applicationFactory, servicesHolder);
         mockTestContext(applicationContext, this.testContext);
 
         this.methodInvoker = new MethodInvoker(new FrameworkMethod(Stub.class.getMethod("setApplication",
