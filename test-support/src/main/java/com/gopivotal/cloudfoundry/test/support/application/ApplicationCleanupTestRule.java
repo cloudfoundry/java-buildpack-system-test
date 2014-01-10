@@ -19,6 +19,7 @@ package com.gopivotal.cloudfoundry.test.support.application;
 import com.gopivotal.cloudfoundry.test.support.util.RandomizedNameFactory;
 import org.cloudfoundry.client.lib.CloudFoundryOperations;
 import org.cloudfoundry.client.lib.domain.CloudApplication;
+import org.cloudfoundry.client.lib.domain.CloudRoute;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
@@ -91,13 +92,7 @@ final class ApplicationCleanupTestRule implements TestRule {
                     this.logger.info("Cleaning up residual applications");
 
                     for (CloudApplication cloudApplication : this.cloudFoundryOperations.getApplications()) {
-                        String name = cloudApplication.getName();
-
-                        if (this.randomizedNameFactory.matches(name)) {
-                            this.logger.warn("Deleting residual application {}", name);
-                            this.cloudFoundryOperations.deleteRoute(name, this.domain);
-                            this.cloudFoundryOperations.deleteApplication(name);
-                        }
+                        cleanupApplication(cloudApplication);
                     }
 
                     this.finished.set(true);
@@ -105,6 +100,30 @@ final class ApplicationCleanupTestRule implements TestRule {
             }
 
             this.base.evaluate();
+        }
+
+        private void cleanupApplication(CloudApplication cloudApplication) {
+            String name = cloudApplication.getName();
+
+            if (this.randomizedNameFactory.matches(name)) {
+                this.logger.warn("Deleting residual application {}", name);
+
+                if (hasRoute(name)) {
+                    this.cloudFoundryOperations.deleteRoute(name, this.domain);
+                }
+
+                this.cloudFoundryOperations.deleteApplication(name);
+            }
+        }
+
+        private boolean hasRoute(String name) {
+            for (CloudRoute route : this.cloudFoundryOperations.getRoutes(this.domain)) {
+                if (route.getHost().equals(name)) {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

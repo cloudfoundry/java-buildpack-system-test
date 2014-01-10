@@ -19,10 +19,13 @@ package com.gopivotal.cloudfoundry.test.support.application;
 import com.gopivotal.cloudfoundry.test.support.util.RandomizedNameFactory;
 import org.cloudfoundry.client.lib.CloudFoundryOperations;
 import org.cloudfoundry.client.lib.domain.CloudApplication;
+import org.cloudfoundry.client.lib.domain.CloudDomain;
+import org.cloudfoundry.client.lib.domain.CloudRoute;
 import org.junit.Test;
 import org.junit.runners.model.Statement;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -45,10 +48,25 @@ public final class ApplicationCleanupTestRuleTest {
         when(this.cloudFoundryOperations.getApplications()).thenReturn(Arrays.asList(new CloudApplication(null,
                 "test-application-name")));
         when(this.randomizedNameFactory.matches("test-application-name")).thenReturn(true);
+        when(this.cloudFoundryOperations.getRoutes("test.domain")).thenReturn(Arrays.asList(new CloudRoute(null,
+                "test-application-name", new CloudDomain(null, "test.domain", null), 0)));
 
         this.testRule.apply(this.statement, null).evaluate();
 
         verify(this.cloudFoundryOperations).deleteRoute("test-application-name", "test.domain");
+        verify(this.cloudFoundryOperations).deleteApplication("test-application-name");
+    }
+
+    @Test
+    public void deleteResidualApplicationNoRoute() throws Throwable {
+        when(this.cloudFoundryOperations.getApplications()).thenReturn(Arrays.asList(new CloudApplication(null,
+                "test-application-name")));
+        when(this.randomizedNameFactory.matches("test-application-name")).thenReturn(true);
+        when(this.cloudFoundryOperations.getRoutes("test.domain")).thenReturn(Collections.<CloudRoute>emptyList());
+
+        this.testRule.apply(this.statement, null).evaluate();
+
+        verify(this.cloudFoundryOperations, times(0)).deleteRoute("test-application-name", "test.domain");
         verify(this.cloudFoundryOperations).deleteApplication("test-application-name");
     }
 
@@ -60,6 +78,7 @@ public final class ApplicationCleanupTestRuleTest {
 
         this.testRule.apply(this.statement, null).evaluate();
 
+        verify(this.cloudFoundryOperations, times(0)).getRoutes("test.domain");
         verify(this.cloudFoundryOperations, times(0)).deleteRoute("test-application-name", "test.domain");
         verify(this.cloudFoundryOperations, times(0)).deleteApplication("test-application-name");
     }
@@ -69,10 +88,13 @@ public final class ApplicationCleanupTestRuleTest {
         when(this.cloudFoundryOperations.getApplications()).thenReturn(Arrays.asList(new CloudApplication(null,
                 "test-application-name")));
         when(this.randomizedNameFactory.matches("test-application-name")).thenReturn(true);
+        when(this.cloudFoundryOperations.getRoutes("test.domain")).thenReturn(Arrays.asList(new CloudRoute(null,
+                "test-application-name", new CloudDomain(null, "test.domain", null), 0)));
 
         this.testRule.apply(this.statement, null).evaluate();
         this.testRule.apply(this.statement, null).evaluate();
 
+        verify(this.cloudFoundryOperations, times(1)).getRoutes("test.domain");
         verify(this.cloudFoundryOperations, times(1)).deleteRoute("test-application-name", "test.domain");
         verify(this.cloudFoundryOperations, times(1)).deleteApplication("test-application-name");
     }
