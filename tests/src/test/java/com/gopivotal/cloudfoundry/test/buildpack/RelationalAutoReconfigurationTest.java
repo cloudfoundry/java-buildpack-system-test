@@ -25,7 +25,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
-@ExcludedApplications({"groovy", "java-main", "java-main-with-web-inf", "spring-boot-cli", "web"})
+@ExcludedApplications({"groovy", "java-main", "spring-boot-cli", "spring-boot-cli-jar", "web"})
 public abstract class RelationalAutoReconfigurationTest extends AbstractAutoReconfigurationTest {
 
     protected void assertRelationalAutoReconfiguration(Application application) {
