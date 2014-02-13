@@ -23,9 +23,9 @@
             <option value="$PROJECT_DIR$/vendor/java-test-applications/grails-application" />
             <option value="$PROJECT_DIR$/vendor/java-test-applications/groovy-application" />
             <option value="$PROJECT_DIR$/vendor/java-test-applications/java-main-application" />
-            <option value="$PROJECT_DIR$/vendor/java-test-applications/java-main-with-web-inf-application" />
             <option value="$PROJECT_DIR$/vendor/java-test-applications/play-application" />
             <option value="$PROJECT_DIR$/vendor/java-test-applications/spring-boot-cli-application" />
+            <option value="$PROJECT_DIR$/vendor/java-test-applications/spring-boot-cli-jar-application" />
             <option value="$PROJECT_DIR$/vendor/java-test-applications/spring-common" />
             <option value="$PROJECT_DIR$/vendor/java-test-applications/web-application" />
             <option value="$PROJECT_DIR$/vendor/java-test-applications/web-servlet-2-application" />
