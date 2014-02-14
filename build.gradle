@@ -4,7 +4,6 @@ allprojects {
 		cloudFoundryClientLibVersion = '1.0.2'
 		snakeyamlVersion = '1.13'
 		springBootVersion = '1.0.0.RC3'
-		springVersion = '4.0.1.RELEASE'
 	}
 
 	repositories {

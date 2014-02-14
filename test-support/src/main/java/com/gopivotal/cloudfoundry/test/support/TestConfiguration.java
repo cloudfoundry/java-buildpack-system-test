@@ -24,6 +24,7 @@ import org.junit.rules.RuleChain;
 import org.junit.rules.TestRule;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
@@ -38,7 +39,7 @@ import java.util.List;
 /**
  * Configuration used by all tests
  */
-@EnableAutoConfiguration
+@EnableAutoConfiguration(exclude = SecurityAutoConfiguration.class)
 @ComponentScan
 public class TestConfiguration {
 
