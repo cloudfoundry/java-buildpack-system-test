@@ -22,11 +22,10 @@ import org.junit.Rule;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.initializer.ConfigFileApplicationContextInitializer;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.boot.test.SpringApplicationConfiguration;
 
 @RunWith(BuildpackClassRunner.class)
-@ContextConfiguration(classes = TestConfiguration.class, initializers = ConfigFileApplicationContextInitializer.class)
+@SpringApplicationConfiguration(classes = TestConfiguration.class)
 public abstract class AbstractTest {
 
     @Rule
