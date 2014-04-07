@@ -16,22 +16,31 @@
 
 package com.gopivotal.cloudfoundry.test.buildpack;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.Map;
-
-import org.junit.Test;
-
 import com.gopivotal.cloudfoundry.test.support.application.Application;
 import com.gopivotal.cloudfoundry.test.support.operations.TestOperations;
 import com.gopivotal.cloudfoundry.test.support.service.CreateServices;
 import com.gopivotal.cloudfoundry.test.support.service.RabbitService;
+import com.gopivotal.cloudfoundry.test.support.util.RetryCallback;
+import com.gopivotal.cloudfoundry.test.support.util.RetryTemplate;
+import org.junit.Test;
+
+import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
 
 public class RabbitAutoReconfigurationTest extends AbstractAutoReconfigurationTest {
 
+    private static final Long SECOND = 1000L;
+
+    private static final Long MINUTE = 60 * SECOND;
+
+    private static final Long INTERVAL = 5 * SECOND;
+
+    private static final Long TIMEOUT = 5 * MINUTE;
+
     @CreateServices(RabbitService.class)
     @Test
-    public void rabbitbReconfiguration(Application application) {
+    public void rabbitReconfiguration(Application application) {
         assertRabbitAutoReconfiguration(application);
     }
 
@@ -39,8 +48,21 @@ public class RabbitAutoReconfigurationTest extends AbstractAutoReconfigurationTe
         TestOperations testOperations = application.getTestOperations();
         Map<String, String> environmentVariables = testOperations.environmentVariables();
 
-        assertEquals(this.servicesHolder.get(RabbitService.class).getEndpoint(environmentVariables),
-                testOperations.rabbitUrl());
-        assertEquals("ok", testOperations.rabbitCheckAccess());
+        assertEquals(this.servicesHolder.get(RabbitService.class).getEndpoint(environmentVariables), testOperations.rabbitUrl());
+
+        RetryTemplate.retry(INTERVAL, TIMEOUT, new RetryCallback() {
+
+            @Override
+            public Boolean execute() {
+                // Implemented within retry because the rabbit connection might not be up and running immediately
+                return "ok".equals(testOperations.rabbitCheckAccess());
+            }
+
+            @Override
+            public String getFailureMessage() {
+                return "Rabbit connection never made";
+            }
+        });
+
     }
 }
