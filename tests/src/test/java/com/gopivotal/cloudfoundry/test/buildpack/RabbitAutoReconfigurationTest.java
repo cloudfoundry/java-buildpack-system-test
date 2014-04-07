@@ -45,7 +45,7 @@ public class RabbitAutoReconfigurationTest extends AbstractAutoReconfigurationTe
     }
 
     private void assertRabbitAutoReconfiguration(Application application) {
-        TestOperations testOperations = application.getTestOperations();
+        final TestOperations testOperations = application.getTestOperations();
         Map<String, String> environmentVariables = testOperations.environmentVariables();
 
         assertEquals(this.servicesHolder.get(RabbitService.class).getEndpoint(environmentVariables), testOperations.rabbitUrl());
