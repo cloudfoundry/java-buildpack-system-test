@@ -25,7 +25,7 @@ import org.cloudfoundry.client.lib.CloudFoundryOperations;
 public final class ClearDbService extends RelationalDatabaseService {
 
     ClearDbService(CloudFoundryOperations cloudFoundryOperations, RandomizedNameFactory randomizedNameFactory) {
-        super(cloudFoundryOperations, "cleardb", "spark", randomizedNameFactory);
+        super(cloudFoundryOperations, "cleardb", "boost", randomizedNameFactory);
     }
 
 }

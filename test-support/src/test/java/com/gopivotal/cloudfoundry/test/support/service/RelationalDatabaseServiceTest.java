@@ -65,7 +65,7 @@ public final class RelationalDatabaseServiceTest {
     public void test() {
         Map<String, String> environmentVariables = new HashMap<>();
         environmentVariables.put("VCAP_SERVICES", "{\"cleardb-n/a\":[{\"name\":\"randomized-name\"," +
-                "\"label\":\"cleardb-n/a\",\"tags\":[\"mysql\",\"relational\"],\"plan\":\"spark\"," +
+                "\"label\":\"cleardb-n/a\",\"tags\":[\"mysql\",\"relational\"],\"plan\":\"boost\"," +
                 "\"credentials\":{\"uri\":\"http://test.uri\",\"name\":\"test-name\"," +
                 "\"hostname\":\"test-host-name\",\"port\":\"3306\",\"username\":\"test-username\"," +
                 "\"password\":\"test-password\"}}]}");
