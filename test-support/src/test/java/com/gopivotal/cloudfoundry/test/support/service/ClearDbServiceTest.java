@@ -22,7 +22,7 @@ import org.cloudfoundry.client.lib.CloudFoundryOperations;
 public final class ClearDbServiceTest extends AbstractServiceTest<ClearDbService> {
 
     public ClearDbServiceTest() {
-        super("cleardb", "boost");
+        super("cleardb", "spark");
     }
 
     protected ClearDbService createService(CloudFoundryOperations cloudFoundryOperations,
