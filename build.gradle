@@ -2,8 +2,8 @@
 allprojects {
 	ext {
 		cloudFoundryClientLibVersion = '1.0.2'
-		snakeyamlVersion = '1.13'
-		springBootVersion = '1.1.1.RELEASE'
+		snakeyamlVersion = '1.14'
+		springBootVersion = '1.1.8.RELEASE'
 	}
 
 	repositories {
@@ -47,7 +47,7 @@ build.dependsOn javaTestApplications
 clean.dependsOn cleanTestApplications
 
 task wrapper(type: Wrapper) {
-	gradleVersion = "1.11"
+	gradleVersion = "1.12"
 }
 
 defaultTasks 'build'
