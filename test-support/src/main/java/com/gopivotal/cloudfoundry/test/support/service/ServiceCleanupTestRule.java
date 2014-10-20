@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpServerErrorException;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -87,7 +88,12 @@ final class ServiceCleanupTestRule implements TestRule {
 
                         if (this.randomizedNameFactory.matches(name)) {
                             this.logger.warn("Deleting residual service {}", name);
-                            this.cloudFoundryOperations.deleteService(name);
+
+                            try {
+                                this.cloudFoundryOperations.deleteService(name);
+                            } catch (HttpServerErrorException e) {
+                                this.logger.error("Unable to delete residual service {}", name);
+                            }
                         }
                     }
 
