@@ -1,7 +1,7 @@
 // All Project Configuration
 allprojects {
 	ext {
-		cloudFoundryClientLibVersion = '1.0.2'
+		cloudFoundryClientLibVersion = '1.0.5'
 		snakeyamlVersion = '1.14'
 		springBootVersion = '1.1.8.RELEASE'
 	}
