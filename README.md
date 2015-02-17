@@ -26,13 +26,23 @@ Note: when running tests in Eclipse or IntelliJ IDEA, you can set environment va
 
 ## Building
 
-This project is built with Gradle. Set the environment variables as described above and then issue:
+This project is built with Gradle. Ensure the submodule containing the test applications has been updated. 
+```plain
+git submodule update --init --recursive
+```
+
+Set the environment variables as described above and then issue:
 ```plain
 ./gradlew
 ```
 
 ## Running Tests
-To run the tests, set the environment variables as described above and then do the following:
+To run the tests, ensure the submodule containing the test applications has been updated. 
+```plain
+git submodule update --init --recursive
+```
+
+Set the environment variables as described above and then issue:
 ```bash
 ./gradlew
 ```
