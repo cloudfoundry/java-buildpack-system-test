@@ -44,13 +44,6 @@ public interface Application extends Deletable {
     Application bind(Service... services);
 
     /**
-     * Returns logs from the most recent crashed instance of the application.
-     *
-     * @return a map keyed by the path to the log file an the full contents of the log as the value
-     */
-    Map<String, String> getCrashLogs();
-
-    /**
      * Returns a {@link TestOperations} that communicates with the application's endpoint
      *
      * @return a {@link TestOperations} that communicates with the application's endpoint

@@ -1,9 +1,8 @@
 // All Project Configuration
 allprojects {
 	ext {
-		cloudFoundryClientLibVersion = '1.0.5'
-		snakeyamlVersion = '1.14'
-		springBootVersion = '1.1.8.RELEASE'
+		cloudFoundryClientLibVersion = '1.1.2'
+		springBootVersion = '1.2.3.RELEASE'
 	}
 
 	repositories {
@@ -20,16 +19,17 @@ allprojects {
 }
 
 // Root Project Configuration
-apply plugin: "versions"
+apply plugin: "com.github.ben-manes.versions"
 apply plugin: "java"
 
 buildscript {
 	repositories {
+		jcenter()
 		mavenCentral()
 	}
 
 	dependencies {
-		classpath "com.github.ben-manes:gradle-versions-plugin:0.4"
+		classpath "com.github.ben-manes:gradle-versions-plugin:0.9"
 	}
 }
 
@@ -47,7 +47,7 @@ build.dependsOn javaTestApplications
 clean.dependsOn cleanTestApplications
 
 task wrapper(type: Wrapper) {
-	gradleVersion = "1.12"
+	gradleVersion = "2.4"
 }
 
 defaultTasks 'build'

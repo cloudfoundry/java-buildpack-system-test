@@ -126,24 +126,6 @@ public final class CloudFoundryApplicationTest {
     }
 
     @Test
-    public void getCrashLogsApplicationExists() {
-        CloudApplication cloudApplication = new CloudApplication(null, this.application.getName());
-        when(this.cloudFoundryOperations.getApplications()).thenReturn(Arrays.asList(cloudApplication));
-        Map<String, String> crashLogs = new HashMap<>();
-        when(this.cloudFoundryOperations.getCrashLogs(this.application.getName())).thenReturn(crashLogs);
-
-        assertSame(this.application.getCrashLogs(), crashLogs);
-    }
-
-    @Test
-    public void getCrashLogsApplicationDoesNotExist() {
-        when(this.cloudFoundryOperations.getApplications()).thenReturn(Collections.<CloudApplication>emptyList());
-
-        assertEquals(this.application.getCrashLogs(), Collections.<String, String>emptyMap());
-        verify(this.cloudFoundryOperations, never()).getCrashLogs("test-name");
-    }
-
-    @Test
     public void getTestOperations() {
         assertNotNull(this.application.getTestOperations());
     }

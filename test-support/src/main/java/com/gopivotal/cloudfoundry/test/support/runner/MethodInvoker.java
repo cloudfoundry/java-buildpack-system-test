@@ -63,12 +63,6 @@ final class MethodInvoker extends Statement implements TestExecutionListener {
             application.start().getTestOperations().waitForStart();
 
             this.frameworkMethod.invokeExplosively(this.instance, application);
-        } catch (Exception e) {
-            if (application != null) {
-                this.logger.error(getCrashLogs(application));
-            }
-
-            throw e;
         } finally {
             TcfUtils.deleteQuietly(application);
         }
@@ -101,31 +95,6 @@ final class MethodInvoker extends Statement implements TestExecutionListener {
 
     @Override
     public void afterTestClass(TestContext testContext) {
-    }
-
-    private String getCrashLogs(Application application) {
-        StringBuilder sb = new StringBuilder("Crash Logs:\n\n");
-
-        Map<String, String> crashLogs = new TreeMap<>(application.getCrashLogs());
-        for (Map.Entry<String, String> entry : crashLogs.entrySet()) {
-            String key = entry.getKey();
-            sb.append(key).append('\n');
-            sb.append(separator(key.length())).append('\n');
-
-            String value = entry.getValue();
-            if (value != null) {
-                sb.append(entry.getValue());
-            }
-            sb.append('\n');
-        }
-
-        return sb.toString();
-    }
-
-    private String separator(int length) {
-        char[] separator = new char[length];
-        Arrays.fill(separator, '=');
-        return new String(separator);
     }
 
 }

@@ -95,7 +95,7 @@ public final class BuildpackClassRunnerTest {
         new BuildpackClassRunner(InvalidTestMethods.class);
     }
 
-    static final class TestMethods {
+    public static final class TestMethods {
 
         public TestMethods() {
         }
@@ -108,7 +108,7 @@ public final class BuildpackClassRunnerTest {
     }
 
     @ExcludedApplications("grails")
-    static final class IgnoredTestMethods {
+    public static final class IgnoredTestMethods {
 
         public IgnoredTestMethods() {
         }
@@ -127,7 +127,7 @@ public final class BuildpackClassRunnerTest {
 
     }
 
-    static final class InvalidTestMethods {
+    public static final class InvalidTestMethods {
 
         public InvalidTestMethods() {
         }

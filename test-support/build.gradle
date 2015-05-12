@@ -4,8 +4,7 @@ dependencies {
 	compile "org.cloudfoundry:cloudfoundry-client-lib:$cloudFoundryClientLibVersion"
 	compile "org.springframework.boot:spring-boot-autoconfigure:$springBootVersion"
 	compile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
-    compile "org.springframework.boot:spring-boot-starter-logging:$springBootVersion"
-	compile "org.yaml:snakeyaml:$snakeyamlVersion"
+	compile "org.springframework.boot:spring-boot-starter-logging:$springBootVersion"
 }
 
 test {

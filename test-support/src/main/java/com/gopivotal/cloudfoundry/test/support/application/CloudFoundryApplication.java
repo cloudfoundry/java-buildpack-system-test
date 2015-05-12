@@ -73,7 +73,7 @@ final class CloudFoundryApplication implements Application {
                 buildpack == null ? "built-in" : buildpack);
         Staging staging = new Staging(null, buildpack);
 
-        cloudFoundryOperations.createApplication(name, staging, manifest.getMemory(), Arrays.asList(host),
+        cloudFoundryOperations.createApplication(name, staging, manifest.getMemory(), Collections.singletonList(host),
                 Collections.<String>emptyList());
     }
 
@@ -96,15 +96,6 @@ final class CloudFoundryApplication implements Application {
             this.cloudFoundryOperations.deleteRoute(this.name, this.domain);
             this.cloudFoundryOperations.deleteApplication(this.name);
         }
-    }
-
-    @Override
-    public Map<String, String> getCrashLogs() {
-        if (applicationExists()) {
-            return this.cloudFoundryOperations.getCrashLogs(this.name);
-        }
-
-        return Collections.emptyMap();
     }
 
     @Override

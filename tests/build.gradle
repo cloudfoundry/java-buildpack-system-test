@@ -4,7 +4,6 @@ dependencies {
 	testCompile project(':test-support')
 	testCompile "org.springframework.boot:spring-boot:$springBootVersion"
 	testCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
-	testCompile "org.yaml:snakeyaml:$snakeyamlVersion"
 }
 
 test {

@@ -119,7 +119,6 @@ public final class MethodInvokerTest {
             this.methodInvoker.evaluate();
             fail();
         } catch (Throwable throwable) {
-            verify(this.application, never()).getCrashLogs();
             verify(this.application, never()).delete();
         }
     }
@@ -127,9 +126,6 @@ public final class MethodInvokerTest {
     @Test
     public void evaluateFailureAfterApplicationCreated() {
         when(this.application.start()).thenThrow(new RuntimeException());
-        Map<String, String> crashLogs = new HashMap<>();
-        crashLogs.put("key", "value");
-        when(this.application.getCrashLogs()).thenReturn(crashLogs);
 
         this.methodInvoker.beforeTestMethod(this.testContext);
 
@@ -137,7 +133,6 @@ public final class MethodInvokerTest {
             this.methodInvoker.evaluate();
             fail();
         } catch (Throwable throwable) {
-            verify(this.application).getCrashLogs();
             verify(this.application).delete();
         }
     }
