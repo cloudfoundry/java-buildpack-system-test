@@ -5,6 +5,7 @@ dependencies {
 	compile "org.springframework.boot:spring-boot-autoconfigure:$springBootVersion"
 	compile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
 	compile "org.springframework.boot:spring-boot-starter-logging:$springBootVersion"
+	runtime "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
 }
 
 test {
