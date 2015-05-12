@@ -1,11 +1,11 @@
-apply plugin: "java"
+apply plugin: 'java'
 
 dependencies {
-	compile "org.cloudfoundry:cloudfoundry-client-lib:$cloudFoundryClientLibVersion"
-	compile "org.springframework.boot:spring-boot-autoconfigure:$springBootVersion"
-	compile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
-	compile "org.springframework.boot:spring-boot-starter-logging:$springBootVersion"
-	runtime "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
+	compile 'org.cloudfoundry:cloudfoundry-client-lib'
+	compile 'org.springframework.boot:spring-boot-autoconfigure'
+	compile 'org.springframework.boot:spring-boot-starter-test'
+	compile 'org.springframework.boot:spring-boot-starter-logging'
+	runtime 'org.springframework.boot:spring-boot-starter-web'
 }
 
 test {

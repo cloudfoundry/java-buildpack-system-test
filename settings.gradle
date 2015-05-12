@@ -1,4 +1,4 @@
-rootProject.name = "java-buildpack-system-test"
+rootProject.name = 'java-buildpack-system-test'
 
-include "test-support"
-include "tests"
+include 'test-support'
+include 'tests'
