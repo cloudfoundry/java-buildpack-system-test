@@ -26,7 +26,13 @@ Note: when running tests in Eclipse or IntelliJ IDEA, you can set environment va
 
 ## Building
 
-This project is built with Gradle. Ensure the submodule containing the test applications has been updated. 
+Before building the project, the following tools must be installed: 
+* [JDK 7](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
+* [Spring Boot CLI](http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#getting-started-installing-the-cli)
+* [Grails](https://grails.org/download)
+* [Typesafe Activator](https://typesafe.com/platform/getstarted)
+
+This project is built with Gradle. Set the environment variables as described above, ensure the submodule containing the test applications has been updated, install the pre-requisites, and then issue: 
 ```plain
 git submodule update --init --recursive
 ```
