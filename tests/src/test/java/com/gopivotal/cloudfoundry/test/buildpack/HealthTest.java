@@ -17,10 +17,12 @@
 package com.gopivotal.cloudfoundry.test.buildpack;
 
 import com.gopivotal.cloudfoundry.test.support.application.Application;
+import com.gopivotal.cloudfoundry.test.support.runner.ExcludedApplications;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+@ExcludedApplications({"spring-boot-cli"})
 public final class HealthTest extends AbstractTest {
 
     @Test
