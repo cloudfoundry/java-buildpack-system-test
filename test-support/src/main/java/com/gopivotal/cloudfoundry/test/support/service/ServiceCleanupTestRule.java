@@ -92,8 +92,9 @@ final class ServiceCleanupTestRule implements TestRule {
 
                             try {
                                 this.cloudFoundryOperations.deleteService(name);
-                            } catch (HttpClientErrorException | HttpServerErrorException e) {
-                                this.logger.error("Unable to delete residual service {}", name);
+                            } catch (Exception e) { //HttpClientErrorException | HttpServerErrorException e) {
+                                this.logger.error("Unable to delete residual service {} because of {}", name, e
+                                        .getMessage());
                             }
                         }
                     }
