@@ -60,7 +60,7 @@ final class MethodInvoker extends Statement implements TestExecutionListener {
         try {
             application = applicationContext.getBean(ApplicationFactory.class).create(this.name);
             application.push().bind(applicationContext.getBean(ServicesHolder.class).get());
-            application.start().getTestOperations().waitForStart();
+            application.start().getTestOperations().waitForStart(this.name);
 
             this.frameworkMethod.invokeExplosively(this.instance, application);
         } finally {

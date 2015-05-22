@@ -118,7 +118,7 @@ public final class RestOperationsTestOperationsTest {
         when(this.restOperations.getForEntity("http://{host}/", String.class,
                 "test-host")).thenReturn(new ResponseEntity<String>(HttpStatus.OK));
 
-        this.testOperations.waitForStart();
+        this.testOperations.waitForStart("test-name");
     }
 
     @Test(expected = IllegalStateException.class)
@@ -126,7 +126,7 @@ public final class RestOperationsTestOperationsTest {
         when(this.restOperations.getForEntity("http://{host}/", String.class,
                 "test-host")).thenReturn(new ResponseEntity<String>(HttpStatus.BAD_REQUEST));
 
-        this.testOperations.waitForStart();
+        this.testOperations.waitForStart("test-name");
     }
 
 }

@@ -126,7 +126,7 @@ final class RestOperationsTestOperations extends AbstractTestOperations {
     }
 
     @Override
-    public void waitForStart() {
+    public void waitForStart(String name) {
         RetryTemplate.retry(this.connectionInterval, this.connectionTimeout, new RetryCallback() {
 
             private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -143,7 +143,7 @@ final class RestOperationsTestOperations extends AbstractTestOperations {
 
             @Override
             public String getFailureMessage() {
-                return "Application did not start quickly enough";
+                return String.format("Application '%s' did not start quickly enough", name);
             }
 
         });

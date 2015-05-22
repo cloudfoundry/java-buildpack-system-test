@@ -87,8 +87,11 @@ public interface TestOperations {
 
     /**
      * Blocks until the test application has started successfully
+     *
+     * @param name the name of the application to block on
+     *
      */
-    void waitForStart();
+    void waitForStart(String name);
 
     /**
      * Returns whether the service connector can access the redis service

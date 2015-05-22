@@ -143,6 +143,7 @@ final class CloudFoundryApplication implements Application {
         return this;
     }
 
+    @Override
     public String getName() {
         return this.name;
     }

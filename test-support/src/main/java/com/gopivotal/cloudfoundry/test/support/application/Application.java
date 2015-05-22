@@ -20,8 +20,6 @@ import com.gopivotal.cloudfoundry.test.support.operations.TestOperations;
 import com.gopivotal.cloudfoundry.test.support.service.Service;
 import com.gopivotal.cloudfoundry.test.support.util.Deletable;
 
-import java.util.Map;
-
 /**
  * Represents an application in Cloud Foundry
  */
@@ -72,5 +70,12 @@ public interface Application extends Deletable {
      * @return this {@link Application}
      */
     Application unbind(Service... services);
+
+    /**
+     * Get the name of the application
+     *
+     * @return String name
+     */
+    String getName();
 
 }
