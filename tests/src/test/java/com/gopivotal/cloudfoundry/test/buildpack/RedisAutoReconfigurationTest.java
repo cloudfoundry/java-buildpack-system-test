@@ -22,6 +22,7 @@ import com.gopivotal.cloudfoundry.test.support.service.CreateServices;
 import com.gopivotal.cloudfoundry.test.support.service.RedisService;
 import com.gopivotal.cloudfoundry.test.support.util.RetryCallback;
 import com.gopivotal.cloudfoundry.test.support.util.RetryTemplate;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Map;
@@ -40,6 +41,7 @@ public class RedisAutoReconfigurationTest extends AbstractAutoReconfigurationTes
 
     @CreateServices(RedisService.class)
     @Test
+    @Ignore
     public void redisReconfiguration(Application application) {
         assertRedisReconfiguration(application);
     }
@@ -55,13 +57,13 @@ public class RedisAutoReconfigurationTest extends AbstractAutoReconfigurationTes
 
             @Override
             public Boolean execute() {
-                // Implemented within retry because the reddis connection might not be up and running immediately
+                // Implemented within retry because the redis connection might not be up and running immediately
                 return "ok".equals(testOperations.redisCheckAccess());
             }
 
             @Override
             public String getFailureMessage() {
-                return String.format("Reddis connection never made for '%s'", application.getName());
+                return String.format("Redis connection never made for '%s'", application.getName());
             }
         });
     }
