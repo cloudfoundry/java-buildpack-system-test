@@ -22,19 +22,11 @@ import com.gopivotal.cloudfoundry.test.support.service.ServicesHolder;
 import com.gopivotal.cloudfoundry.test.support.util.TcfUtils;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.TestContext;
 import org.springframework.test.context.TestExecutionListener;
 
-import java.util.Arrays;
-import java.util.Map;
-import java.util.TreeMap;
-
 final class MethodInvoker extends Statement implements TestExecutionListener {
-
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final FrameworkMethod frameworkMethod;
 
@@ -61,7 +53,6 @@ final class MethodInvoker extends Statement implements TestExecutionListener {
             application = applicationContext.getBean(ApplicationFactory.class).create(this.name);
             application.push().bind(applicationContext.getBean(ServicesHolder.class).get());
             application.start().getTestOperations().waitForStart(this.name);
-
             this.frameworkMethod.invokeExplosively(this.instance, application);
         } finally {
             TcfUtils.deleteQuietly(application);

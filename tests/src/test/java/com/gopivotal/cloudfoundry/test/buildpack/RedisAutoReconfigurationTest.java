@@ -40,7 +40,7 @@ public class RedisAutoReconfigurationTest extends AbstractAutoReconfigurationTes
 
     @CreateServices(RedisService.class)
     @Test
-    public void reddisReconfiguration(Application application) {
+    public void redisReconfiguration(Application application) {
         assertRedisReconfiguration(application);
     }
 

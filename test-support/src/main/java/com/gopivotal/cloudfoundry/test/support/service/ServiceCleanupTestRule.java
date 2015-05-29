@@ -27,8 +27,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -92,7 +90,7 @@ final class ServiceCleanupTestRule implements TestRule {
 
                             try {
                                 this.cloudFoundryOperations.deleteService(name);
-                            } catch (Exception e) { //HttpClientErrorException | HttpServerErrorException e) {
+                            } catch (Exception e) {
                                 this.logger.error("Unable to delete residual service {}. Caused by '{}'", name,
                                         e.toString());
                             }
