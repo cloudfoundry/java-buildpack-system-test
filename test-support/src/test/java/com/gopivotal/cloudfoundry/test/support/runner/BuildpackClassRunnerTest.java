@@ -80,6 +80,16 @@ public final class BuildpackClassRunnerTest {
     }
 
     @Test
+    public void getDescription() throws Exception {
+        BuildpackClassRunner classRunner = new BuildpackClassRunner(TestMethods.class);
+        FrameworkMethod method = new ApplicationSpecificFrameworkMethod("web", TestMethods.class.getMethod
+                ("test", Application.class));
+
+        assertEquals("test#web(com.gopivotal.cloudfoundry.test.support.runner.BuildpackClassRunnerTest$TestMethods)",
+                classRunner.describeChild(method).getDisplayName());
+    }
+
+    @Test
     public void methodInvoker() throws Exception {
         BuildpackClassRunner classRunner = new BuildpackClassRunner(TestMethods.class);
         Method method = TestMethods.class.getMethod("test", Application.class);

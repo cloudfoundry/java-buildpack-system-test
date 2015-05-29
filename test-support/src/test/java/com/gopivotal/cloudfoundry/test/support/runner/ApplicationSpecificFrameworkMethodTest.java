@@ -36,7 +36,7 @@ public final class ApplicationSpecificFrameworkMethodTest {
 
     @Test
     public void getName() throws Exception {
-        assertEquals("hashCode#test-application", this.method.getName());
+        assertEquals("hashCode", this.method.getName());
     }
 
 }

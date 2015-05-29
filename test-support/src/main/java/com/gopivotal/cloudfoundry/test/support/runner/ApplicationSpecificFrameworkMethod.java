@@ -32,9 +32,4 @@ final class ApplicationSpecificFrameworkMethod extends FrameworkMethod {
     String getApplication() {
         return this.application;
     }
-
-    @Override
-    public String getName() {
-        return String.format("%s#%s", super.getName(), this.application);
-    }
 }

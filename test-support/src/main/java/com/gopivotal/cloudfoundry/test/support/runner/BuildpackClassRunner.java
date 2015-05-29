@@ -18,6 +18,7 @@ package com.gopivotal.cloudfoundry.test.support.runner;
 
 import com.gopivotal.cloudfoundry.test.support.application.Application;
 import org.junit.Test;
+import org.junit.runner.Description;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.Statement;
@@ -62,6 +63,12 @@ public final class BuildpackClassRunner extends SpringJUnit4ClassRunner {
     }
 
     @Override
+    protected Description describeChild(FrameworkMethod method) {
+        return Description.createTestDescription(getTestClass().getJavaClass(), getTestName(method),
+                method.getAnnotations());
+    }
+
+    @Override
     protected boolean isTestMethodIgnored(FrameworkMethod frameworkMethod) {
         return super.isTestMethodIgnored(frameworkMethod) || isExcludedApplication(frameworkMethod);
     }
@@ -70,7 +77,6 @@ public final class BuildpackClassRunner extends SpringJUnit4ClassRunner {
     protected Statement methodInvoker(FrameworkMethod method, Object test) {
         MethodInvoker methodInvoker = new MethodInvoker(method, test, getApplicationName(method));
         getTestContextManager().registerTestExecutionListeners(methodInvoker);
-
         return methodInvoker;
     }
 
@@ -103,6 +109,10 @@ public final class BuildpackClassRunner extends SpringJUnit4ClassRunner {
 
     private String getApplicationName(FrameworkMethod method) {
         return ((ApplicationSpecificFrameworkMethod) method).getApplication();
+    }
+
+    private String getTestName(FrameworkMethod method) {
+        return String.format("%s#%s", testName(method), getApplicationName(method));
     }
 
     private Set<String> getExcludedApplicationNames(Method method) {
