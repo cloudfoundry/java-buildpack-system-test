@@ -20,7 +20,7 @@ import com.gopivotal.cloudfoundry.test.support.runner.ExcludedApplications;
 import com.gopivotal.cloudfoundry.test.support.service.ServicesHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@ExcludedApplications({"play", "groovy", "ratpack", "spring-boot-cli"})
+@ExcludedApplications({"play", "groovy", "ratpack"})
 public abstract class AbstractAutoReconfigurationTest extends AbstractTest {
 
     @Autowired
