@@ -21,6 +21,7 @@ import com.gopivotal.cloudfoundry.test.support.operations.TestOperationsFactory;
 import com.gopivotal.cloudfoundry.test.support.service.Service;
 import org.cloudfoundry.client.lib.CloudFoundryOperations;
 import org.cloudfoundry.client.lib.StartingInfo;
+import org.cloudfoundry.client.lib.domain.ApplicationLog;
 import org.cloudfoundry.client.lib.domain.CloudApplication;
 import org.cloudfoundry.client.lib.domain.Staging;
 import org.slf4j.Logger;
@@ -28,6 +29,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 final class CloudFoundryApplication implements Application {
 
@@ -85,6 +88,16 @@ final class CloudFoundryApplication implements Application {
         }
 
         return this;
+    }
+
+    @Override
+    public List<String> getRecentLogs() {
+        return this.cloudFoundryOperations.getRecentLogs(this.name).stream()
+                .map((applicationLog) -> {
+                    return String.format("%s [%s] %s ", applicationLog.getMessageType(),
+                            applicationLog.getSourceName(), applicationLog.getMessage());
+                })
+                .collect(Collectors.toList());
     }
 
     @Override

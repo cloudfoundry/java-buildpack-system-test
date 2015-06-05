@@ -20,6 +20,8 @@ import com.gopivotal.cloudfoundry.test.support.operations.TestOperations;
 import com.gopivotal.cloudfoundry.test.support.service.Service;
 import com.gopivotal.cloudfoundry.test.support.util.Deletable;
 
+import java.util.List;
+
 /**
  * Represents an application in Cloud Foundry
  */
@@ -40,6 +42,13 @@ public interface Application extends Deletable {
      * @return this {@link Application}
      */
     Application bind(Service... services);
+
+    /**
+     * Returns the recent log entries for the {@link Application}
+     *
+     * @return the recent log entries for the {@link Application}
+     */
+    List<String> getRecentLogs();
 
     /**
      * Returns a {@link TestOperations} that communicates with the application's endpoint
