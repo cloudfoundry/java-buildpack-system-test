@@ -22,7 +22,6 @@ import com.gopivotal.cloudfoundry.test.support.service.CreateServices;
 import com.gopivotal.cloudfoundry.test.support.service.RedisService;
 import com.gopivotal.cloudfoundry.test.support.util.RetryCallback;
 import com.gopivotal.cloudfoundry.test.support.util.RetryTemplate;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Map;
@@ -41,7 +40,6 @@ public class RedisAutoReconfigurationTest extends AbstractAutoReconfigurationTes
 
     @CreateServices(RedisService.class)
     @Test
-    @Ignore
     public void redisReconfiguration(Application application) {
         assertRedisReconfiguration(application);
     }
