@@ -20,7 +20,11 @@ public abstract class RelationalDatabaseService extends AbstractService {
     @Override
     public final URI getEndpoint(Map<String, String> environmentVariables) {
         Map<String, ?> credentials = getCredentials(environmentVariables);
-        return JdbcUrlNormalizer.normalize((String) credentials.get("uri"));
+        String endpoint = (String) credentials.get("jdbcUrl");
+        if(endpoint == null){
+            endpoint = (String) credentials.get("uri");
+        }
+        return JdbcUrlNormalizer.normalize(endpoint);
     }
 
 }

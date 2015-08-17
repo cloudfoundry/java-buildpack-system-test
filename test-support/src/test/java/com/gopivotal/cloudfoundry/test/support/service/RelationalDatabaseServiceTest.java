@@ -62,7 +62,7 @@ public final class RelationalDatabaseServiceTest {
     }
 
     @Test
-    public void test() {
+    public void testWithURI() {
         Map<String, String> environmentVariables = new HashMap<>();
         environmentVariables.put("VCAP_SERVICES", "{\"cleardb-n/a\":[{\"name\":\"randomized-name\"," +
                 "\"label\":\"cleardb-n/a\",\"tags\":[\"mysql\",\"relational\"],\"plan\":\"spark\"," +
@@ -71,6 +71,18 @@ public final class RelationalDatabaseServiceTest {
                 "\"password\":\"test-password\"}}]}");
 
         assertEquals(URI.create("http://test.uri"), this.service.getEndpoint(environmentVariables));
+    }
+
+    @Test
+    public void testWithJDBCURL() {
+        Map<String, String> environmentVariables = new HashMap<>();
+        environmentVariables.put("VCAP_SERVICES", "{\"cleardb-n/a\":[{\"name\":\"randomized-name\"," +
+                "\"label\":\"cleardb-n/a\",\"tags\":[\"mysql\",\"relational\"],\"plan\":\"spark\"," +
+                "\"credentials\":{\"jdbcUrl\":\"http://testtest.uri\",\"uri\":\"http://test.uri\",\"name\":" + 
+                "\"test-name\",\"hostname\":\"test-host-name\",\"port\":\"3306\",\"username\":" + 
+                "\"test-username\",\"password\":\"test-password\"}}]}");
+
+        assertEquals(URI.create("http://testtest.uri"), this.service.getEndpoint(environmentVariables));
     }
 
 }
