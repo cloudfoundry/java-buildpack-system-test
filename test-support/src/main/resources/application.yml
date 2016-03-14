@@ -1,0 +1,52 @@
+---
+applications:
+  root: ../../java-test-applications
+  dist-zip:
+    location: ${applications.root}/dist-zip-application
+    prefix:   dist-zip-application-
+  ejb:
+    location: ${applications.root}/ejb-application
+    prefix:   ejb-application-
+  groovy:
+    location: ${applications.root}/groovy-application
+    prefix:   groovy-application-
+  java-main:
+    location: ${applications.root}/java-main-application
+    prefix:   java-main-application-
+  ratpack:
+    location: ${applications.root}/ratpack-application
+    prefix:   ratpack-application-
+  spring-boot-cli:
+    location: ${applications.root}/spring-boot-cli-application
+    prefix:   spring-boot-cli-application-
+  spring-boot-cli-jar:
+    location: ${applications.root}/spring-boot-cli-jar-application
+    prefix:   spring-boot-cli-jar-application-
+  web:
+    location: ${applications.root}/web-application
+    prefix:   web-application-
+  web-servlet-2:
+    location: ${applications.root}/web-servlet-2-application
+    prefix:   test-web-servlet-2-application-
+
+services:
+  mongodb:
+    name:    test-mongodb
+    service: mongolab
+    plan:    sandbox
+  mysql:
+    name:    test-mysql
+    service: cleardb
+    plan:    spark
+  postgresql:
+    name:    test-postgresql
+    service: elephantsql
+    plan:    turtle
+  rabbitmq:
+    name:    test-rabbitmq
+    service: cloudamqp
+    plan:    lemur
+  redis:
+    name:    test-redis
+    service: rediscloud
+    plan:    30mb

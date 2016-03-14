@@ -16,55 +16,43 @@
 
 package com.gopivotal.cloudfoundry.test.buildpack;
 
-import com.gopivotal.cloudfoundry.test.support.application.Application;
-import com.gopivotal.cloudfoundry.test.support.operations.TestOperations;
-import com.gopivotal.cloudfoundry.test.support.service.CreateServices;
-import com.gopivotal.cloudfoundry.test.support.service.MongoDbService;
-import com.gopivotal.cloudfoundry.test.support.util.RetryCallback;
-import com.gopivotal.cloudfoundry.test.support.util.RetryTemplate;
-import org.junit.Test;
-
-import java.util.Map;
-
-import static org.junit.Assert.assertEquals;
-
 public class MongoDbAutoReconfigurationTest extends AbstractAutoReconfigurationTest {
 
-    private static final Long SECOND = 1000L;
-
-    private static final Long MINUTE = 60 * SECOND;
-
-    private static final Long INTERVAL = 5 * SECOND;
-
-    private static final Long TIMEOUT = 5 * MINUTE;
-
-    @CreateServices(MongoDbService.class)
-    @Test
-    public void mongoDbReconfiguration(Application application) {
-        assertMongoDbAutoReconfiguration(application);
-    }
-
-    private void assertMongoDbAutoReconfiguration(Application application) {
-        final TestOperations testOperations = application.getTestOperations();
-        Map<String, String> environmentVariables = testOperations.environmentVariables();
-
-        assertEquals(this.servicesHolder.get(MongoDbService.class).getEndpoint(environmentVariables),
-                testOperations.mongoDbUrl());
-
-        RetryTemplate.retry(INTERVAL, TIMEOUT, new RetryCallback() {
-
-            @Override
-            public Boolean execute() {
-                // Implemented within retry because the mongoDB connection might not be up and running immediately
-                return "ok".equals(testOperations.mongoDbCheckAccess());
-            }
-
-            @Override
-            public String getFailureMessage() {
-                return String.format("MongoDb connection never made for '%s'", application.getName());
-            }
-        });
-
-
-    }
+//    private static final Long SECOND = 1000L;
+//
+//    private static final Long MINUTE = 60 * SECOND;
+//
+//    private static final Long INTERVAL = 5 * SECOND;
+//
+//    private static final Long TIMEOUT = 5 * MINUTE;
+//
+//    @CreateServices(MongoDbService.class)
+//    @Test
+//    public void mongoDbReconfiguration(Application application) {
+//        assertMongoDbAutoReconfiguration(application);
+//    }
+//
+//    private void assertMongoDbAutoReconfiguration(Application application) {
+//        final TestOperations testOperations = application.getTestOperations();
+//        Map<String, String> environmentVariables = testOperations.environmentVariables();
+//
+//        assertEquals(this.servicesHolder.get(MongoDbService.class).getEndpoint(environmentVariables),
+//                testOperations.mongoDbUrl());
+//
+//        RetryTemplate.retry(INTERVAL, TIMEOUT, new RetryCallback() {
+//
+//            @Override
+//            public Boolean execute() {
+//                // Implemented within retry because the mongoDB connection might not be up and running immediately
+//                return "ok".equals(testOperations.mongoDbCheckAccess());
+//            }
+//
+//            @Override
+//            public String getFailureMessage() {
+//                return String.format("MongoDb connection never made for '%s'", application.getName());
+//            }
+//        });
+//
+//
+//    }
 }

@@ -1,4 +1,0 @@
-rootProject.name = 'java-buildpack-system-test'
-
-include 'test-support'
-include 'tests'

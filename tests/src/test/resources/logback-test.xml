@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2013 the original author or authors.
+  ~ Copyright 2013-2016 the original author or authors.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -17,20 +17,16 @@
 
 <configuration>
 
-    <conversionRule conversionWord="flushmessage"
-                    converterClass="com.gopivotal.cloudfoundry.test.util.FlushMessageConverter"/>
-
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} %-5level %flushmessage%n</pattern>
+            <pattern>%-5level %msg%n</pattern>
         </encoder>
     </appender>
 
-    <logger name="com.gopivotal.cloudfoundry.test" level="${LOGGING_LEVEL:-INFO}"/>
+    <logger name="org.cloudfoundry.test" level="${LOGGING_LEVEL:-INFO}"/>
 
     <root level="WARN">
         <appender-ref ref="STDOUT"/>
     </root>
-
 
 </configuration>

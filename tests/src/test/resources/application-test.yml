@@ -1,0 +1,23 @@
+---
+test:
+  buildpack: https://github.com/cloudfoundry/java-buildpack.git
+  health:
+    ejb:     false
+  mongodb:
+    groovy:  false
+    play:    false
+    ratpack: false
+  mysql:
+    groovy:  false
+    ratpack: false
+  postgresql:
+    groovy:  false
+    ratpack: false
+  rabbitmq:
+    groovy:  false
+    play:    false
+    ratpack: false
+  redis:
+    groovy:  false
+    play:    false
+    ratpack: false

@@ -16,16 +16,11 @@
 
 package com.gopivotal.cloudfoundry.test.buildpack;
 
-import com.gopivotal.cloudfoundry.test.support.application.Application;
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-
 public final class HealthTest extends AbstractTest {
 
-    @Test
-    public void health(Application application) {
-        assertEquals("ok", application.getTestOperations().health());
-    }
+//    @Test
+//    public void health(Application application) {
+//        assertEquals("ok", application.getTestOperations().health());
+//    }
 
 }

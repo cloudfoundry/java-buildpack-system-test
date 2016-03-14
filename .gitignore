@@ -1,7 +1,4 @@
-.gradle
 .idea/libraries
 .idea/tasks.xml
 .idea/workspace.xml
-bin
-build
-out
+target

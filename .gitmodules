@@ -1,3 +1,0 @@
-[submodule "vendor/java-test-applications"]
-	path = vendor/java-test-applications
-	url = https://github.com/cloudfoundry/java-test-applications

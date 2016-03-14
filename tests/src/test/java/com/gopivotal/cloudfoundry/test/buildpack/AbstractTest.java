@@ -16,20 +16,12 @@
 
 package com.gopivotal.cloudfoundry.test.buildpack;
 
-import com.gopivotal.cloudfoundry.test.support.TestConfiguration;
-import com.gopivotal.cloudfoundry.test.support.runner.BuildpackClassRunner;
-import org.junit.Rule;
-import org.junit.rules.RuleChain;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-
-@RunWith(BuildpackClassRunner.class)
-@SpringApplicationConfiguration(classes = TestConfiguration.class)
+//@RunWith(BuildpackClassRunner.class)
+//@SpringApplicationConfiguration(classes = TestConfiguration.class)
 public abstract class AbstractTest {
 
-    @Rule
-    @Autowired
-    public volatile RuleChain ruleChain;
+//    @Rule
+//    @Autowired
+//    public volatile RuleChain ruleChain;
 
 }

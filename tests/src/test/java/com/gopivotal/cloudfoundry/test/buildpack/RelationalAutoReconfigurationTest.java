@@ -16,25 +16,16 @@
 
 package com.gopivotal.cloudfoundry.test.buildpack;
 
-import com.gopivotal.cloudfoundry.test.support.application.Application;
-import com.gopivotal.cloudfoundry.test.support.operations.TestOperations;
-import com.gopivotal.cloudfoundry.test.support.runner.ExcludedApplications;
-import com.gopivotal.cloudfoundry.test.support.service.RelationalDatabaseService;
-
-import java.util.Map;
-
-import static org.junit.Assert.assertEquals;
-
-@ExcludedApplications({"groovy", "ratpack"})
+//@ExcludedApplications({"groovy", "ratpack"})
 public abstract class RelationalAutoReconfigurationTest extends AbstractAutoReconfigurationTest {
 
-    protected void assertRelationalAutoReconfiguration(Application application) {
-        TestOperations testOperations = application.getTestOperations();
-        Map<String, String> environmentVariables = testOperations.environmentVariables();
-
-        assertEquals(this.servicesHolder.get(RelationalDatabaseService.class).getEndpoint(environmentVariables),
-                testOperations.dataSourceUrl());
-        assertEquals("ok", testOperations.dataSourceCheckAccess());
-    }
+//    protected void assertRelationalAutoReconfiguration(Application application) {
+//        TestOperations testOperations = application.getTestOperations();
+//        Map<String, String> environmentVariables = testOperations.environmentVariables();
+//
+//        assertEquals(this.servicesHolder.get(RelationalDatabaseService.class).getEndpoint(environmentVariables),
+//                testOperations.dataSourceUrl());
+//        assertEquals("ok", testOperations.dataSourceCheckAccess());
+//    }
 
 }
