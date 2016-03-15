@@ -16,47 +16,111 @@
 
 package org.cloudfoundry.test;
 
-import org.cloudfoundry.test.support.ApplicationFactory;
-import org.cloudfoundry.test.support.IgnoreOnPropertyTestRule;
-import org.junit.Rule;
+import org.cloudfoundry.test.support.application.Application;
+import org.cloudfoundry.test.support.application.ApplicationDirectory;
+import org.cloudfoundry.test.support.application.DistZipApplication;
+import org.cloudfoundry.test.support.application.EjbApplication;
+import org.cloudfoundry.test.support.application.GroovyApplication;
+import org.cloudfoundry.test.support.application.JavaMainApplication;
+import org.cloudfoundry.test.support.application.RatpackApplication;
+import org.cloudfoundry.test.support.application.SpringBootCliApplication;
+import org.cloudfoundry.test.support.application.SpringBootCliJarApplication;
+import org.cloudfoundry.test.support.application.WebApplication;
+import org.cloudfoundry.test.support.application.WebServlet2Application;
+import org.cloudfoundry.util.test.TestSubscriber;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.core.env.Environment;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.web.client.AsyncRestOperations;
+
+import static java.util.concurrent.TimeUnit.MINUTES;
+import static org.junit.Assume.assumeTrue;
 
 @ActiveProfiles("test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = IntegrationTestConfiguration.class)
-public abstract class AbstractTest {
+public abstract class AbstractTest<T> {
+
+    private final String testType;
 
     @Autowired
-    @Rule
-    public IgnoreOnPropertyTestRule ignoreOnPropertyTestRule;
+    private ApplicationDirectory applicationDirectory;
 
     @Autowired
-    protected ApplicationFactory applicationFactory;
+    private Environment environment;
 
-    @Autowired
-    protected AsyncRestOperations restOperations;
+    protected AbstractTest(String testType) {
+        this.testType = testType;
+    }
 
-    public abstract void distZip() throws Exception;
+    @Test
+    public final void distZip() throws InterruptedException {
+        isIgnored(this.environment, this.testType, "distZip");
+        test(this.applicationDirectory.get(DistZipApplication.class));
+    }
 
-    public abstract void ejb() throws Exception;
+    @Test
+    public final void ejb() throws InterruptedException {
+        isIgnored(this.environment, this.testType, "ejb");
+        test(this.applicationDirectory.get(EjbApplication.class));
+    }
 
-    public abstract void groovy() throws Exception;
+    @Test
+    public final void groovy() throws InterruptedException {
+        isIgnored(this.environment, this.testType, "groovy");
+        test(this.applicationDirectory.get(GroovyApplication.class));
+    }
 
-    public abstract void javaMain() throws Exception;
+    @Test
+    public final void javaMain() throws InterruptedException {
+        isIgnored(this.environment, this.testType, "javaMain");
+        test(this.applicationDirectory.get(JavaMainApplication.class));
+    }
 
-    public abstract void ratpack() throws Exception;
+    @Test
+    public final void ratpack() throws InterruptedException {
+        isIgnored(this.environment, this.testType, "ratpack");
+        test(this.applicationDirectory.get(RatpackApplication.class));
+    }
 
-    public abstract void springBootCli() throws Exception;
+    @Test
+    public final void springBootCli() throws InterruptedException {
+        isIgnored(this.environment, this.testType, "springBootCli");
+        test(this.applicationDirectory.get(SpringBootCliApplication.class));
+    }
 
-    public abstract void springBootCliJar() throws Exception;
+    @Test
+    public final void springBootCliJar() throws InterruptedException {
+        isIgnored(this.environment, this.testType, "springBootCliJar");
+        test(this.applicationDirectory.get(SpringBootCliJarApplication.class));
+    }
 
-    public abstract void web() throws Exception;
+    @Test
+    public final void web() throws InterruptedException {
+        isIgnored(this.environment, this.testType, "web");
+        test(this.applicationDirectory.get(WebApplication.class));
+    }
 
-    public abstract void webServlet2() throws Exception;
+    @Test
+    public final void webServlet2() throws InterruptedException {
+        isIgnored(this.environment, this.testType, "webServlet2");
+        test(this.applicationDirectory.get(WebServlet2Application.class));
+    }
+
+    protected abstract void test(Application application, TestSubscriber<T> testSubscriber);
+
+    private static void isIgnored(Environment environment, String testType, String applicationType) {
+        String key = String.format("test.%s.%s", testType, applicationType);
+        assumeTrue(String.format("Test is disabled via %s", key), environment.getProperty(key, boolean.class, true));
+    }
+
+    private void test(Application application) throws InterruptedException {
+        TestSubscriber<T> testSubscriber = new TestSubscriber<>();
+        test(application, testSubscriber);
+        testSubscriber.verify(5, MINUTES);
+    }
 
 }

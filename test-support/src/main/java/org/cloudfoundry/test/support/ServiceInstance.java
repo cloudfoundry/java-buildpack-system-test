@@ -16,6 +16,10 @@
 
 package org.cloudfoundry.test.support;
 
-public interface Service {
+import reactor.core.publisher.Mono;
+
+public interface ServiceInstance {
+
+    Mono<String> getName();
 
 }

@@ -14,25 +14,10 @@
  * limitations under the License.
  */
 
-package org.cloudfoundry.test.support;
+package org.cloudfoundry.test.support.application;
 
-import org.cloudfoundry.client.CloudFoundryClient;
+public interface ApplicationDirectory {
 
-public final class DefaultService implements Service {
-
-    private final CloudFoundryClient cloudFoundryClient;
-
-    private final String name;
-
-    private final String plan;
-
-    private final String service;
-
-    DefaultService(CloudFoundryClient cloudFoundryClient, String name, String service, String plan) {
-        this.cloudFoundryClient = cloudFoundryClient;
-        this.name = name;
-        this.plan = plan;
-        this.service = service;
-    }
+    <T extends Application> T get(Class<T> type);
 
 }

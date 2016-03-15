@@ -16,15 +16,8 @@
 
 package org.cloudfoundry.test.support;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+public interface ServiceInstanceFactory {
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE, ElementType.METHOD})
-public @interface IgnoreOnProperty {
-
-    String value();
+    ServiceInstance get(String type);
 
 }

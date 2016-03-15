@@ -17,99 +17,23 @@
 package org.cloudfoundry.test;
 
 
-import org.cloudfoundry.test.support.Application;
-import org.cloudfoundry.test.support.IgnoreOnProperty;
+import org.cloudfoundry.test.support.application.Application;
 import org.cloudfoundry.util.test.TestSubscriber;
-import org.junit.Test;
 import org.springframework.http.HttpEntity;
-import reactor.core.publisher.Mono;
 
-import java.util.concurrent.TimeUnit;
+public final class HealthTest extends AbstractTest<String> {
 
-public final class HealthTest extends AbstractTest {
+    public HealthTest() {
+        super("health");
+    }
 
-    @Test
-    @IgnoreOnProperty("test.health.distZip")
     @Override
-    public void distZip() throws Exception {
-        test("distZip");
-    }
-
-    @Test
-    @IgnoreOnProperty("test.health.ejb")
-    @Override
-    public void ejb() throws Exception {
-        test("ejb");
-    }
-
-    @Test
-    @IgnoreOnProperty("test.health.groovy")
-    @Override
-    public void groovy() throws Exception {
-        test("groovy");
-    }
-
-    @Test
-    @IgnoreOnProperty("test.health.javaMain")
-    @Override
-    public void javaMain() throws Exception {
-        test("javaMain");
-    }
-
-    @Test
-    @IgnoreOnProperty("test.health.ratpack")
-    @Override
-    public void ratpack() throws Exception {
-        test("ratpack");
-    }
-
-    @Test
-    @IgnoreOnProperty("test.health.springBootCli")
-    @Override
-    public void springBootCli() throws Exception {
-        test("springBootCli");
-    }
-
-    @Test
-    @IgnoreOnProperty("test.health.springBootCliJar")
-    @Override
-    public void springBootCliJar() throws Exception {
-        test("springBootCliJar");
-    }
-
-    @Test
-    @IgnoreOnProperty("test.health.web")
-    @Override
-    public void web() throws Exception {
-        test("web");
-    }
-
-    @Test
-    @IgnoreOnProperty("test.health.webServlet2")
-    @Override
-    public void webServlet2() throws Exception {
-        test("webServlet2");
-    }
-
-    private Mono<String> request(String host) {
-        return Mono
-            .fromFuture(this.restOperations.getForEntity("http://{host}", String.class, host))
-            .map(HttpEntity::getBody);
-    }
-
-    private void test(String type) throws Exception {
-        try (Application application = this.applicationFactory.get(type)) {
-            TestSubscriber<String> testSubscriber = new TestSubscriber<>();
-
-            application.push()
-                .after(application::start)
-                .after(() -> application.host()
-                    .then(this::request))
-                .subscribe(testSubscriber
-                    .assertEquals("ok"));
-
-            testSubscriber.verify(5, TimeUnit.MINUTES);
-        }
+    protected void test(Application application, TestSubscriber<String> testSubscriber) {
+        application
+            .request("/", String.class)
+            .map(HttpEntity::getBody)
+            .subscribe(testSubscriber
+                .assertEquals("ok"));
     }
 
 }

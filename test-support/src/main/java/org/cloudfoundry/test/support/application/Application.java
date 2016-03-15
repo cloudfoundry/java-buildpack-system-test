@@ -14,22 +14,23 @@
  * limitations under the License.
  */
 
-package org.cloudfoundry.test.support;
+package org.cloudfoundry.test.support.application;
 
+import org.cloudfoundry.test.support.service.Service;
+import org.springframework.http.ResponseEntity;
 import reactor.core.publisher.Mono;
 
-import java.io.IOException;
+public interface Application {
 
-public interface Application extends AutoCloseable {
-
-    void close();
+    Mono<Void> bindService(Service service);
 
     Mono<Void> delete();
 
-    Mono<String> host();
+    Mono<Void> push();
 
-    Mono<Void> push() throws IOException;
+    <T> Mono<ResponseEntity<T>> request(String path, Class<T> responseType);
 
-    Mono<Void> start();
+    Mono<Void> restage();
 
+    Mono<Void> unbindService(Service service);
 }

@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-package org.cloudfoundry.test.support;
+package org.cloudfoundry.test.support.service;
 
-import java.io.IOException;
+public interface Service {
 
-public interface ApplicationFactory {
-
-    Application get(String name) throws IOException;
+    String getName();
 
 }
