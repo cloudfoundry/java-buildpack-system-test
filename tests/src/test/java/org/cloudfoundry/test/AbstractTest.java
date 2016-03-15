@@ -114,8 +114,8 @@ public abstract class AbstractTest<T> {
         test(this.applicationDirectory.get(WebServlet2Application.class));
     }
 
-    protected Service getService() {
-        return null;
+    protected Optional<Service> getService() {
+        return Optional.empty();
     }
 
     protected abstract void test(Application application, TestSubscriber<T> testSubscriber);
@@ -126,16 +126,19 @@ public abstract class AbstractTest<T> {
     }
 
     private void test(Application application) throws InterruptedException {
-        Optional<Service> service = Optional.ofNullable(getService());
-
         try {
-            service.ifPresent(s -> application.bindService(s).get(Duration.ofMinutes(1)));
+            getService()
+                .ifPresent(s -> application.bindService(s)
+                    .after(application::restage)
+                    .get(Duration.ofMinutes(15)));
 
             TestSubscriber<T> testSubscriber = new TestSubscriber<>();
             test(application, testSubscriber);
             testSubscriber.verify(5, MINUTES);
         } finally {
-            service.ifPresent(s -> application.unbindService(s).get(Duration.ofMinutes(1)));
+            getService()
+                .ifPresent(s -> application.unbindService(s)
+                    .get(Duration.ofMinutes(1)));
         }
     }
 

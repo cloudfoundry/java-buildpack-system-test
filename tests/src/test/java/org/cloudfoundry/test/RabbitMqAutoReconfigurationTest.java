@@ -18,25 +18,35 @@ package org.cloudfoundry.test;
 
 import org.cloudfoundry.test.support.application.Application;
 import org.cloudfoundry.test.support.service.RedisService;
+import org.cloudfoundry.test.support.service.Service;
 import org.cloudfoundry.util.test.TestSubscriber;
+import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
 import reactor.core.publisher.Mono;
 import reactor.core.tuple.Tuple;
 import reactor.core.tuple.Tuple2;
 
-public final class RedisTest extends AbstractTest<Tuple2<String, String>> {
+import java.util.Optional;
+
+@Ignore
+public final class RabbitMqAutoReconfigurationTest extends AbstractTest<Tuple2<String, String>> {
 
     @Autowired
     private RedisService service;
 
-    public RedisTest() {
-        super("redis");
+    public RabbitMqAutoReconfigurationTest() {
+        super("rabbitmq");
+    }
+
+    @Override
+    protected Optional<Service> getService() {
+        return Optional.of(this.service);
     }
 
     @Override
     protected void test(Application application, TestSubscriber<Tuple2<String, String>> testSubscriber) {
         Mono
-            .when(application.request("/redis/check-access"), application.request("/redis/url"))
+            .when(application.request("/rabbitmq/check-access"), application.request("/rabbitmq/url"))
             .subscribe(testSubscriber
                 .assertEquals(Tuple.of("ok", "redis://fake")));
     }
