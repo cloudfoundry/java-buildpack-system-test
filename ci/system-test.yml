@@ -1,0 +1,24 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: java
+    tag: 8-jdk
+
+inputs:
+- name: java-test-applications-built
+  path: java-test-applications
+- name: java-buildpack-system-test
+
+run:
+  path: java-buildpack-system-test/ci/system-test.sh
+
+params:
+  TEST_HOST:
+  TEST_ORGANIZATION:
+  TEST_PASSWORD:
+  TEST_SKIPSSLVALIDATION:
+  TEST_SPACE:
+  TEST_USERNAME:
