@@ -23,7 +23,7 @@ import org.cloudfoundry.test.support.application.EjbApplication;
 import org.cloudfoundry.test.support.application.GroovyApplication;
 import org.cloudfoundry.test.support.application.JavaMainApplication;
 import org.cloudfoundry.test.support.application.RatpackApplication;
-import org.cloudfoundry.test.support.application.SpringBootCliApplication2;
+import org.cloudfoundry.test.support.application.SpringBootCliApplication;
 import org.cloudfoundry.test.support.application.SpringBootCliJarApplication;
 import org.cloudfoundry.test.support.application.WebApplication;
 import org.cloudfoundry.test.support.application.WebServlet2Application;
@@ -93,7 +93,7 @@ public abstract class AbstractTest<T> {
     @Test
     public final void springBootCli() throws InterruptedException {
         isIgnored(this.environment, this.testType, "springBootCli");
-        test(this.applicationDirectory.get(SpringBootCliApplication2.class));
+        test(this.applicationDirectory.get(SpringBootCliApplication.class));
     }
 
     @Test

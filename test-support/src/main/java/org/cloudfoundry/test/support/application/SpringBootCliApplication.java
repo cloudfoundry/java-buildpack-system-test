@@ -26,15 +26,15 @@ import org.springframework.web.client.AsyncRestOperations;
 import java.io.File;
 
 @Component
-public final class SpringBootCliApplication2 extends AbstractApplication {
+public final class SpringBootCliApplication extends AbstractApplication {
 
     @Autowired
-    SpringBootCliApplication2(String buildpack,
-                              CloudFoundryOperations cloudFoundryOperations,
-                              @Value("${applications.springBootCli.location}") File location,
-                              NameFactory nameFactory,
-                              @Value("${applications.springBootCli.prefix}") String prefix,
-                              AsyncRestOperations restOperations) {
+    SpringBootCliApplication(String buildpack,
+                             CloudFoundryOperations cloudFoundryOperations,
+                             @Value("${applications.springBootCli.location}") File location,
+                             NameFactory nameFactory,
+                             @Value("${applications.springBootCli.prefix}") String prefix,
+                             AsyncRestOperations restOperations) {
         super(buildpack, cloudFoundryOperations, location, nameFactory.getName(prefix), restOperations);
     }
 
