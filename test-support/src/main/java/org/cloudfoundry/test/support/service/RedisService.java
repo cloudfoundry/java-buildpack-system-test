@@ -16,10 +16,22 @@
 
 package org.cloudfoundry.test.support.service;
 
+import org.cloudfoundry.client.CloudFoundryClient;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
-public interface Service {
+@Component
+public final class RedisService extends AbstractService {
 
-    Mono<String> getName();
+    @Autowired
+    RedisService(CloudFoundryClient cloudFoundryClient,
+                 @Value("${services.redis.name}") String name,
+                 @Value("${services.redis.plan}") String plan,
+                 @Value("${services.redis.service}") String service,
+                 Mono<String> spaceId) {
+        super(cloudFoundryClient, name, plan, service, spaceId);
+    }
 
 }

@@ -4,20 +4,25 @@ test:
   health:
     ejb:     false
   mongodb:
+    ejb:     false
     groovy:  false
     play:    false
     ratpack: false
   mysql:
+    ejb:     false
     groovy:  false
     ratpack: false
   postgresql:
+    ejb:     false
     groovy:  false
     ratpack: false
   rabbitmq:
+    ejb:     false
     groovy:  false
     play:    false
     ratpack: false
   redis:
+    ejb:     false
     groovy:  false
     play:    false
     ratpack: false

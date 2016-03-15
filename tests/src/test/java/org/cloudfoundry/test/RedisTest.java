@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 the original author or authors.
+ * Copyright 2013-2016 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,22 +16,29 @@
 
 package org.cloudfoundry.test;
 
-
 import org.cloudfoundry.test.support.application.Application;
+import org.cloudfoundry.test.support.service.RedisService;
 import org.cloudfoundry.util.test.TestSubscriber;
+import org.springframework.beans.factory.annotation.Autowired;
+import reactor.core.publisher.Mono;
+import reactor.core.tuple.Tuple;
+import reactor.core.tuple.Tuple2;
 
-public final class HealthTest extends AbstractTest<String> {
+public final class RedisTest extends AbstractTest<Tuple2<String, String>> {
 
-    public HealthTest() {
-        super("health");
+    @Autowired
+    private RedisService service;
+
+    public RedisTest() {
+        super("redis");
     }
 
     @Override
-    protected void test(Application application, TestSubscriber<String> testSubscriber) {
-        application
-            .request("/")
+    protected void test(Application application, TestSubscriber<Tuple2<String, String>> testSubscriber) {
+        Mono
+            .when(application.request("/redis/check-access"), application.request("/redis/url"))
             .subscribe(testSubscriber
-                .assertEquals("ok"));
+                .assertEquals(Tuple.of("ok", "redis://fake")));
     }
 
 }

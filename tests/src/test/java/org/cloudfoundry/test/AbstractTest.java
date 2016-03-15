@@ -27,6 +27,7 @@ import org.cloudfoundry.test.support.application.SpringBootCliApplication;
 import org.cloudfoundry.test.support.application.SpringBootCliJarApplication;
 import org.cloudfoundry.test.support.application.WebApplication;
 import org.cloudfoundry.test.support.application.WebServlet2Application;
+import org.cloudfoundry.test.support.service.Service;
 import org.cloudfoundry.util.test.TestSubscriber;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,6 +36,9 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.core.env.Environment;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.time.Duration;
+import java.util.Optional;
 
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static org.junit.Assume.assumeTrue;
@@ -110,6 +114,10 @@ public abstract class AbstractTest<T> {
         test(this.applicationDirectory.get(WebServlet2Application.class));
     }
 
+    protected Service getService() {
+        return null;
+    }
+
     protected abstract void test(Application application, TestSubscriber<T> testSubscriber);
 
     private static void isIgnored(Environment environment, String testType, String applicationType) {
@@ -118,9 +126,17 @@ public abstract class AbstractTest<T> {
     }
 
     private void test(Application application) throws InterruptedException {
-        TestSubscriber<T> testSubscriber = new TestSubscriber<>();
-        test(application, testSubscriber);
-        testSubscriber.verify(5, MINUTES);
+        Optional<Service> service = Optional.ofNullable(getService());
+
+        try {
+            service.ifPresent(s -> application.bindService(s).get(Duration.ofMinutes(1)));
+
+            TestSubscriber<T> testSubscriber = new TestSubscriber<>();
+            test(application, testSubscriber);
+            testSubscriber.verify(5, MINUTES);
+        } finally {
+            service.ifPresent(s -> application.unbindService(s).get(Duration.ofMinutes(1)));
+        }
     }
 
 }

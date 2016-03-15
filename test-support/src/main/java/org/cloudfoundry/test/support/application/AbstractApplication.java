@@ -28,7 +28,7 @@ import org.cloudfoundry.test.support.service.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpEntity;
 import org.springframework.web.client.AsyncRestOperations;
 import reactor.core.publisher.Mono;
 
@@ -81,11 +81,12 @@ abstract class AbstractApplication implements Application {
 
     @Override
     public final Mono<Void> bindService(Service service) {
-        return this.cloudFoundryOperations.services()
-            .bind(BindServiceRequest.builder()
-                .applicationName(this.name)
-                .serviceName(service.getName())
-                .build())
+        return service.getName()
+            .then(serviceName -> this.cloudFoundryOperations.services()
+                .bind(BindServiceRequest.builder()
+                    .applicationName(this.name)
+                    .serviceName(serviceName)
+                    .build()))
             .doOnSubscribe(s -> this.logger.info("Binding {} to {}", service.getName(), this.name));
     }
 
@@ -114,9 +115,10 @@ abstract class AbstractApplication implements Application {
     }
 
     @Override
-    public final <T> Mono<ResponseEntity<T>> request(String path, Class<T> responseType) {
+    public final Mono<String> request(String path) {
         return this.host
-            .then(host -> Mono.fromFuture(this.restOperations.getForEntity(String.format("http://%s%s", host, path), responseType)));
+            .then(host -> Mono.fromFuture(this.restOperations.getForEntity(String.format("http://%s%s", host, path), String.class)))
+            .map(HttpEntity::getBody);
     }
 
     @Override

@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-package org.cloudfoundry.test.support.application;
+package org.cloudfoundry.test.support.service;
 
-import org.cloudfoundry.test.support.service.Service;
+import org.cloudfoundry.client.CloudFoundryClient;
 import reactor.core.publisher.Mono;
 
-public interface Application {
+abstract class AbstractService implements Service {
 
-    Mono<Void> bindService(Service service);
+    private final String name;
 
-    Mono<Void> delete();
+    protected AbstractService(CloudFoundryClient cloudFoundryClient, String name, String plan, String service, Mono<String> spaceId) {
+        this.name = name;
+    }
 
-    Mono<Void> push();
+    @Override
+    public Mono<String> getName() {
+        return Mono.just(this.name);
+    }
 
-    Mono<String> request(String path);
-
-    Mono<Void> restage();
-
-    Mono<Void> unbindService(Service service);
 }
