@@ -1,7 +1,7 @@
 ---
 applications:
   root: ../../java-test-applications
-  dist-zip:
+  distZip:
     location: ${applications.root}/dist-zip-application
     prefix:   dist-zip-application-
   ejb:
@@ -10,22 +10,22 @@ applications:
   groovy:
     location: ${applications.root}/groovy-application
     prefix:   groovy-application-
-  java-main:
+  javaMain:
     location: ${applications.root}/java-main-application
     prefix:   java-main-application-
   ratpack:
     location: ${applications.root}/ratpack-application
     prefix:   ratpack-application-
-  spring-boot-cli:
+  springBootCli:
     location: ${applications.root}/spring-boot-cli-application
     prefix:   spring-boot-cli-application-
-  spring-boot-cli-jar:
+  springBootCliJar:
     location: ${applications.root}/spring-boot-cli-jar-application
     prefix:   spring-boot-cli-jar-application-
   web:
     location: ${applications.root}/web-application
     prefix:   web-application-
-  web-servlet-2:
+  webServlet2:
     location: ${applications.root}/web-servlet-2-application
     prefix:   test-web-servlet-2-application-
 

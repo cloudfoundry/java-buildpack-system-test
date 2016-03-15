@@ -29,10 +29,10 @@ import java.util.concurrent.TimeUnit;
 public final class HealthTest extends AbstractTest {
 
     @Test
-    @IgnoreOnProperty("test.health.dist-zip")
+    @IgnoreOnProperty("test.health.distZip")
     @Override
     public void distZip() throws Exception {
-        test("dist-zip");
+        test("distZip");
     }
 
     @Test
@@ -50,10 +50,10 @@ public final class HealthTest extends AbstractTest {
     }
 
     @Test
-    @IgnoreOnProperty("test.health.java-main")
+    @IgnoreOnProperty("test.health.javaMain")
     @Override
     public void javaMain() throws Exception {
-        test("java-main");
+        test("javaMain");
     }
 
     @Test
@@ -64,17 +64,17 @@ public final class HealthTest extends AbstractTest {
     }
 
     @Test
-    @IgnoreOnProperty("test.health.spring-boot-cli")
+    @IgnoreOnProperty("test.health.springBootCli")
     @Override
     public void springBootCli() throws Exception {
-        test("spring-boot-cli");
+        test("springBootCli");
     }
 
     @Test
-    @IgnoreOnProperty("test.health.spring-boot-cli-jar")
+    @IgnoreOnProperty("test.health.springBootCliJar")
     @Override
     public void springBootCliJar() throws Exception {
-        test("spring-boot-cli-jar");
+        test("springBootCliJar");
     }
 
     @Test
@@ -85,10 +85,10 @@ public final class HealthTest extends AbstractTest {
     }
 
     @Test
-    @IgnoreOnProperty("test.health.web-servlet-2")
+    @IgnoreOnProperty("test.health.webServlet2")
     @Override
     public void webServlet2() throws Exception {
-        test("web-servlet-2");
+        test("webServlet2");
     }
 
     private Mono<String> request(String host) {

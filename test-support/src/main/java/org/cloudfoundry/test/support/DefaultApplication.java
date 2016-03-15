@@ -63,7 +63,7 @@ final class DefaultApplication implements Application {
                 .deleteRoutes(true)
                 .name(this.name)
                 .build())
-            .doOnSubscribe(s -> this.logger.debug("Deleting {}", this.name))
+            .doOnSubscribe(s -> this.logger.info("Deleting {}", this.name))
             .doOnError(Throwable::printStackTrace);
     }
 
@@ -86,7 +86,7 @@ final class DefaultApplication implements Application {
                 .name(this.name)
                 .noStart(true)
                 .build())
-            .doOnSubscribe(s -> this.logger.debug("Pushing {}", this.name))
+            .doOnSubscribe(s -> this.logger.info("Pushing {}", this.name))
             .doOnError(Throwable::printStackTrace);
     }
 
@@ -96,7 +96,7 @@ final class DefaultApplication implements Application {
             .start(StartApplicationRequest.builder()
                 .name(this.name)
                 .build())
-            .doOnSubscribe(s -> this.logger.debug("Starting {}", this.name))
+            .doOnSubscribe(s -> this.logger.info("Starting {}", this.name))
             .doOnError(Throwable::printStackTrace);
     }
 
