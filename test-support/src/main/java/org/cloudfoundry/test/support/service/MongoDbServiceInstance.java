@@ -14,30 +14,35 @@
  * limitations under the License.
  */
 
-package org.cloudfoundry.test.support.application;
+package org.cloudfoundry.test.support.service;
 
 import org.cloudfoundry.operations.CloudFoundryOperations;
-import org.cloudfoundry.test.support.NameFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.AsyncRestOperations;
 
-import java.io.File;
+import java.net.URI;
+import java.util.Map;
 
 @Component
-@ConditionalOnProperty(name = "applications.distZip.enabled", matchIfMissing = true)
-public final class DistZipApplication extends AbstractApplication {
+@ConditionalOnProperty(name = "services.mongodb.enabled", matchIfMissing = true)
+public final class MongoDbServiceInstance extends AbstractServiceInstance {
 
     @Autowired
-    DistZipApplication(String buildpack,
-                       CloudFoundryOperations cloudFoundryOperations,
-                       @Value("${applications.distZip.location}") File location,
-                       NameFactory nameFactory,
-                       @Value("${applications.distZip.prefix}") String prefix,
-                       AsyncRestOperations restOperations) {
-        super(buildpack, cloudFoundryOperations, location, nameFactory.getName(prefix), restOperations);
+    MongoDbServiceInstance(CloudFoundryOperations cloudFoundryOperations,
+                           @Value("${services.mongodb.name}") String name,
+                           @Value("${services.mongodb.plan}") String plan,
+                           @Value("${services.mongodb.service}") String service) {
+
+        super(cloudFoundryOperations, name, plan, service);
+    }
+
+    @Override
+    String extractEndpoint(Map<String, Object> credentials) {
+        URI uri = URI.create((String) credentials.get("uri"));
+
+        return String.format("%s://%s:%s%s", uri.getScheme(), uri.getHost(), uri.getPort(), uri.getPath());
     }
 
 }

@@ -23,8 +23,6 @@ import org.cloudfoundry.operations.applications.DeleteApplicationRequest;
 import org.cloudfoundry.operations.applications.GetApplicationRequest;
 import org.cloudfoundry.operations.applications.PushApplicationRequest;
 import org.cloudfoundry.operations.applications.RestageApplicationRequest;
-import org.cloudfoundry.operations.services.BindServiceRequest;
-import org.cloudfoundry.test.support.service.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.FileSystemResource;
@@ -80,17 +78,6 @@ abstract class AbstractApplication implements Application {
     }
 
     @Override
-    public final Mono<Void> bindService(Service service) {
-        return service.getName()
-            .then(serviceName -> this.cloudFoundryOperations.services()
-                .bind(BindServiceRequest.builder()
-                    .applicationName(this.name)
-                    .serviceName(serviceName)
-                    .build()))
-            .doOnSubscribe(s -> this.logger.info("Binding {} to {}", service.getName(), this.name));
-    }
-
-    @Override
     public final Mono<Void> delete() {
         return this.cloudFoundryOperations.applications()
             .delete(DeleteApplicationRequest.builder()
@@ -98,6 +85,11 @@ abstract class AbstractApplication implements Application {
                 .name(this.name)
                 .build())
             .doOnSubscribe(s -> this.logger.info("Deleting {}", this.name));
+    }
+
+    @Override
+    public final String getName() {
+        return this.name;
     }
 
     @Override
@@ -110,8 +102,8 @@ abstract class AbstractApplication implements Application {
                     .buildpack(this.buildpack)
                     .memory(memory)
                     .name(this.name)
-                    .build())))
-            .doOnSubscribe(s -> this.logger.info("Pushing {}", this.name));
+                    .build())
+                .doOnSubscribe(s -> this.logger.info("Pushing {}", this.name))));
     }
 
     @Override
@@ -130,13 +122,6 @@ abstract class AbstractApplication implements Application {
             .doOnSubscribe(s -> this.logger.info("Restaging {}", this.name));
     }
 
-    @Override
-    public final Mono<Void> unbindService(Service service) {  // TODO: Replace with https://www.pivotaltracker.com/story/show/106155498
-        return Mono
-            .<Void>empty()
-            .doOnSubscribe(s -> this.logger.info("Unbinding {} from {}", service.getName(), this.name))
-            .doOnSuccess(v -> this.logger.warn("Service was not unbound due to missing CloudFoundryOperations functionality"));
-    }
 
     private static File createZip(File path) throws IOException {
         Path zip = Files.createTempFile("cf-package-", ".zip");

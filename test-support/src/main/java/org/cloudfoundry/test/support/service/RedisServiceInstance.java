@@ -16,22 +16,30 @@
 
 package org.cloudfoundry.test.support.service;
 
-import org.cloudfoundry.client.CloudFoundryClient;
+import org.cloudfoundry.operations.CloudFoundryOperations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Mono;
+
+import java.util.Map;
 
 @Component
-public final class MySqlService extends AbstractService {
+@ConditionalOnProperty(name = "services.redis.enabled", matchIfMissing = true)
+public final class RedisServiceInstance extends AbstractServiceInstance {
 
     @Autowired
-    MySqlService(CloudFoundryClient cloudFoundryClient,
-                 @Value("${services.mysql.name}") String name,
-                 @Value("${services.mysql.plan}") String plan,
-                 @Value("${services.mysql.service}") String service,
-                 Mono<String> spaceId) {
-        super(cloudFoundryClient, name, plan, service, spaceId);
+    RedisServiceInstance(CloudFoundryOperations cloudFoundryOperations,
+                         @Value("${services.redis.name}") String name,
+                         @Value("${services.redis.plan}") String plan,
+                         @Value("${services.redis.service}") String service) {
+
+        super(cloudFoundryOperations, name, plan, service);
+    }
+
+    @Override
+    String extractEndpoint(Map<String, Object> credentials) {
+        return String.format("redis://%s:%s", credentials.get("hostname"), credentials.get("port"));
     }
 
 }

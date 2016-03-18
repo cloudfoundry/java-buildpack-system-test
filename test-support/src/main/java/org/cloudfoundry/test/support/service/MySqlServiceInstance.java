@@ -16,22 +16,30 @@
 
 package org.cloudfoundry.test.support.service;
 
-import org.cloudfoundry.client.CloudFoundryClient;
+import org.cloudfoundry.operations.CloudFoundryOperations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Mono;
+
+import java.util.Map;
 
 @Component
-public final class RabbitMqService extends AbstractService {
+@ConditionalOnProperty(name = "services.mysql.enabled", matchIfMissing = true)
+public final class MySqlServiceInstance extends AbstractServiceInstance {
 
     @Autowired
-    RabbitMqService(CloudFoundryClient cloudFoundryClient,
-                    @Value("${services.rabbitmq.name}") String name,
-                    @Value("${services.rabbitmq.plan}") String plan,
-                    @Value("${services.rabbitmq.service}") String service,
-                    Mono<String> spaceId) {
-        super(cloudFoundryClient, name, plan, service, spaceId);
+    MySqlServiceInstance(CloudFoundryOperations cloudFoundryOperations,
+                         @Value("${services.mysql.name}") String name,
+                         @Value("${services.mysql.plan}") String plan,
+                         @Value("${services.mysql.service}") String service) {
+
+        super(cloudFoundryOperations, name, plan, service);
+    }
+
+    @Override
+    String extractEndpoint(Map<String, Object> credentials) {
+        return (String) credentials.get("jdbcUrl");
     }
 
 }

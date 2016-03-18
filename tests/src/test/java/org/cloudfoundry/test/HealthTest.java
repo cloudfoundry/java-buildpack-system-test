@@ -20,11 +20,8 @@ package org.cloudfoundry.test;
 import org.cloudfoundry.test.support.application.Application;
 import org.cloudfoundry.util.test.TestSubscriber;
 
+@TestType("health")
 public final class HealthTest extends AbstractTest<String> {
-
-    public HealthTest() {
-        super("health");
-    }
 
     @Override
     protected void test(Application application, TestSubscriber<String> testSubscriber) {

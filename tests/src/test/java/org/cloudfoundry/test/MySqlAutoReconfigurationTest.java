@@ -17,38 +17,31 @@
 package org.cloudfoundry.test;
 
 import org.cloudfoundry.test.support.application.Application;
-import org.cloudfoundry.test.support.service.RedisService;
-import org.cloudfoundry.test.support.service.Service;
+import org.cloudfoundry.test.support.service.MySqlServiceInstance;
 import org.cloudfoundry.util.test.TestSubscriber;
-import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
 import reactor.core.publisher.Mono;
-import reactor.core.tuple.Tuple;
-import reactor.core.tuple.Tuple2;
+import reactor.core.tuple.Tuple3;
 
-import java.util.Optional;
+import static org.cloudfoundry.util.tuple.TupleUtils.consumer;
+import static org.junit.Assert.assertEquals;
 
-@Ignore
-public final class MySqlAutoReconfigurationTest extends AbstractTest<Tuple2<String, String>> {
+@ServiceType(MySqlServiceInstance.class)
+@TestType("mysql")
+public final class MySqlAutoReconfigurationTest extends AbstractTest<Tuple3<String, String, String>> {
 
     @Autowired
-    private RedisService service;
-
-    public MySqlAutoReconfigurationTest() {
-        super("mysql");
-    }
+    private MySqlServiceInstance service;
 
     @Override
-    protected Optional<Service> getService() {
-        return Optional.of(this.service);
-    }
-
-    @Override
-    protected void test(Application application, TestSubscriber<Tuple2<String, String>> testSubscriber) {
+    protected void test(Application application, TestSubscriber<Tuple3<String, String, String>> testSubscriber) {
         Mono
-            .when(application.request("/mysql/check-access"), application.request("/mysql/url"))
+            .when(application.request("/datasource/check-access"), this.service.getEndpoint(application), application.request("/datasource/url"))
             .subscribe(testSubscriber
-                .assertEquals(Tuple.of("ok", "redis://fake")));
+                .assertThat(consumer((access, expectedUrl, actualUrl) -> {
+                    assertEquals("ok", access);
+                    assertEquals(expectedUrl, actualUrl);
+                })));
     }
 
 }

@@ -17,38 +17,33 @@
 package org.cloudfoundry.test;
 
 import org.cloudfoundry.test.support.application.Application;
-import org.cloudfoundry.test.support.service.RedisService;
-import org.cloudfoundry.test.support.service.Service;
+import org.cloudfoundry.test.support.service.RedisServiceInstance;
 import org.cloudfoundry.util.test.TestSubscriber;
-import org.junit.Ignore;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import reactor.core.publisher.Mono;
-import reactor.core.tuple.Tuple;
-import reactor.core.tuple.Tuple2;
+import reactor.core.tuple.Tuple3;
 
-import java.util.Optional;
+import static org.cloudfoundry.util.tuple.TupleUtils.consumer;
+import static org.junit.Assert.assertEquals;
 
-@Ignore
-public final class RedisAutoReconfigurationTest extends AbstractTest<Tuple2<String, String>> {
+@ServiceType(RedisServiceInstance.class)
+@TestType("redis")
+public final class RedisAutoReconfigurationTest extends AbstractTest<Tuple3<String, String, String>> {
 
     @Autowired
-    private RedisService service;
-
-    public RedisAutoReconfigurationTest() {
-        super("redis");
-    }
+    private RedisServiceInstance service;
 
     @Override
-    protected Optional<Service> getService() {
-        return Optional.of(this.service);
-    }
-
-    @Override
-    protected void test(Application application, TestSubscriber<Tuple2<String, String>> testSubscriber) {
+    protected void test(Application application, TestSubscriber<Tuple3<String, String, String>> testSubscriber) {
         Mono
-            .when(application.request("/redis/check-access"), application.request("/redis/url"))
+            .when(application.request("/redis/check-access"), this.service.getEndpoint(application), application.request("/redis/url"))
             .subscribe(testSubscriber
-                .assertEquals(Tuple.of("ok", "redis://fake")));
+                .assertThat(consumer((access, expectedUrl, actualUrl) -> {
+                    assertEquals("ok", access);
+                    assertEquals(expectedUrl, actualUrl);
+                })));
     }
 
 }
+

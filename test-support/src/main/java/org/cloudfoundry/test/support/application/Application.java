@@ -16,20 +16,17 @@
 
 package org.cloudfoundry.test.support.application;
 
-import org.cloudfoundry.test.support.service.Service;
 import reactor.core.publisher.Mono;
 
 public interface Application {
 
-    Mono<Void> bindService(Service service);
-
     Mono<Void> delete();
+
+    String getName();
 
     Mono<Void> push();
 
     Mono<String> request(String path);
 
     Mono<Void> restage();
-
-    Mono<Void> unbindService(Service service);
 }

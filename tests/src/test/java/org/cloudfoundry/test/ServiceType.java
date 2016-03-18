@@ -14,10 +14,19 @@
  * limitations under the License.
  */
 
-package org.cloudfoundry.test.support.application;
+package org.cloudfoundry.test;
 
-public interface ApplicationDirectory {
+import org.cloudfoundry.test.support.service.ServiceInstance;
 
-    <T extends Application> T get(Class<T> type);
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@interface ServiceType {
+
+    Class<? extends ServiceInstance> value();
 
 }

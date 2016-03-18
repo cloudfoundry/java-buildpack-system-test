@@ -17,7 +17,6 @@
 package org.cloudfoundry.test;
 
 import org.cloudfoundry.test.support.application.Application;
-import org.cloudfoundry.test.support.application.ApplicationDirectory;
 import org.cloudfoundry.test.support.application.DistZipApplication;
 import org.cloudfoundry.test.support.application.EjbApplication;
 import org.cloudfoundry.test.support.application.GroovyApplication;
@@ -27,18 +26,18 @@ import org.cloudfoundry.test.support.application.SpringBootCliApplication;
 import org.cloudfoundry.test.support.application.SpringBootCliJarApplication;
 import org.cloudfoundry.test.support.application.WebApplication;
 import org.cloudfoundry.test.support.application.WebServlet2Application;
-import org.cloudfoundry.test.support.service.Service;
 import org.cloudfoundry.util.test.TestSubscriber;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.env.Environment;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import java.time.Duration;
-import java.util.Optional;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static org.junit.Assume.assumeTrue;
@@ -46,76 +45,67 @@ import static org.junit.Assume.assumeTrue;
 @ActiveProfiles("test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = IntegrationTestConfiguration.class)
+@TestExecutionListeners({DependencyInjectionTestExecutionListener.class, ServiceBindingTestExecutionListener.class})
 public abstract class AbstractTest<T> {
 
-    private final String testType;
-
     @Autowired
-    private ApplicationDirectory applicationDirectory;
+    private ApplicationContext applicationContext;
 
     @Autowired
     private Environment environment;
 
-    protected AbstractTest(String testType) {
-        this.testType = testType;
-    }
-
     @Test
     public final void distZip() throws InterruptedException {
-        isIgnored(this.environment, this.testType, "distZip");
-        test(this.applicationDirectory.get(DistZipApplication.class));
+        isIgnored(this.environment, getTestType(), "distZip");
+        test(this.applicationContext.getBean(DistZipApplication.class));
     }
 
     @Test
     public final void ejb() throws InterruptedException {
-        isIgnored(this.environment, this.testType, "ejb");
-        test(this.applicationDirectory.get(EjbApplication.class));
+        isIgnored(this.environment, getTestType(), "ejb");
+        test(this.applicationContext.getBean(EjbApplication.class));
     }
 
     @Test
     public final void groovy() throws InterruptedException {
-        isIgnored(this.environment, this.testType, "groovy");
-        test(this.applicationDirectory.get(GroovyApplication.class));
+        isIgnored(this.environment, getTestType(), "groovy");
+        test(this.applicationContext.getBean(GroovyApplication.class));
     }
 
     @Test
     public final void javaMain() throws InterruptedException {
-        isIgnored(this.environment, this.testType, "javaMain");
-        test(this.applicationDirectory.get(JavaMainApplication.class));
+        isIgnored(this.environment, getTestType(), "javaMain");
+        test(this.applicationContext.getBean(JavaMainApplication.class));
     }
 
     @Test
     public final void ratpack() throws InterruptedException {
-        isIgnored(this.environment, this.testType, "ratpack");
-        test(this.applicationDirectory.get(RatpackApplication.class));
+        isIgnored(this.environment, getTestType(), "ratpack");
+        test(this.applicationContext.getBean(RatpackApplication.class));
     }
 
     @Test
     public final void springBootCli() throws InterruptedException {
-        isIgnored(this.environment, this.testType, "springBootCli");
-        test(this.applicationDirectory.get(SpringBootCliApplication.class));
+        isIgnored(this.environment, getTestType(), "springBootCli");
+        test(this.applicationContext.getBean(SpringBootCliApplication.class));
     }
 
     @Test
     public final void springBootCliJar() throws InterruptedException {
-        isIgnored(this.environment, this.testType, "springBootCliJar");
-        test(this.applicationDirectory.get(SpringBootCliJarApplication.class));
+        isIgnored(this.environment, getTestType(), "springBootCliJar");
+        test(this.applicationContext.getBean(SpringBootCliJarApplication.class));
     }
 
     @Test
     public final void web() throws InterruptedException {
-        isIgnored(this.environment, this.testType, "web");
-        test(this.applicationDirectory.get(WebApplication.class));
+        isIgnored(this.environment, getTestType(), "web");
+        test(this.applicationContext.getBean(WebApplication.class));
     }
 
     @Test
     public final void webServlet2() throws InterruptedException {
-        isIgnored(this.environment, this.testType, "webServlet2");
-        test(this.applicationDirectory.get(WebServlet2Application.class));
-    }
-
-    protected Optional<Service> getService() {
-        return Optional.empty();
+        isIgnored(this.environment, getTestType(), "webServlet2");
+        test(this.applicationContext.getBean(WebServlet2Application.class));
     }
 
     protected abstract void test(Application application, TestSubscriber<T> testSubscriber);
@@ -126,20 +116,13 @@ public abstract class AbstractTest<T> {
     }
 
     private void test(Application application) throws InterruptedException {
-        try {
-            getService()
-                .ifPresent(s -> application.bindService(s)
-                    .after(application::restage)
-                    .get(Duration.ofMinutes(15)));
+        TestSubscriber<T> testSubscriber = new TestSubscriber<>();
+        test(application, testSubscriber);
+        testSubscriber.verify(5, MINUTES);
+    }
 
-            TestSubscriber<T> testSubscriber = new TestSubscriber<>();
-            test(application, testSubscriber);
-            testSubscriber.verify(5, MINUTES);
-        } finally {
-            getService()
-                .ifPresent(s -> application.unbindService(s)
-                    .get(Duration.ofMinutes(1)));
-        }
+    private String getTestType() {
+        return AnnotationUtils.findAnnotation(this.getClass(), TestType.class).value();
     }
 
 }
