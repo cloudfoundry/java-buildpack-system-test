@@ -37,7 +37,7 @@ final class ServiceBindingTestExecutionListener extends AbstractTestExecutionLis
 
             Flux
                 .fromIterable(applications)
-                .flatMap(serviceInstance::unbind)
+                .flatMap(serviceInstance::unbind, 1)  // Single-threaded because of problems with AppDirect Service Broker
                 .after()
                 .get(Duration.ofMinutes(1));
 
