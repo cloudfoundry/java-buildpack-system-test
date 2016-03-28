@@ -16,22 +16,27 @@
 
 package org.cloudfoundry.test.support.service;
 
-import org.cloudfoundry.client.CloudFoundryClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-import reactor.core.publisher.Mono;
+import org.springframework.context.annotation.Configuration;
+import reactor.core.publisher.Flux;
 
-@Component
-public final class PostgresqlService extends AbstractService {
+import javax.annotation.PostConstruct;
+import java.time.Duration;
+import java.util.List;
+
+@Configuration
+class ServiceInstanceConfiguration {
 
     @Autowired
-    PostgresqlService(CloudFoundryClient cloudFoundryClient,
-                      @Value("${services.postgresql.name}") String name,
-                      @Value("${services.postgresql.plan}") String plan,
-                      @Value("${services.postgresql.service}") String service,
-                      Mono<String> spaceId) {
-        super(cloudFoundryClient, name, plan, service, spaceId);
+    private List<ServiceInstance> serviceInstances;
+
+    @PostConstruct
+    void create() {
+        Flux
+            .fromIterable(this.serviceInstances)
+            .flatMap(ServiceInstance::create)
+            .after()
+            .get(Duration.ofMinutes(15));
     }
 
 }

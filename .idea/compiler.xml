@@ -32,17 +32,13 @@
         <processorPath useClasspath="true" />
         <module name="test-support (1)" />
       </profile>
-      <profile default="false" name="Annotation profile for tests" enabled="true">
+      <profile default="false" name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
-      </profile>
-      <profile default="false" name="Annotation profile for test-support" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="true" />
+        <module name="test-support" />
+        <module name="tests" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

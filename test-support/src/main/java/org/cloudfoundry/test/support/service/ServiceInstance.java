@@ -16,22 +16,19 @@
 
 package org.cloudfoundry.test.support.service;
 
-import org.cloudfoundry.client.CloudFoundryClient;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.cloudfoundry.test.support.application.Application;
 import reactor.core.publisher.Mono;
 
-@Component
-public final class MongoDbService extends AbstractService {
+public interface ServiceInstance {
 
-    @Autowired
-    MongoDbService(CloudFoundryClient cloudFoundryClient,
-                   @Value("${services.mongodb.name}") String name,
-                   @Value("${services.mongodb.plan}") String plan,
-                   @Value("${services.mongodb.service}") String service,
-                   Mono<String> spaceId) {
-        super(cloudFoundryClient, name, plan, service, spaceId);
-    }
+    Mono<Void> bind(Application application);
+
+    Mono<Void> create();
+
+    Mono<String> getEndpoint(Application application);
+
+    String getName();
+
+    Mono<Void> unbind(Application application);
 
 }

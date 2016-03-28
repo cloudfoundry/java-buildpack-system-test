@@ -14,12 +14,17 @@
  * limitations under the License.
  */
 
-package org.cloudfoundry.test.support.service;
+package org.cloudfoundry.test;
 
-import reactor.core.publisher.Mono;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public interface Service {
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@interface TestType {
 
-    Mono<String> getName();
+    String value();
 
 }

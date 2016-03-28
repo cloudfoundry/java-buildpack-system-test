@@ -17,38 +17,25 @@
 package org.cloudfoundry.test.support.application;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 import reactor.core.publisher.Flux;
 
 import javax.annotation.PostConstruct;
 import java.time.Duration;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
-@Component
-final class DefaultApplicationDirectory implements ApplicationDirectory {
-
-    private final Map<Class, Application> applications;
+@Configuration
+class ApplicationConfiguration {
 
     @Autowired
-    DefaultApplicationDirectory(List<? extends Application> applications) {
-        this.applications = applications.stream()
-            .collect(Collectors.toMap(Application::getClass, a -> a));
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T extends Application> T get(Class<T> type) {
-        return (T) this.applications.get(type);
-    }
+    private List<Application> applications;
 
     @PostConstruct
     void push() {
         Flux
-            .fromIterable(this.applications.values())
+            .fromIterable(this.applications)
             .flatMap(Application::push)
-            .doOnComplete(this::registerShutdownHook)
+            .doOnSubscribe(s -> registerShutdownHook())
             .after()
             .get(Duration.ofMinutes(15));
     }
@@ -56,7 +43,7 @@ final class DefaultApplicationDirectory implements ApplicationDirectory {
     private void registerShutdownHook() {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             Flux
-                .fromIterable(this.applications.values())
+                .fromIterable(this.applications)
                 .flatMap(Application::delete)
                 .after()
                 .get(Duration.ofMinutes(15));

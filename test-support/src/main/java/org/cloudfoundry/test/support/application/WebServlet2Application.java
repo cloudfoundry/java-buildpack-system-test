@@ -20,12 +20,14 @@ import org.cloudfoundry.operations.CloudFoundryOperations;
 import org.cloudfoundry.test.support.NameFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.AsyncRestOperations;
 
 import java.io.File;
 
 @Component
+@ConditionalOnProperty(name = "applications.webServlet2.enabled", matchIfMissing = true)
 public final class WebServlet2Application extends AbstractApplication {
 
     @Autowired
