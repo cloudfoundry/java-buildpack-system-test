@@ -110,6 +110,8 @@ abstract class AbstractApplication implements Application {
     public final Mono<String> request(String path) {
         return this.host
             .then(host -> Mono.fromFuture(this.restOperations.getForEntity(String.format("http://%s%s", host, path), String.class)))
+            .doOnError(t -> this.logger.warn("Error while making request: {}", t.getMessage()))
+            .retry(5)
             .map(HttpEntity::getBody);
     }
 

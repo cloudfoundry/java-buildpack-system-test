@@ -18,17 +18,20 @@ package org.cloudfoundry.test;
 
 import org.cloudfoundry.test.support.application.Application;
 import org.cloudfoundry.test.support.service.ServiceInstance;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.test.context.TestContext;
 import org.springframework.test.context.support.AbstractTestExecutionListener;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 import java.util.Collection;
 import java.util.Optional;
 
 final class ServiceBindingTestExecutionListener extends AbstractTestExecutionListener {
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
     public void afterTestClass(TestContext testContext) {
@@ -38,7 +41,9 @@ final class ServiceBindingTestExecutionListener extends AbstractTestExecutionLis
 
             Flux
                 .fromIterable(applications)
-                .flatMap(serviceInstance::unbind, 1)  // Single-threaded because of problems with AppDirect Service Broker
+                .flatMap((application) -> serviceInstance.unbind(application)
+                    .doOnError(t -> this.logger.warn("Error while unbinding: {}", t.getMessage()))
+                    .retry(5))
                 .after()
                 .get(Duration.ofMinutes(1));
         });
@@ -53,8 +58,9 @@ final class ServiceBindingTestExecutionListener extends AbstractTestExecutionLis
             Flux
                 .fromIterable(applications)
                 .flatMap(application -> serviceInstance.bind(application)
-                    .after(() -> Mono.just(application)), 1)  // Single-threaded because of problems with AppDirect Service Broker
-                .flatMap(Application::restage)
+                    .doOnError(t -> this.logger.warn("Error while binding: {}", t.getMessage()))
+                    .retry(5)
+                    .after(application::restage))
                 .after()
                 .get(Duration.ofMinutes(15));
         });
