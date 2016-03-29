@@ -22,6 +22,7 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.test.context.TestContext;
 import org.springframework.test.context.support.AbstractTestExecutionListener;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 import java.util.Collection;
@@ -40,7 +41,6 @@ final class ServiceBindingTestExecutionListener extends AbstractTestExecutionLis
                 .flatMap(serviceInstance::unbind, 1)  // Single-threaded because of problems with AppDirect Service Broker
                 .after()
                 .get(Duration.ofMinutes(1));
-
         });
     }
 
@@ -53,7 +53,8 @@ final class ServiceBindingTestExecutionListener extends AbstractTestExecutionLis
             Flux
                 .fromIterable(applications)
                 .flatMap(application -> serviceInstance.bind(application)
-                    .after(application::restage))
+                    .after(() -> Mono.just(application)), 1)  // Single-threaded because of problems with AppDirect Service Broker
+                .flatMap(Application::restage)
                 .after()
                 .get(Duration.ofMinutes(15));
         });
