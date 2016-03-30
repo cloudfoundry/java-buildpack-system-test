@@ -39,7 +39,8 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
-import static java.util.concurrent.TimeUnit.MINUTES;
+import java.time.Duration;
+
 import static org.junit.Assume.assumeTrue;
 
 @ActiveProfiles("test")
@@ -118,7 +119,7 @@ public abstract class AbstractTest<T> {
     private void test(Application application) throws InterruptedException {
         TestSubscriber<T> testSubscriber = new TestSubscriber<>();
         test(application, testSubscriber);
-        testSubscriber.verify(5, MINUTES);
+        testSubscriber.verify(Duration.ofMinutes(5));
     }
 
     private String getTestType() {
