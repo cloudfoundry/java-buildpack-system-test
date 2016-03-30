@@ -18,6 +18,7 @@ package org.cloudfoundry.test;
 
 import org.cloudfoundry.test.support.application.Application;
 import org.cloudfoundry.test.support.service.ServiceInstance;
+import org.cloudfoundry.util.DelayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -43,7 +44,7 @@ final class ServiceBindingTestExecutionListener extends AbstractTestExecutionLis
                 .fromIterable(applications)
                 .flatMap((application) -> serviceInstance.unbind(application)
                     .doOnError(t -> this.logger.warn("Error while unbinding: {}", t.getMessage()))
-                    .retry(5))
+                    .retryWhen(DelayUtils.exponentialBackOffError(Duration.ofSeconds(1), Duration.ofSeconds(10), Duration.ofMinutes(1))))
                 .after()
                 .get(Duration.ofMinutes(1));
         });
@@ -59,7 +60,7 @@ final class ServiceBindingTestExecutionListener extends AbstractTestExecutionLis
                 .fromIterable(applications)
                 .flatMap(application -> serviceInstance.bind(application)
                     .doOnError(t -> this.logger.warn("Error while binding: {}", t.getMessage()))
-                    .retry(5)
+                    .retryWhen(DelayUtils.exponentialBackOffError(Duration.ofSeconds(1), Duration.ofSeconds(10), Duration.ofMinutes(1)))
                     .after(application::restage))
                 .after()
                 .get(Duration.ofMinutes(15));

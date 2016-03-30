@@ -23,6 +23,7 @@ import org.cloudfoundry.operations.applications.DeleteApplicationRequest;
 import org.cloudfoundry.operations.applications.GetApplicationRequest;
 import org.cloudfoundry.operations.applications.PushApplicationRequest;
 import org.cloudfoundry.operations.applications.RestageApplicationRequest;
+import org.cloudfoundry.util.DelayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.FileSystemResource;
@@ -42,6 +43,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -111,7 +113,7 @@ abstract class AbstractApplication implements Application {
         return this.host
             .then(host -> Mono.fromFuture(this.restOperations.getForEntity(String.format("http://%s%s", host, path), String.class)))
             .doOnError(t -> this.logger.warn("Error while making request: {}", t.getMessage()))
-            .retry(5)
+            .retryWhen(DelayUtils.exponentialBackOffError(Duration.ofSeconds(1), Duration.ofSeconds(10), Duration.ofMinutes(1)))
             .map(HttpEntity::getBody);
     }
 
