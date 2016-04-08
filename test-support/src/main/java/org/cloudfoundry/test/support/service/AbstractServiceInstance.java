@@ -64,7 +64,7 @@ abstract class AbstractServiceInstance implements ServiceInstance {
     public Mono<Void> create() {
         return this.cloudFoundryOperations.services()
             .listInstances()
-            .filter(serviceInstance -> this.name.equals(serviceInstance.getServiceInstance()))
+            .filter(serviceInstance -> this.name.equals(serviceInstance.getName()))
             .singleOrEmpty()
             .otherwiseIfEmpty(this.cloudFoundryOperations.services()
                 .createInstance(CreateServiceInstanceRequest.builder()
