@@ -35,7 +35,7 @@ class ServiceInstanceConfiguration {
         Flux
             .fromIterable(this.serviceInstances)
             .flatMap(ServiceInstance::create)
-            .after()
+            .then()
             .get(Duration.ofMinutes(15));
     }
 

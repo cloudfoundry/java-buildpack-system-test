@@ -45,7 +45,7 @@ final class ServiceBindingTestExecutionListener extends AbstractTestExecutionLis
                 .flatMap((application) -> serviceInstance.unbind(application)
                     .doOnError(t -> this.logger.warn("Error while unbinding: {}", t.getMessage()))
                     .retryWhen(DelayUtils.exponentialBackOffError(Duration.ofSeconds(1), Duration.ofSeconds(10), Duration.ofMinutes(1))))
-                .after()
+                .then()
                 .get(Duration.ofMinutes(1));
         });
     }
@@ -61,8 +61,8 @@ final class ServiceBindingTestExecutionListener extends AbstractTestExecutionLis
                 .flatMap(application -> serviceInstance.bind(application)
                     .doOnError(t -> this.logger.warn("Error while binding: {}", t.getMessage()))
                     .retryWhen(DelayUtils.exponentialBackOffError(Duration.ofSeconds(1), Duration.ofSeconds(10), Duration.ofMinutes(1)))
-                    .after(application::restage))
-                .after()
+                    .then(application::restage))
+                .then()
                 .get(Duration.ofMinutes(15));
         });
     }

@@ -28,6 +28,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.concurrent.ListenableFutureCallback;
 import org.springframework.web.client.AsyncRestOperations;
 import reactor.core.publisher.Mono;
 
@@ -111,7 +113,20 @@ abstract class AbstractApplication implements Application {
     @Override
     public final Mono<String> request(String path) {
         return this.host
-            .then(host -> Mono.fromFuture(this.restOperations.getForEntity(String.format("http://%s%s", host, path), String.class)))
+            .then(host -> Mono.<ResponseEntity<String>>create(emitter -> this.restOperations.getForEntity(String.format("http://%s%s", host, path), String.class)
+                .addCallback(new ListenableFutureCallback<ResponseEntity<String>>() {
+
+                    @Override
+                    public void onFailure(Throwable ex) {
+                        emitter.fail(ex);
+                    }
+
+                    @Override
+                    public void onSuccess(ResponseEntity<String> result) {
+                        emitter.complete(result);
+                    }
+
+                })))
             .doOnError(t -> this.logger.warn("Error while making request: {}", t.getMessage()))
             .retryWhen(DelayUtils.exponentialBackOffError(Duration.ofSeconds(1), Duration.ofSeconds(10), Duration.ofMinutes(1)))
             .map(HttpEntity::getBody);

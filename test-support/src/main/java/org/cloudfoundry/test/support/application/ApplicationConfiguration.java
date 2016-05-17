@@ -36,7 +36,7 @@ class ApplicationConfiguration {
             .fromIterable(this.applications)
             .flatMap(Application::push)
             .doOnSubscribe(s -> registerShutdownHook())
-            .after()
+            .then()
             .get(Duration.ofMinutes(15));
     }
 
@@ -45,7 +45,7 @@ class ApplicationConfiguration {
             Flux
                 .fromIterable(this.applications)
                 .flatMap(Application::delete)
-                .after()
+                .then()
                 .get(Duration.ofMinutes(15));
         }));
     }

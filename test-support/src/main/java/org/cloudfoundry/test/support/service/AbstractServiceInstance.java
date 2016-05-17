@@ -74,7 +74,7 @@ abstract class AbstractServiceInstance implements ServiceInstance {
                     .build())
                 .cast(org.cloudfoundry.operations.services.ServiceInstance.class)
                 .doOnSubscribe(s -> this.logger.info("Creating {} ({}/{})", this.name, this.service, this.plan)))
-            .after();
+            .then();
     }
 
     @SuppressWarnings("unchecked")
