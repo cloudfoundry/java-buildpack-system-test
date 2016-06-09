@@ -18,7 +18,7 @@ package org.cloudfoundry.test;
 
 import org.cloudfoundry.client.CloudFoundryClient;
 import org.cloudfoundry.operations.CloudFoundryOperations;
-import org.cloudfoundry.operations.CloudFoundryOperationsBuilder;
+import org.cloudfoundry.operations.DefaultCloudFoundryOperations;
 import org.cloudfoundry.spring.client.SpringCloudFoundryClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -55,9 +55,10 @@ public class IntegrationTestConfiguration {
     CloudFoundryOperations cloudFoundryOperations(CloudFoundryClient cloudFoundryClient,
                                                   @Value("${test.organization}") String organization,
                                                   @Value("${test.space}") String space) {
-        return new CloudFoundryOperationsBuilder()
+        return DefaultCloudFoundryOperations.builder()
             .cloudFoundryClient(cloudFoundryClient)
-            .target(organization, space)
+            .organization(organization)
+            .space(space)
             .build();
     }
 

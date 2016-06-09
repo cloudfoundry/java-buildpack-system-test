@@ -46,7 +46,7 @@ final class ServiceBindingTestExecutionListener extends AbstractTestExecutionLis
                     .doOnError(t -> this.logger.warn("Error while unbinding: {}", t.getMessage()))
                     .retryWhen(DelayUtils.exponentialBackOffError(Duration.ofSeconds(1), Duration.ofSeconds(10), Duration.ofMinutes(1))))
                 .then()
-                .get(Duration.ofMinutes(1));
+                .block(Duration.ofMinutes(1));
         });
     }
 
@@ -63,7 +63,7 @@ final class ServiceBindingTestExecutionListener extends AbstractTestExecutionLis
                     .retryWhen(DelayUtils.exponentialBackOffError(Duration.ofSeconds(1), Duration.ofSeconds(10), Duration.ofMinutes(1)))
                     .then(application::restage))
                 .then()
-                .get(Duration.ofMinutes(15));
+                .block(Duration.ofMinutes(15));
         });
     }
 

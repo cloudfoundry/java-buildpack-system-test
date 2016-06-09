@@ -36,7 +36,7 @@ class ServiceInstanceConfiguration {
             .fromIterable(this.serviceInstances)
             .flatMap(ServiceInstance::create)
             .then()
-            .get(Duration.ofMinutes(15));
+            .block(Duration.ofMinutes(15));
     }
 
 }

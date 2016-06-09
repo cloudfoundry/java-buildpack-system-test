@@ -37,7 +37,7 @@ class ApplicationConfiguration {
             .flatMap(Application::push)
             .doOnSubscribe(s -> registerShutdownHook())
             .then()
-            .get(Duration.ofMinutes(15));
+            .block(Duration.ofMinutes(15));
     }
 
     private void registerShutdownHook() {
@@ -46,7 +46,7 @@ class ApplicationConfiguration {
                 .fromIterable(this.applications)
                 .flatMap(Application::delete)
                 .then()
-                .get(Duration.ofMinutes(15));
+                .block(Duration.ofMinutes(15));
         }));
     }
 
