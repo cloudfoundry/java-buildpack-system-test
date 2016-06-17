@@ -38,11 +38,11 @@ services:
   mysql:
     name:    test-mysql
     service: cleardb
-    plan:    boost
+    plan:    spark
   postgresql:
     name:    test-postgresql
     service: elephantsql
-    plan:    panda
+    plan:    turtle
   rabbitmq:
     name:    test-rabbitmq
     service: cloudamqp
