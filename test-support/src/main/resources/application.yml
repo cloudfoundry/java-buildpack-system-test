@@ -33,7 +33,7 @@ applications:
 services:
   mongodb:
     name:    test-mongodb
-    service: mongolab
+    service: mlab
     plan:    sandbox
   mysql:
     name:    test-mysql
