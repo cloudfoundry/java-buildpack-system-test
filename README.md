@@ -76,10 +76,10 @@ The following configuration elements define details about the test services.
 
 | Environment Variable | Value
 | -------------------- | -----
-| `SERVIES_<SERVICE>_ENABLED` | Whether to create the service
-| `SERVIES_<APPLICATION>_NAME` | The name of the service
-| `SERVIES_<APPLICATION>_SERVICE` | The service provider to use
-| `SERVIES_<APPLICATION>_PLAN` | The service plan to use
+| `SERVICES_<SERVICE>_ENABLED` | Whether to create the service
+| `SERVICES_<APPLICATION>_NAME` | The name of the service
+| `SERVICES_<APPLICATION>_SERVICE` | The service provider to use
+| `SERVICES_<APPLICATION>_PLAN` | The service plan to use
 
 ## Contributing
 [Pull requests][p] are welcome; see the [contributor guidelines][g] for details.
