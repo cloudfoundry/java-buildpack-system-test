@@ -17,15 +17,7 @@
 package org.cloudfoundry.test;
 
 import org.cloudfoundry.test.support.application.Application;
-import org.cloudfoundry.test.support.application.DistZipApplication;
-import org.cloudfoundry.test.support.application.EjbApplication;
-import org.cloudfoundry.test.support.application.GroovyApplication;
-import org.cloudfoundry.test.support.application.JavaMainApplication;
-import org.cloudfoundry.test.support.application.RatpackApplication;
-import org.cloudfoundry.test.support.application.SpringBootCliApplication;
-import org.cloudfoundry.test.support.application.SpringBootCliJarApplication;
 import org.cloudfoundry.test.support.application.WebApplication;
-import org.cloudfoundry.test.support.application.WebServlet2Application;
 import org.cloudfoundry.util.test.TestSubscriber;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -55,47 +47,47 @@ public abstract class AbstractTest<T> {
     @Autowired
     private Environment environment;
 
-    @Test
-    public final void distZip() throws InterruptedException {
-        isIgnored(this.environment, getTestType(), "distZip");
-        test(this.applicationContext.getBean(DistZipApplication.class));
-    }
-
-    @Test
-    public final void ejb() throws InterruptedException {
-        isIgnored(this.environment, getTestType(), "ejb");
-        test(this.applicationContext.getBean(EjbApplication.class));
-    }
-
-    @Test
-    public final void groovy() throws InterruptedException {
-        isIgnored(this.environment, getTestType(), "groovy");
-        test(this.applicationContext.getBean(GroovyApplication.class));
-    }
-
-    @Test
-    public final void javaMain() throws InterruptedException {
-        isIgnored(this.environment, getTestType(), "javaMain");
-        test(this.applicationContext.getBean(JavaMainApplication.class));
-    }
-
-    @Test
-    public final void ratpack() throws InterruptedException {
-        isIgnored(this.environment, getTestType(), "ratpack");
-        test(this.applicationContext.getBean(RatpackApplication.class));
-    }
-
-    @Test
-    public final void springBootCli() throws InterruptedException {
-        isIgnored(this.environment, getTestType(), "springBootCli");
-        test(this.applicationContext.getBean(SpringBootCliApplication.class));
-    }
-
-    @Test
-    public final void springBootCliJar() throws InterruptedException {
-        isIgnored(this.environment, getTestType(), "springBootCliJar");
-        test(this.applicationContext.getBean(SpringBootCliJarApplication.class));
-    }
+//    @Test
+//    public final void distZip() throws InterruptedException {
+//        isIgnored(this.environment, getTestType(), "distZip");
+//        test(this.applicationContext.getBean(DistZipApplication.class));
+//    }
+//
+//    @Test
+//    public final void ejb() throws InterruptedException {
+//        isIgnored(this.environment, getTestType(), "ejb");
+//        test(this.applicationContext.getBean(EjbApplication.class));
+//    }
+//
+//    @Test
+//    public final void groovy() throws InterruptedException {
+//        isIgnored(this.environment, getTestType(), "groovy");
+//        test(this.applicationContext.getBean(GroovyApplication.class));
+//    }
+//
+//    @Test
+//    public final void javaMain() throws InterruptedException {
+//        isIgnored(this.environment, getTestType(), "javaMain");
+//        test(this.applicationContext.getBean(JavaMainApplication.class));
+//    }
+//
+//    @Test
+//    public final void ratpack() throws InterruptedException {
+//        isIgnored(this.environment, getTestType(), "ratpack");
+//        test(this.applicationContext.getBean(RatpackApplication.class));
+//    }
+//
+//    @Test
+//    public final void springBootCli() throws InterruptedException {
+//        isIgnored(this.environment, getTestType(), "springBootCli");
+//        test(this.applicationContext.getBean(SpringBootCliApplication.class));
+//    }
+//
+//    @Test
+//    public final void springBootCliJar() throws InterruptedException {
+//        isIgnored(this.environment, getTestType(), "springBootCliJar");
+//        test(this.applicationContext.getBean(SpringBootCliJarApplication.class));
+//    }
 
     @Test
     public final void web() throws InterruptedException {
@@ -103,11 +95,11 @@ public abstract class AbstractTest<T> {
         test(this.applicationContext.getBean(WebApplication.class));
     }
 
-    @Test
-    public final void webServlet2() throws InterruptedException {
-        isIgnored(this.environment, getTestType(), "webServlet2");
-        test(this.applicationContext.getBean(WebServlet2Application.class));
-    }
+//    @Test
+//    public final void webServlet2() throws InterruptedException {
+//        isIgnored(this.environment, getTestType(), "webServlet2");
+//        test(this.applicationContext.getBean(WebServlet2Application.class));
+//    }
 
     protected abstract void test(Application application, TestSubscriber<T> testSubscriber);
 
