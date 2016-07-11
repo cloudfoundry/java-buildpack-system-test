@@ -45,7 +45,7 @@ The following configuration elements are required and define where the tests wil
 | `TEST_HOST` | The host of the Cloud Foundry being tested on
 | `TEST_ORGANIZATION` | The organization to test in
 | `TEST_PASSWORD` | The password of the user
-| `TEST_SKIPSSLVALIDATION` | Whether to skip SSL validation agains the Cloud Foundry
+| `TEST_SKIPSSLVALIDATION` | Whether to skip SSL validation against the Cloud Foundry
 | `TEST_SPACE` | The space to test in
 | `TEST_USERNAME` | The name of the user
 
