@@ -37,8 +37,8 @@ services:
     plan:    sandbox
   mysql:
     name:    test-mysql
-    service: cleardb
-    plan:    boost
+    service: p-mysql
+    plan:    100mb-dev
   postgresql:
     name:    test-postgresql
     service: elephantsql
