@@ -36,8 +36,9 @@ public final class WebApplication extends AbstractApplication {
                    @Value("${applications.web.location}") File location,
                    NameFactory nameFactory,
                    @Value("${applications.web.prefix}") String prefix,
-                   AsyncRestOperations restOperations) {
-        super(buildpack, cloudFoundryOperations, location, nameFactory.getName(prefix), restOperations);
+                   AsyncRestOperations restOperations,
+                   Integer memoryMultiplier) {
+        super(buildpack, cloudFoundryOperations, location, nameFactory.getName(prefix), restOperations, memoryMultiplier);
     }
 
 }
