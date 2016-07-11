@@ -49,6 +49,13 @@ The following configuration elements are required and define where the tests wil
 | `TEST_SPACE` | The space to test in
 | `TEST_USERNAME` | The name of the user
 
+### Optional Configuration
+The following configuration elements are optional.
+
+| Environment Variable | Value | Default
+| -------------------- | ----- | -------
+| `TEST_MEMORY_MULTIPLIER` | A factor by which to increase the total memory provided for each test application | 1
+
 ### Test Configuration
 The following configuration elements define what tests will run.
 

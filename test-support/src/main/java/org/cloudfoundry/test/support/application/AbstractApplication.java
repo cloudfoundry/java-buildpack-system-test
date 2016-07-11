@@ -63,13 +63,16 @@ abstract class AbstractApplication implements Application {
 
     private final AsyncRestOperations restOperations;
 
-    protected AbstractApplication(String buildpack, CloudFoundryOperations cloudFoundryOperations, File location, String name, AsyncRestOperations restOperations) {
+    private final Integer memoryMultiplier;
+
+    protected AbstractApplication(String buildpack, CloudFoundryOperations cloudFoundryOperations, File location, String name, AsyncRestOperations restOperations, Integer memoryMultiplier) {
         this.buildpack = buildpack;
         this.cloudFoundryOperations = cloudFoundryOperations;
         this.host = getHost(cloudFoundryOperations, name);
         this.location = location;
         this.name = name;
         this.restOperations = restOperations;
+        this.memoryMultiplier = memoryMultiplier;
     }
 
     @Override
@@ -91,7 +94,7 @@ abstract class AbstractApplication implements Application {
     @Override
     public final Mono<Void> push() {
         return getManifest(this.location)
-            .then(manifest -> Mono.when(getApplication(this.location, manifest), getMemory(manifest)))
+            .then(manifest -> Mono.when(getApplication(this.location, manifest), getMemory(manifest, this.memoryMultiplier)))
             .then(function((application, memory) -> this.cloudFoundryOperations.applications()
                 .push(PushApplicationRequest.builder()
                     .application(application)
@@ -174,10 +177,11 @@ abstract class AbstractApplication implements Application {
             .map(m -> ((Map<String, List<Map<String, String>>>) m).get("applications").get(0));
     }
 
-    private static Mono<Integer> getMemory(Map<String, String> manifest) {
+    private static Mono<Integer> getMemory(Map<String, String> manifest, Integer memoryMultiplier) {
         return Mono.just(manifest)
             .map(m -> m.get("memory"))
-            .map(AbstractApplication::resolveMemory);
+            .map(AbstractApplication::resolveMemory)
+            .map(m -> m * memoryMultiplier);
     }
 
     private static Integer resolveMemory(String raw) {
