@@ -21,7 +21,7 @@ import org.cloudfoundry.test.support.service.PostgresqlServiceInstance;
 import org.cloudfoundry.util.test.TestSubscriber;
 import org.springframework.beans.factory.annotation.Autowired;
 import reactor.core.publisher.Mono;
-import reactor.core.tuple.Tuple3;
+import reactor.util.function.Tuple3;
 
 import static org.cloudfoundry.util.tuple.TupleUtils.consumer;
 import static org.junit.Assert.assertEquals;

@@ -19,7 +19,11 @@ package org.cloudfoundry.test;
 import org.cloudfoundry.client.CloudFoundryClient;
 import org.cloudfoundry.operations.CloudFoundryOperations;
 import org.cloudfoundry.operations.DefaultCloudFoundryOperations;
-import org.cloudfoundry.spring.client.SpringCloudFoundryClient;
+import org.cloudfoundry.reactor.ConnectionContext;
+import org.cloudfoundry.reactor.DefaultConnectionContext;
+import org.cloudfoundry.reactor.TokenProvider;
+import org.cloudfoundry.reactor.client.ReactorCloudFoundryClient;
+import org.cloudfoundry.reactor.tokenprovider.PasswordGrantTokenProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -38,16 +42,10 @@ public class IntegrationTestConfiguration {
     }
 
     @Bean
-    SpringCloudFoundryClient cloudFoundryClient(@Value("${test.host}") String host,
-                                                @Value("${test.username}") String username,
-                                                @Value("${test.password}") String password,
-                                                @Value("${test.skipSslValidation:false}") Boolean skipSslValidation) {
-
-        return SpringCloudFoundryClient.builder()
-            .host(host)
-            .username(username)
-            .password(password)
-            .skipSslValidation(skipSslValidation)
+    ReactorCloudFoundryClient cloudFoundryClient(ConnectionContext connectionContext, TokenProvider tokenProvider) {
+        return ReactorCloudFoundryClient.builder()
+            .connectionContext(connectionContext)
+            .tokenProvider(tokenProvider)
             .build();
     }
 
@@ -55,6 +53,7 @@ public class IntegrationTestConfiguration {
     CloudFoundryOperations cloudFoundryOperations(CloudFoundryClient cloudFoundryClient,
                                                   @Value("${test.organization}") String organization,
                                                   @Value("${test.space}") String space) {
+
         return DefaultCloudFoundryOperations.builder()
             .cloudFoundryClient(cloudFoundryClient)
             .organization(organization)
@@ -63,8 +62,27 @@ public class IntegrationTestConfiguration {
     }
 
     @Bean
+    DefaultConnectionContext connectionContext(@Value("${test.host}") String host,
+                                               @Value("${test.skipSslValidation:false}") Boolean skipSslValidation) {
+
+        return DefaultConnectionContext.builder()
+            .apiHost(host)
+            .skipSslValidation(skipSslValidation)
+            .build();
+    }
+
+    @Bean
     AsyncRestTemplate restOperations() {
         return new AsyncRestTemplate();
+    }
+
+    @Bean
+    PasswordGrantTokenProvider tokenProvider(@Value("${test.username}") String username,
+                                             @Value("${test.password}") String password) {
+        return PasswordGrantTokenProvider.builder()
+            .username(username)
+            .password(password)
+            .build();
     }
 
 }
