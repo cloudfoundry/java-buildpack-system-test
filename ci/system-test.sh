@@ -1,7 +1,6 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 set -e
 
-pushd java-buildpack-system-test
-  ./mvnw -q test
-popd
+cd java-buildpack-system-test
+./mvnw -q test
