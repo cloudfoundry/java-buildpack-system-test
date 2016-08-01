@@ -47,16 +47,12 @@ public class IntegrationTestConfiguration {
     }
 
     @Bean
-    SpringCloudFoundryClient cloudFoundryClient(@Value("${test.host}") String host,
-                                                @Value("${test.username}") String username,
-                                                @Value("${test.password}") String password,
-                                                @Value("${test.skipSslValidation:false}") Boolean skipSslValidation) {
+    CloudFoundryClient cloudFoundryClient(ConnectionContext connectionContext,
+                                          TokenProvider tokenProvider) {
 
-        return SpringCloudFoundryClient.builder()
-            .host(host)
-            .username(username)
-            .password(password)
-            .skipSslValidation(skipSslValidation)
+        return ReactorCloudFoundryClient.builder()
+            .connectionContext(connectionContext)
+            .tokenProvider(tokenProvider)
             .build();
     }
 
