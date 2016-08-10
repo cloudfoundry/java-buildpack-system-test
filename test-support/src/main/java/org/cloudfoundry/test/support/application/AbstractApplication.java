@@ -23,6 +23,8 @@ import org.cloudfoundry.operations.applications.DeleteApplicationRequest;
 import org.cloudfoundry.operations.applications.GetApplicationRequest;
 import org.cloudfoundry.operations.applications.PushApplicationRequest;
 import org.cloudfoundry.operations.applications.RestageApplicationRequest;
+import org.cloudfoundry.operations.applications.SetEnvironmentVariableApplicationRequest;
+import org.cloudfoundry.operations.applications.StartApplicationRequest;
 import org.cloudfoundry.util.DelayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +32,10 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 import org.springframework.web.client.AsyncRestOperations;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.util.function.Tuple2;
+import reactor.util.function.Tuples;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -93,7 +98,20 @@ abstract class AbstractApplication implements Application {
                     .buildpack(this.buildpack)
                     .memory(memory)
                     .name(this.name)
+                    .noStart(true)
                     .build())
+                .then(getEnvironmentVariables()
+                    .flatMap(function((key, value) -> this.cloudFoundryOperations.applications()
+                        .setEnvironmentVariable(SetEnvironmentVariableApplicationRequest.builder()
+                            .name(this.name)
+                            .variableName(key)
+                            .variableValue(value)
+                            .build())), 1)
+                    .then())
+                .then(this.cloudFoundryOperations.applications()
+                    .start(StartApplicationRequest.builder()
+                        .name(this.name)
+                        .build()))
                 .doOnError(t -> this.logger.error("Error pushing {}", this.name, t))
                 .doOnSubscribe(s -> this.logger.info("Pushing {}", this.name))));
     }
@@ -132,6 +150,12 @@ abstract class AbstractApplication implements Application {
 
     private static Mono<Path> getApplication(File location, Map<String, String> manifest) {
         return Mono.just(new File(location, manifest.get("path")).toPath());
+    }
+
+    private static Flux<Tuple2<String, String>> getEnvironmentVariables() {
+        return Flux.fromIterable(System.getenv().entrySet())
+            .filter(entry -> entry.getKey().startsWith("JBP_CONFIG_"))
+            .map(entry -> Tuples.of(entry.getKey(), entry.getValue()));
     }
 
     private static Mono<String> getHost(CloudFoundryOperations cloudFoundryOperations, String name) {
