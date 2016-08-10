@@ -74,6 +74,7 @@ abstract class AbstractApplication implements Application {
                 .deleteRoutes(true)
                 .name(this.name)
                 .build())
+            .doOnError(t -> this.logger.error("Error deleting {}", this.name, t))
             .doOnSubscribe(s -> this.logger.info("Deleting {}", this.name));
     }
 
@@ -93,6 +94,7 @@ abstract class AbstractApplication implements Application {
                     .memory(memory)
                     .name(this.name)
                     .build())
+                .doOnError(t -> this.logger.error("Error pushing {}", this.name, t))
                 .doOnSubscribe(s -> this.logger.info("Pushing {}", this.name))));
     }
 
@@ -124,6 +126,7 @@ abstract class AbstractApplication implements Application {
             .restage(RestageApplicationRequest.builder()
                 .name(this.name)
                 .build())
+            .doOnError(t -> this.logger.error("Error restaging {}", this.name, t))
             .doOnSubscribe(s -> this.logger.info("Restaging {}", this.name));
     }
 

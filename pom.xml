@@ -42,7 +42,7 @@
     </modules>
 
     <properties>
-        <cf-java-client.version>2.0.0.M10</cf-java-client.version>
+        <cf-java-client.version>2.0.0.BUILD-SNAPSHOT</cf-java-client.version>
         <netty.version>4.1.4.Final</netty.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring-boot.version>1.4.0.RELEASE</spring-boot.version>

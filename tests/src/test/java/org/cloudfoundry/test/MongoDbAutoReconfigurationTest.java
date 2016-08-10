@@ -38,7 +38,7 @@ public final class MongoDbAutoReconfigurationTest extends AbstractTest<Tuple3<St
         Mono
             .when(application.request("/mongodb/check-access"), this.service.getEndpoint(application), application.request("/mongodb/url"))
             .subscribe(testSubscriber
-                .assertThat(consumer((access, expectedUrl, actualUrl) -> {
+                .expectThat(consumer((access, expectedUrl, actualUrl) -> {
                     assertEquals("ok", access);
                     assertEquals(expectedUrl, actualUrl);
                 })));

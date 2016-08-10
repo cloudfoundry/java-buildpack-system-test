@@ -38,7 +38,7 @@ public final class RabbitMqAutoReconfigurationTest extends AbstractTest<Tuple3<S
         Mono
             .when(application.request("/rabbit/check-access"), this.service.getEndpoint(application), application.request("/rabbit/url"))
             .subscribe(testSubscriber
-                .assertThat(consumer((access, expectedUrl, actualUrl) -> {
+                .expectThat(consumer((access, expectedUrl, actualUrl) -> {
                     assertEquals("ok", access);
                     assertEquals(expectedUrl, actualUrl);
                 })));

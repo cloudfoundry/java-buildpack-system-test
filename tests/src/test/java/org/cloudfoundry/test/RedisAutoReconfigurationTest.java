@@ -38,7 +38,7 @@ public final class RedisAutoReconfigurationTest extends AbstractTest<Tuple3<Stri
         Mono
             .when(application.request("/redis/check-access"), this.service.getEndpoint(application), application.request("/redis/url"))
             .subscribe(testSubscriber
-                .assertThat(consumer((access, expectedUrl, actualUrl) -> {
+                .expectThat(consumer((access, expectedUrl, actualUrl) -> {
                     assertEquals("ok", access);
                     assertEquals(expectedUrl, actualUrl);
                 })));

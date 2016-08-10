@@ -28,7 +28,7 @@ public final class HealthTest extends AbstractTest<String> {
         application
             .request("/")
             .subscribe(testSubscriber
-                .assertEquals("ok"));
+                .expectEquals("ok"));
     }
 
 }
