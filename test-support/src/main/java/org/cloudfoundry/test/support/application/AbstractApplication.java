@@ -26,7 +26,6 @@ import org.cloudfoundry.operations.applications.RestageApplicationRequest;
 import org.cloudfoundry.util.DelayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.concurrent.ListenableFutureCallback;
@@ -34,24 +33,11 @@ import org.springframework.web.client.AsyncRestOperations;
 import reactor.core.publisher.Mono;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.time.Duration;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static java.nio.file.FileVisitResult.CONTINUE;
-import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
 import static org.cloudfoundry.util.tuple.TupleUtils.function;
 
 abstract class AbstractApplication implements Application {
@@ -141,54 +127,8 @@ abstract class AbstractApplication implements Application {
             .doOnSubscribe(s -> this.logger.info("Restaging {}", this.name));
     }
 
-
-    private static File createZip(File path) throws IOException {
-        Path zip = Files.createTempFile("cf-package-", ".zip");
-        Files.delete(zip);
-
-        try (FileSystem zipFileSystem = FileSystems.newFileSystem(URI.create("jar:file:" + zip.toString()), Collections.singletonMap("create", "true"))) {
-            Path source = Paths.get(path.toURI());
-            Files.walkFileTree(source, new SimpleFileVisitor<Path>() {
-
-                @Override
-                public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-                    String relative = source.relativize(dir).toString();
-
-                    if (!relative.isEmpty()) {
-                        Files.createDirectory(zipFileSystem.getPath(relative));
-                    }
-
-                    return CONTINUE;
-                }
-
-                @Override
-                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                    String relative = source.relativize(file).toString();
-
-                    if (!relative.isEmpty()) {
-                        Files.copy(file, zipFileSystem.getPath(relative), COPY_ATTRIBUTES);
-                    }
-
-                    return CONTINUE;
-                }
-            });
-
-        }
-
-        return zip.toFile();
-    }
-
-    private static Mono<InputStream> getApplication(File location, Map<String, String> manifest) {
-        return Mono
-            .fromCallable(() -> {
-                File path = new File(location, manifest.get("path"));
-
-                if (path.isFile()) {
-                    return new FileSystemResource(path).getInputStream();
-                }
-
-                return new FileSystemResource(createZip(path)).getInputStream();
-            });
+    private static Mono<Path> getApplication(File location, Map<String, String> manifest) {
+        return Mono.just(new File(location, manifest.get("path")).toPath());
     }
 
     private static Mono<String> getHost(CloudFoundryOperations cloudFoundryOperations, String name) {
