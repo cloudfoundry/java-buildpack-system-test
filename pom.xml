@@ -42,12 +42,12 @@
     </modules>
 
     <properties>
-        <cf-java-client.version>2.0.0.BUILD-SNAPSHOT</cf-java-client.version>
+        <cf-java-client.version>2.0.0.RELEASE</cf-java-client.version>
         <netty.version>4.1.4.Final</netty.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring-boot.version>1.4.0.RELEASE</spring-boot.version>
-        <reactor-core.version>3.0.0.RC1</reactor-core.version>
-        <reactor-netty.version>0.5.0.M1</reactor-netty.version>
+        <reactor-core.version>3.0.0.RELEASE</reactor-core.version>
+        <reactor-netty.version>0.5.0.RELEASE</reactor-netty.version>
     </properties>
 
     <dependencyManagement>
@@ -104,6 +104,14 @@
             <id>spring-milestones</id>
             <name>Spring Milestones</name>
             <url>http://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>spring-releases</id>
+            <name>Spring Releases</name>
+            <url>http://repo.spring.io/release</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
