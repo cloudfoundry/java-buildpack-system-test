@@ -124,12 +124,12 @@ abstract class AbstractApplication implements Application {
 
                     @Override
                     public void onFailure(Throwable ex) {
-                        emitter.fail(ex);
+                        emitter.error(ex);
                     }
 
                     @Override
                     public void onSuccess(ResponseEntity<String> result) {
-                        emitter.complete(result);
+                        emitter.success(result);
                     }
 
                 })))
