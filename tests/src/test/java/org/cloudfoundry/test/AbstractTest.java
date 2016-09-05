@@ -17,7 +17,9 @@
 package org.cloudfoundry.test;
 
 import org.cloudfoundry.test.support.application.Application;
+import org.cloudfoundry.test.support.application.EjbApplication;
 import org.cloudfoundry.test.support.application.WebApplication;
+import org.cloudfoundry.test.support.application.WebServlet2Application;
 import org.cloudfoundry.util.test.TestSubscriber;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -53,12 +55,12 @@ public abstract class AbstractTest<T> {
 //        test(this.applicationContext.getBean(DistZipApplication.class));
 //    }
 //
-//    @Test
-//    public final void ejb() throws InterruptedException {
-//        isIgnored(this.environment, getTestType(), "ejb");
-//        test(this.applicationContext.getBean(EjbApplication.class));
-//    }
-//
+    @Test
+    public final void ejb() throws InterruptedException {
+        isIgnored(this.environment, getTestType(), "ejb");
+        test(this.applicationContext.getBean(EjbApplication.class));
+    }
+
 //    @Test
 //    public final void groovy() throws InterruptedException {
 //        isIgnored(this.environment, getTestType(), "groovy");
@@ -95,11 +97,11 @@ public abstract class AbstractTest<T> {
         test(this.applicationContext.getBean(WebApplication.class));
     }
 
-//    @Test
-//    public final void webServlet2() throws InterruptedException {
-//        isIgnored(this.environment, getTestType(), "webServlet2");
-//        test(this.applicationContext.getBean(WebServlet2Application.class));
-//    }
+    @Test
+    public final void webServlet2() throws InterruptedException {
+        isIgnored(this.environment, getTestType(), "webServlet2");
+        test(this.applicationContext.getBean(WebServlet2Application.class));
+    }
 
     protected abstract void test(Application application, TestSubscriber<T> testSubscriber);
 
