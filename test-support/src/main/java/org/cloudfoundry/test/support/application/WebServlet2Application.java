@@ -36,9 +36,8 @@ public final class WebServlet2Application extends AbstractApplication {
                            @Value("${applications.webServlet2.location}") File location,
                            NameFactory nameFactory,
                            @Value("${applications.webServlet2.prefix}") String prefix,
-                           AsyncRestOperations restOperations,
-                           Integer memoryMultiplier) {
-        super(buildpack, cloudFoundryOperations, location, nameFactory.getName(prefix), restOperations, memoryMultiplier);
+                           AsyncRestOperations restOperations) {
+        super(buildpack, cloudFoundryOperations, location, nameFactory.getName(prefix), restOperations);
     }
 
 }

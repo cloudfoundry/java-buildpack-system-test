@@ -36,9 +36,8 @@ public final class GroovyApplication extends AbstractApplication {
                       @Value("${applications.groovy.location}") File location,
                       NameFactory nameFactory,
                       @Value("${applications.groovy.prefix}") String prefix,
-                      AsyncRestOperations restOperations,
-                      Integer memoryMultiplier) {
-        super(buildpack, cloudFoundryOperations, location, nameFactory.getName(prefix), restOperations, memoryMultiplier);
+                      AsyncRestOperations restOperations) {
+        super(buildpack, cloudFoundryOperations, location, nameFactory.getName(prefix), restOperations);
     }
 
 }

@@ -36,9 +36,8 @@ public final class SpringBootCliApplication extends AbstractApplication {
                              @Value("${applications.springBootCli.location}") File location,
                              NameFactory nameFactory,
                              @Value("${applications.springBootCli.prefix}") String prefix,
-                             AsyncRestOperations restOperations,
-                             Integer memoryMultiplier) {
-        super(buildpack, cloudFoundryOperations, location, nameFactory.getName(prefix), restOperations, memoryMultiplier);
+                             AsyncRestOperations restOperations) {
+        super(buildpack, cloudFoundryOperations, location, nameFactory.getName(prefix), restOperations);
     }
 
 }

@@ -42,11 +42,6 @@ public class IntegrationTestConfiguration {
     }
 
     @Bean
-    Integer memoryMultiplier(@Value("${test.memoryMultiplier:1}") Integer memoryMultiplier) {
-        return memoryMultiplier;
-    }
-
-    @Bean
     ReactorCloudFoundryClient cloudFoundryClient(ConnectionContext connectionContext, TokenProvider tokenProvider) {
         return ReactorCloudFoundryClient.builder()
             .connectionContext(connectionContext)
