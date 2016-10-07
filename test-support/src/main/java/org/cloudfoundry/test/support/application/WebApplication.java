@@ -34,10 +34,11 @@ public final class WebApplication extends AbstractApplication {
     WebApplication(String buildpack,
                    CloudFoundryOperations cloudFoundryOperations,
                    @Value("${applications.web.location}") File location,
+                   @Value("${applications.web.memory:#{null}}") String memory,
                    NameFactory nameFactory,
                    @Value("${applications.web.prefix}") String prefix,
                    AsyncRestOperations restOperations) {
-        super(buildpack, cloudFoundryOperations, location, nameFactory.getName(prefix), restOperations);
+        super(buildpack, cloudFoundryOperations, location, memory, nameFactory.getName(prefix), restOperations);
     }
 
 }

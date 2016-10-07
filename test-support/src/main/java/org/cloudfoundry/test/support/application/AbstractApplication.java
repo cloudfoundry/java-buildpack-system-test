@@ -59,15 +59,18 @@ abstract class AbstractApplication implements Application {
 
     private final File location;
 
+    private final String memory;
+
     private final String name;
 
     private final AsyncRestOperations restOperations;
 
-    protected AbstractApplication(String buildpack, CloudFoundryOperations cloudFoundryOperations, File location, String name, AsyncRestOperations restOperations) {
+    protected AbstractApplication(String buildpack, CloudFoundryOperations cloudFoundryOperations, File location, String memory, String name, AsyncRestOperations restOperations) {
         this.buildpack = buildpack;
         this.cloudFoundryOperations = cloudFoundryOperations;
         this.host = getHost(cloudFoundryOperations, name);
         this.location = location;
+        this.memory = memory;
         this.name = name;
         this.restOperations = restOperations;
     }
@@ -91,7 +94,7 @@ abstract class AbstractApplication implements Application {
     @Override
     public final Mono<Void> push() {
         return getManifest(this.location)
-            .then(manifest -> Mono.when(getApplication(this.location, manifest), getMemory(manifest)))
+            .then(manifest -> Mono.when(getApplication(this.location, manifest), getMemory(this.logger, this.name, this.memory, manifest)))
             .then(function((application, memory) -> this.cloudFoundryOperations.applications()
                 .push(PushApplicationRequest.builder()
                     .application(application)
@@ -174,9 +177,16 @@ abstract class AbstractApplication implements Application {
             .map(m -> ((Map<String, List<Map<String, String>>>) m).get("applications").get(0));
     }
 
-    private static Mono<Integer> getMemory(Map<String, String> manifest) {
-        return Mono.just(manifest)
-            .map(m -> m.get("memory"))
+    private static Mono<Integer> getMemory(Logger logger, String name, String memory, Map<String, String> manifest) {
+        return Mono
+            .fromSupplier(() -> {
+                if (memory != null) {
+                    logger.warn("Overriding {} memory with {}", name, memory);
+                    return memory;
+                } else {
+                    return manifest.get("memory");
+                }
+            })
             .map(AbstractApplication::resolveMemory);
     }
 

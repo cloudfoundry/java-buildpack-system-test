@@ -68,6 +68,7 @@ The following configuration elements define details about the test applications.
 | -------------------- | -----
 | `APPLICATIONS_ROOT` | The path to the built `java-test-applications` repository
 | `APPLICATIONS_<APPLICATION>_ENABLED` | Whether the application is pushed to Cloud Foundry
+| `APPLICATIONS_<APPLICATION>_MEMORY` | The amount of memory allocated for the application, overriding the value in the `manifest.yml`
 | `APPLICATIONS_<APPLICATION>_PREFIX` | The application name prefix for the application
 
 

@@ -34,10 +34,11 @@ public final class JavaMainApplication extends AbstractApplication {
     JavaMainApplication(String buildpack,
                         CloudFoundryOperations cloudFoundryOperations,
                         @Value("${applications.javaMain.location}") File location,
+                        @Value("${applications.javaMain.memory:#{null}}") String memory,
                         NameFactory nameFactory,
                         @Value("${applications.javaMain.prefix}") String prefix,
                         AsyncRestOperations restOperations) {
-        super(buildpack, cloudFoundryOperations, location, nameFactory.getName(prefix), restOperations);
+        super(buildpack, cloudFoundryOperations, location, memory, nameFactory.getName(prefix), restOperations);
     }
 
 }

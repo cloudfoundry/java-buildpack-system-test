@@ -34,10 +34,11 @@ public final class EjbApplication extends AbstractApplication {
     EjbApplication(String buildpack,
                    CloudFoundryOperations cloudFoundryOperations,
                    @Value("${applications.ejb.location}") File location,
+                   @Value("${applications.ejb.memory:#{null}}") String memory,
                    NameFactory nameFactory,
                    @Value("${applications.ejb.prefix}") String prefix,
                    AsyncRestOperations restOperations) {
-        super(buildpack, cloudFoundryOperations, location, nameFactory.getName(prefix), restOperations);
+        super(buildpack, cloudFoundryOperations, location, memory, nameFactory.getName(prefix), restOperations);
     }
 
 }

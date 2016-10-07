@@ -34,10 +34,11 @@ public final class RatpackApplication extends AbstractApplication {
     RatpackApplication(String buildpack,
                        CloudFoundryOperations cloudFoundryOperations,
                        @Value("${applications.ratpack.location}") File location,
+                       @Value("${applications.ratpack.memory:#{null}}") String memory,
                        NameFactory nameFactory,
                        @Value("${applications.ratpack.prefix}") String prefix,
                        AsyncRestOperations restOperations) {
-        super(buildpack, cloudFoundryOperations, location, nameFactory.getName(prefix), restOperations);
+        super(buildpack, cloudFoundryOperations, location, memory, nameFactory.getName(prefix), restOperations);
     }
 
 }

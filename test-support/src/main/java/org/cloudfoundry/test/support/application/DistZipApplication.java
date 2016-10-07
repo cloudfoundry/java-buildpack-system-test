@@ -34,10 +34,11 @@ public final class DistZipApplication extends AbstractApplication {
     DistZipApplication(String buildpack,
                        CloudFoundryOperations cloudFoundryOperations,
                        @Value("${applications.distZip.location}") File location,
+                       @Value("${applications.distZip.memory:#{null}}") String memory,
                        NameFactory nameFactory,
                        @Value("${applications.distZip.prefix}") String prefix,
                        AsyncRestOperations restOperations) {
-        super(buildpack, cloudFoundryOperations, location, nameFactory.getName(prefix), restOperations);
+        super(buildpack, cloudFoundryOperations, location, memory, nameFactory.getName(prefix), restOperations);
     }
 
 }

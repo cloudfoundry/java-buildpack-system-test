@@ -34,10 +34,11 @@ public final class WebServlet2Application extends AbstractApplication {
     WebServlet2Application(String buildpack,
                            CloudFoundryOperations cloudFoundryOperations,
                            @Value("${applications.webServlet2.location}") File location,
+                           @Value("${applications.webServlet2.memory:#{null}}") String memory,
                            NameFactory nameFactory,
                            @Value("${applications.webServlet2.prefix}") String prefix,
                            AsyncRestOperations restOperations) {
-        super(buildpack, cloudFoundryOperations, location, nameFactory.getName(prefix), restOperations);
+        super(buildpack, cloudFoundryOperations, location, memory, nameFactory.getName(prefix), restOperations);
     }
 
 }
