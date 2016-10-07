@@ -31,8 +31,8 @@ The tests are extremely configurable allowing fine-grained control over what app
 | Type | Service | Plan
 | ---- | ------- | ----
 | `mongodb` | `mongolab` | `sandbox`
-| `mysql` | `cleardb` | `spark`
-| `postgresql` | `elephantsql` | `turtle`
+| `mysql` | `cleardb` | `amp`
+| `postgresql` | `elephantsql` | `hippo`
 | `rabbitmq` | `cloudamqp` | `lemur`
 | `redis` | `rediscloud` | `30mb`
 
