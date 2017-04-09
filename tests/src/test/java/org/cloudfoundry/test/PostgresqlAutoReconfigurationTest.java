@@ -18,30 +18,35 @@ package org.cloudfoundry.test;
 
 import org.cloudfoundry.test.support.application.Application;
 import org.cloudfoundry.test.support.service.PostgresqlServiceInstance;
-import org.cloudfoundry.util.test.TestSubscriber;
 import org.springframework.beans.factory.annotation.Autowired;
 import reactor.core.publisher.Mono;
-import reactor.util.function.Tuple3;
+import reactor.test.StepVerifier;
 
+import java.time.Duration;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.cloudfoundry.util.tuple.TupleUtils.consumer;
-import static org.junit.Assert.assertEquals;
 
 @ServiceType(PostgresqlServiceInstance.class)
 @TestType("postgresql")
-public final class PostgresqlAutoReconfigurationTest extends AbstractTest<Tuple3<String, String, String>> {
+public final class PostgresqlAutoReconfigurationTest extends AbstractTest {
 
     @Autowired
     private PostgresqlServiceInstance service;
 
     @Override
-    protected void test(Application application, TestSubscriber<Tuple3<String, String, String>> testSubscriber) {
+    protected void test(Application application) {
         Mono
-            .when(application.request("/datasource/check-access"), this.service.getEndpoint(application), application.request("/datasource/url"))
-            .subscribe(testSubscriber
-                .expectThat(consumer((access, expectedUrl, actualUrl) -> {
-                    assertEquals("ok", access);
-                    assertEquals(expectedUrl, actualUrl);
-                })));
+            .when(
+                application.request("/datasource/check-access"),
+                this.service.getEndpoint(application), application.request("/datasource/url"))
+            .as(StepVerifier::create)
+            .assertNext(consumer((access, expectedUrl, actualUrl) -> {
+                assertThat(access).isEqualTo("ok");
+                assertThat(actualUrl).isEqualTo(expectedUrl);
+            }))
+            .expectComplete()
+            .verify(Duration.ofMinutes(5));
     }
 
 }

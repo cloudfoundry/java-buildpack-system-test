@@ -18,17 +18,21 @@ package org.cloudfoundry.test;
 
 
 import org.cloudfoundry.test.support.application.Application;
-import org.cloudfoundry.util.test.TestSubscriber;
+import reactor.test.StepVerifier;
+
+import java.time.Duration;
 
 @TestType("health")
-public final class HealthTest extends AbstractTest<String> {
+public final class HealthTest extends AbstractTest {
 
     @Override
-    protected void test(Application application, TestSubscriber<String> testSubscriber) {
+    protected void test(Application application) {
         application
             .request("/")
-            .subscribe(testSubscriber
-                .expectEquals("ok"));
+            .as(StepVerifier::create)
+            .expectNext("ok")
+            .expectComplete()
+            .verify(Duration.ofMinutes(5));
     }
 
 }

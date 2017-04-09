@@ -35,6 +35,10 @@
 
     <dependencies>
         <dependency>
+            <groupId>io.projectreactor.addons</groupId>
+            <artifactId>reactor-test</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.cloudfoundry</groupId>
             <artifactId>test-support</artifactId>
             <version>${project.version}</version>

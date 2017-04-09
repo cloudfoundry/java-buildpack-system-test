@@ -26,11 +26,10 @@ import org.cloudfoundry.test.support.application.SpringBootCliApplication;
 import org.cloudfoundry.test.support.application.SpringBootCliJarApplication;
 import org.cloudfoundry.test.support.application.WebApplication;
 import org.cloudfoundry.test.support.application.WebServlet2Application;
-import org.cloudfoundry.util.test.TestSubscriber;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.env.Environment;
@@ -39,15 +38,13 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
-import java.time.Duration;
-
 import static org.junit.Assume.assumeTrue;
 
 @ActiveProfiles("test")
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = IntegrationTestConfiguration.class)
+@SpringBootTest(classes = IntegrationTestConfiguration.class)
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class, ServiceBindingTestExecutionListener.class})
-public abstract class AbstractTest<T> {
+public abstract class AbstractTest {
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -109,17 +106,11 @@ public abstract class AbstractTest<T> {
         test(this.applicationContext.getBean(WebServlet2Application.class));
     }
 
-    protected abstract void test(Application application, TestSubscriber<T> testSubscriber);
+    protected abstract void test(Application application);
 
     private static void isIgnored(Environment environment, String testType, String applicationType) {
         String key = String.format("test.%s.%s", testType, applicationType);
         assumeTrue(String.format("Test is disabled via %s", key), environment.getProperty(key, boolean.class, true));
-    }
-
-    private void test(Application application) throws InterruptedException {
-        TestSubscriber<T> testSubscriber = new TestSubscriber<>();
-        test(application, testSubscriber);
-        testSubscriber.verify(Duration.ofMinutes(5));
     }
 
     private String getTestType() {

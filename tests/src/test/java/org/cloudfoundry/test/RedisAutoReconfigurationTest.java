@@ -18,30 +18,35 @@ package org.cloudfoundry.test;
 
 import org.cloudfoundry.test.support.application.Application;
 import org.cloudfoundry.test.support.service.RedisServiceInstance;
-import org.cloudfoundry.util.test.TestSubscriber;
 import org.springframework.beans.factory.annotation.Autowired;
 import reactor.core.publisher.Mono;
-import reactor.util.function.Tuple3;
+import reactor.test.StepVerifier;
 
+import java.time.Duration;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.cloudfoundry.util.tuple.TupleUtils.consumer;
-import static org.junit.Assert.assertEquals;
 
 @ServiceType(RedisServiceInstance.class)
 @TestType("redis")
-public final class RedisAutoReconfigurationTest extends AbstractTest<Tuple3<String, String, String>> {
+public final class RedisAutoReconfigurationTest extends AbstractTest {
 
     @Autowired
     private RedisServiceInstance service;
 
     @Override
-    protected void test(Application application, TestSubscriber<Tuple3<String, String, String>> testSubscriber) {
+    protected void test(Application application) {
         Mono
-            .when(application.request("/redis/check-access"), this.service.getEndpoint(application), application.request("/redis/url"))
-            .subscribe(testSubscriber
-                .expectThat(consumer((access, expectedUrl, actualUrl) -> {
-                    assertEquals("ok", access);
-                    assertEquals(expectedUrl, actualUrl);
-                })));
+            .when(
+                application.request("/redis/check-access"),
+                this.service.getEndpoint(application), application.request("/redis/url"))
+            .as(StepVerifier::create)
+            .assertNext(consumer((access, expectedUrl, actualUrl) -> {
+                assertThat(access).isEqualTo("ok");
+                assertThat(actualUrl).isEqualTo(expectedUrl);
+            }))
+            .expectComplete()
+            .verify(Duration.ofMinutes(5));
     }
 
 }

@@ -72,7 +72,7 @@ abstract class AbstractServiceInstance implements ServiceInstance {
                     .serviceName(this.service)
                     .serviceInstanceName(this.name)
                     .build())
-                .cast(org.cloudfoundry.operations.services.ServiceInstance.class)
+                .cast(org.cloudfoundry.operations.services.ServiceInstanceSummary.class)
                 .doOnSubscribe(s -> this.logger.info("Creating {} ({}/{})", this.name, this.service, this.plan)))
             .then();
     }
