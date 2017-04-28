@@ -25,6 +25,7 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.test.context.TestContext;
 import org.springframework.test.context.support.AbstractTestExecutionListener;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 import java.util.Collection;
@@ -61,7 +62,7 @@ final class ServiceBindingTestExecutionListener extends AbstractTestExecutionLis
                 .flatMap(application -> serviceInstance.bind(application)
                     .doOnError(t -> this.logger.warn("Error while binding: {}", t.getMessage()))
                     .retryWhen(DelayUtils.exponentialBackOffError(Duration.ofSeconds(1), Duration.ofSeconds(10), Duration.ofMinutes(1)))
-                    .then(application::restage))
+                    .then(Mono.defer(application::restage)))
                 .then()
                 .block(Duration.ofMinutes(15));
         });

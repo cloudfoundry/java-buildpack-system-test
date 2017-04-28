@@ -16,15 +16,13 @@
 
 package org.cloudfoundry.test.support.application;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import org.cloudfoundry.operations.CloudFoundryOperations;
+import org.cloudfoundry.operations.applications.ApplicationManifest;
+import org.cloudfoundry.operations.applications.ApplicationManifestUtils;
 import org.cloudfoundry.operations.applications.DeleteApplicationRequest;
 import org.cloudfoundry.operations.applications.GetApplicationRequest;
-import org.cloudfoundry.operations.applications.PushApplicationRequest;
+import org.cloudfoundry.operations.applications.PushApplicationManifestRequest;
 import org.cloudfoundry.operations.applications.RestageApplicationRequest;
-import org.cloudfoundry.operations.applications.SetEnvironmentVariableApplicationRequest;
-import org.cloudfoundry.operations.applications.StartApplicationRequest;
 import org.cloudfoundry.util.DelayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,22 +30,15 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 import org.springframework.web.client.AsyncRestOperations;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.util.function.Tuple2;
-import reactor.util.function.Tuples;
 
 import java.io.File;
-import java.nio.file.Path;
 import java.time.Duration;
-import java.util.List;
 import java.util.Map;
-
-import static org.cloudfoundry.util.tuple.TupleUtils.function;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 abstract class AbstractApplication implements Application {
-
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper(new YAMLFactory());
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -93,30 +84,12 @@ abstract class AbstractApplication implements Application {
 
     @Override
     public final Mono<Void> push() {
-        return getManifest(this.location)
-            .then(manifest -> Mono.when(getApplication(this.location, manifest), getMemory(this.logger, this.name, this.memory, manifest)))
-            .then(function((application, memory) -> this.cloudFoundryOperations.applications()
-                .push(PushApplicationRequest.builder()
-                    .application(application)
-                    .buildpack(this.buildpack)
-                    .memory(memory)
-                    .name(this.name)
-                    .noStart(true)
-                    .build())
-                .then(getEnvironmentVariables()
-                    .flatMap(function((key, value) -> this.cloudFoundryOperations.applications()
-                        .setEnvironmentVariable(SetEnvironmentVariableApplicationRequest.builder()
-                            .name(this.name)
-                            .variableName(key)
-                            .variableValue(value)
-                            .build())), 1)
-                    .then())
-                .then(this.cloudFoundryOperations.applications()
-                    .start(StartApplicationRequest.builder()
-                        .name(this.name)
-                        .build()))
-                .doOnError(t -> this.logger.error("Error pushing {}", this.name, t))
-                .doOnSubscribe(s -> this.logger.info("Pushing {}", this.name))));
+        return this.cloudFoundryOperations.applications()
+            .pushManifest(PushApplicationManifestRequest.builder()
+                .manifest(getManifest(this.logger, this.buildpack, this.location, this.memory, this.name))
+                .build())
+            .doOnError(t -> this.logger.error("Error pushing {}", this.name, t))
+            .doOnSubscribe(s -> this.logger.info("Pushing {}", this.name));
     }
 
     @Override
@@ -151,14 +124,10 @@ abstract class AbstractApplication implements Application {
             .doOnSubscribe(s -> this.logger.info("Restaging {}", this.name));
     }
 
-    private static Mono<Path> getApplication(File location, Map<String, String> manifest) {
-        return Mono.just(new File(location, manifest.get("path")).toPath());
-    }
-
-    private static Flux<Tuple2<String, String>> getEnvironmentVariables() {
-        return Flux.fromIterable(System.getenv().entrySet())
+    private static Map<String, String> getEnvironmentVariables() {
+        return System.getenv().entrySet().stream()
             .filter(entry -> entry.getKey().startsWith("JBP_CONFIG_"))
-            .map(entry -> Tuples.of(entry.getKey(), entry.getValue()));
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     private static Mono<String> getHost(CloudFoundryOperations cloudFoundryOperations, String name) {
@@ -171,23 +140,24 @@ abstract class AbstractApplication implements Application {
     }
 
     @SuppressWarnings("unchecked")
-    private static Mono<Map<String, String>> getManifest(File location) {
-        return Mono
-            .fromCallable(() -> OBJECT_MAPPER.readValue(new File(location, "manifest.yml"), Map.class))
-            .map(m -> ((Map<String, List<Map<String, String>>>) m).get("applications").get(0));
-    }
+    private static ApplicationManifest getManifest(Logger logger, String buildpack, File location, String memory, String name) {
+        ApplicationManifest template = ApplicationManifestUtils.read(new File(location, "manifest.yml").toPath()).stream()
+            .findFirst()
+            .orElseThrow(() -> new IllegalStateException("Unable to find an application definition"));
 
-    private static Mono<Integer> getMemory(Logger logger, String name, String memory, Map<String, String> manifest) {
-        return Mono
-            .fromSupplier(() -> {
-                if (memory != null) {
-                    logger.warn("Overriding {} memory with {}", name, memory);
-                    return memory;
-                } else {
-                    return manifest.get("memory");
-                }
+        ApplicationManifest.Builder builder = ApplicationManifest.builder().from(template)
+            .name(name)
+            .buildpack(buildpack)
+            .putAllEnvironmentVariables(getEnvironmentVariables());
+
+        Optional.ofNullable(memory)
+            .map(raw -> {
+                logger.warn("Overriding {} memory with {}", name, memory);
+                return resolveMemory(raw);
             })
-            .map(AbstractApplication::resolveMemory);
+            .ifPresent(builder::memory);
+
+        return builder.build();
     }
 
     private static Integer resolveMemory(String raw) {
