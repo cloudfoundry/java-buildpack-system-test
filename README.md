@@ -18,6 +18,7 @@ The tests are extremely configurable allowing fine-grained control over what app
 
 ### Application Types:
 * `EJB`
+* `DISTZIP`
 * `GROOVY`
 * `JAVAMAIN`
 * `RATPACK`
