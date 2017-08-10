@@ -12,6 +12,9 @@ inputs:
   path: java-test-applications
 - name: java-buildpack-system-test
 
+caches:
+- path: maven
+
 run:
   path: java-buildpack-system-test/ci/system-test.sh
 
