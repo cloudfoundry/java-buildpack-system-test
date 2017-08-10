@@ -21,6 +21,7 @@ import org.springframework.context.annotation.Configuration;
 import reactor.core.publisher.Flux;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.time.Duration;
 import java.util.List;
 
@@ -30,24 +31,22 @@ class ApplicationConfiguration {
     @Autowired
     private List<Application> applications;
 
+    @PreDestroy
+    void delete() {
+        Flux
+            .fromIterable(this.applications)
+            .flatMap(Application::delete)
+            .then()
+            .block(Duration.ofMinutes(15));
+    }
+
     @PostConstruct
     void push() {
         Flux
             .fromIterable(this.applications)
             .flatMap(Application::push)
-            .doOnSubscribe(s -> registerShutdownHook())
             .then()
             .block(Duration.ofMinutes(15));
-    }
-
-    private void registerShutdownHook() {
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            Flux
-                .fromIterable(this.applications)
-                .flatMap(Application::delete)
-                .then()
-                .block(Duration.ofMinutes(15));
-        }));
     }
 
 }
