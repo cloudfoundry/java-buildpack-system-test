@@ -31,7 +31,7 @@ import static org.cloudfoundry.util.tuple.TupleUtils.consumer;
 @TestType("mongodb")
 public final class MongoDbAutoReconfigurationTest extends AbstractTest {
 
-    @Autowired
+    @Autowired(required = false)
     private MongoDbServiceInstance service;
 
     @Override

@@ -31,7 +31,7 @@ import static org.cloudfoundry.util.tuple.TupleUtils.consumer;
 @TestType("rabbitmq")
 public final class RabbitMqAutoReconfigurationTest extends AbstractTest {
 
-    @Autowired
+    @Autowired(required = false)
     private RabbitMqServiceInstance service;
 
     @Override
