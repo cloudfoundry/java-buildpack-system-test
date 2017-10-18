@@ -37,7 +37,7 @@ public final class MongoDbAutoReconfigurationTest extends AbstractTest {
     @Override
     protected void test(Application application) {
         Mono
-            .when(
+            .zip(
                 application.request("/mongodb/check-access"),
                 this.service.getEndpoint(application), application.request("/mongodb/url"))
             .as(StepVerifier::create)

@@ -37,7 +37,7 @@ public final class RabbitMqAutoReconfigurationTest extends AbstractTest {
     @Override
     protected void test(Application application) {
         Mono
-            .when(
+            .zip(
                 application.request("/rabbit/check-access"),
                 this.service.getEndpoint(application), application.request("/rabbit/url"))
             .as(StepVerifier::create)

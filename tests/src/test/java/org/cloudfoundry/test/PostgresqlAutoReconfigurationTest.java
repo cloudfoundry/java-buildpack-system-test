@@ -37,7 +37,7 @@ public final class PostgresqlAutoReconfigurationTest extends AbstractTest {
     @Override
     protected void test(Application application) {
         Mono
-            .when(
+            .zip(
                 application.request("/datasource/check-access"),
                 this.service.getEndpoint(application), application.request("/datasource/url"))
             .as(StepVerifier::create)

@@ -35,7 +35,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>io.projectreactor.addons</groupId>
+            <groupId>io.projectreactor</groupId>
             <artifactId>reactor-test</artifactId>
         </dependency>
         <dependency>

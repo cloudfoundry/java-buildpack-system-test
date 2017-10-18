@@ -95,7 +95,7 @@ abstract class AbstractApplication implements Application {
     @Override
     public final Mono<String> request(String path) {
         return this.host
-            .then(host -> Mono.<ResponseEntity<String>>create(emitter -> this.restOperations.getForEntity(String.format("http://%s%s", host, path), String.class)
+            .flatMap(host -> Mono.<ResponseEntity<String>>create(emitter -> this.restOperations.getForEntity(String.format("http://%s%s", host, path), String.class)
                 .addCallback(new ListenableFutureCallback<ResponseEntity<String>>() {
 
                     @Override

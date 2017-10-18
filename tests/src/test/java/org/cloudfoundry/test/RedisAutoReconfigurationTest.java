@@ -37,7 +37,7 @@ public final class RedisAutoReconfigurationTest extends AbstractTest {
     @Override
     protected void test(Application application) {
         Mono
-            .when(
+            .zip(
                 application.request("/redis/check-access"),
                 this.service.getEndpoint(application), application.request("/redis/url"))
             .as(StepVerifier::create)
