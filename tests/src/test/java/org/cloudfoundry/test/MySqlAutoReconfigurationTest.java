@@ -31,7 +31,7 @@ import static org.cloudfoundry.util.tuple.TupleUtils.consumer;
 @TestType("mysql")
 public final class MySqlAutoReconfigurationTest extends AbstractTest {
 
-    @Autowired
+    @Autowired(required = false)
     private MySqlServiceInstance service;
 
     @Override

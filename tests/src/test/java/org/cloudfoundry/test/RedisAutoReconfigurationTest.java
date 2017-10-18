@@ -31,7 +31,7 @@ import static org.cloudfoundry.util.tuple.TupleUtils.consumer;
 @TestType("redis")
 public final class RedisAutoReconfigurationTest extends AbstractTest {
 
-    @Autowired
+    @Autowired(required = false)
     private RedisServiceInstance service;
 
     @Override
@@ -50,4 +50,3 @@ public final class RedisAutoReconfigurationTest extends AbstractTest {
     }
 
 }
-

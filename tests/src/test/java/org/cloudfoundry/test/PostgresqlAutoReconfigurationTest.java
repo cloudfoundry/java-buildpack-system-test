@@ -31,7 +31,7 @@ import static org.cloudfoundry.util.tuple.TupleUtils.consumer;
 @TestType("postgresql")
 public final class PostgresqlAutoReconfigurationTest extends AbstractTest {
 
-    @Autowired
+    @Autowired(required = false)
     private PostgresqlServiceInstance service;
 
     @Override

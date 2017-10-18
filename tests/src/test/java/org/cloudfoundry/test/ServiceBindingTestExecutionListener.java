@@ -37,9 +37,8 @@ final class ServiceBindingTestExecutionListener extends AbstractTestExecutionLis
 
     @Override
     public void afterTestClass(TestContext testContext) {
-        getServiceType(testContext).ifPresent(serviceType -> {
+        getServiceInstance(testContext).ifPresent(serviceInstance -> {
             Collection<Application> applications = getApplications(testContext);
-            ServiceInstance serviceInstance = getServiceInstance(testContext, serviceType);
 
             Flux
                 .fromIterable(applications)
@@ -53,9 +52,8 @@ final class ServiceBindingTestExecutionListener extends AbstractTestExecutionLis
 
     @Override
     public void beforeTestClass(TestContext testContext) {
-        getServiceType(testContext).ifPresent(serviceType -> {
+        getServiceInstance(testContext).ifPresent(serviceInstance -> {
             Collection<Application> applications = getApplications(testContext);
-            ServiceInstance serviceInstance = getServiceInstance(testContext, serviceType);
 
             Flux
                 .fromIterable(applications)
@@ -72,8 +70,9 @@ final class ServiceBindingTestExecutionListener extends AbstractTestExecutionLis
         return testContext.getApplicationContext().getBeansOfType(Application.class).values();
     }
 
-    private static ServiceInstance getServiceInstance(TestContext testContext, ServiceType annotation) {
-        return testContext.getApplicationContext().getBean(annotation.value());
+    private static Optional<? extends ServiceInstance> getServiceInstance(TestContext testContext) {
+        return getServiceType(testContext)
+            .flatMap(serviceType -> testContext.getApplicationContext().getBeansOfType(serviceType.value()).values().stream().findFirst());
     }
 
     private static Optional<ServiceType> getServiceType(TestContext testContext) {
