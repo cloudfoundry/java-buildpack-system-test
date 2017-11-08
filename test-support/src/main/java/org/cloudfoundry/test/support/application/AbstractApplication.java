@@ -111,9 +111,7 @@ abstract class AbstractApplication implements Application {
 
                 })))
             .doOnError(t -> this.logger.warn("Error while making request: {}", t.getMessage()))
-            .log("stream.pre.error")
             .onErrorResume(this::printRecentLogs)
-            .log("stream.post.error")
             .map(HttpEntity::getBody);
     }
 
