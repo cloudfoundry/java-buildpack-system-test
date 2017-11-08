@@ -21,6 +21,7 @@ import org.cloudfoundry.operations.applications.ApplicationManifest;
 import org.cloudfoundry.operations.applications.ApplicationManifestUtils;
 import org.cloudfoundry.operations.applications.DeleteApplicationRequest;
 import org.cloudfoundry.operations.applications.GetApplicationRequest;
+import org.cloudfoundry.operations.applications.LogsRequest;
 import org.cloudfoundry.operations.applications.PushApplicationManifestRequest;
 import org.cloudfoundry.operations.applications.RestageApplicationRequest;
 import org.cloudfoundry.util.DelayUtils;
@@ -89,6 +90,7 @@ abstract class AbstractApplication implements Application {
                 .manifest(getManifest(this.logger, this.buildpack, this.location, this.memory, this.name))
                 .build())
             .doOnError(t -> this.logger.error("Error pushing {}", this.name, t))
+            .onErrorResume(this::printRecentLogs)
             .doOnSubscribe(s -> this.logger.info("Pushing {}", this.name));
     }
 
@@ -121,6 +123,7 @@ abstract class AbstractApplication implements Application {
                 .name(this.name)
                 .build())
             .doOnError(t -> this.logger.error("Error restaging {}", this.name, t))
+            .onErrorResume(this::printRecentLogs)
             .doOnSubscribe(s -> this.logger.info("Restaging {}", this.name));
     }
 
@@ -175,6 +178,16 @@ abstract class AbstractApplication implements Application {
         }
 
         throw new IllegalArgumentException(String.format("Illegal memory size %s", raw));
+    }
+
+    private Mono<Void> printRecentLogs(Throwable t) {
+        return this.cloudFoundryOperations.applications()
+            .logs(LogsRequest.builder()
+                .name(this.name)
+                .recent(true)
+                .build())
+            .doOnNext(System.out::println)
+            .then(Mono.error(t));
     }
 
 }
