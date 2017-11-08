@@ -113,6 +113,7 @@ abstract class AbstractApplication implements Application {
                 })))
             .doOnError(t -> this.logger.warn("Error while making request: {}", t.getMessage()))
             .retryWhen(DelayUtils.exponentialBackOffError(Duration.ofSeconds(1), Duration.ofSeconds(10), Duration.ofMinutes(1)))
+            .onErrorResume(this::printRecentLogs)
             .map(HttpEntity::getBody);
     }
 
@@ -180,7 +181,7 @@ abstract class AbstractApplication implements Application {
         throw new IllegalArgumentException(String.format("Illegal memory size %s", raw));
     }
 
-    private Mono<Void> printRecentLogs(Throwable t) {
+    private <T> Mono<T> printRecentLogs(Throwable t) {
         return this.cloudFoundryOperations.applications()
             .logs(LogsRequest.builder()
                 .name(this.name)
