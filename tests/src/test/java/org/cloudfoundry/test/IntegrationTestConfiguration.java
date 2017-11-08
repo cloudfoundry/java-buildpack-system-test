@@ -17,12 +17,14 @@
 package org.cloudfoundry.test;
 
 import org.cloudfoundry.client.CloudFoundryClient;
+import org.cloudfoundry.doppler.DopplerClient;
 import org.cloudfoundry.operations.CloudFoundryOperations;
 import org.cloudfoundry.operations.DefaultCloudFoundryOperations;
 import org.cloudfoundry.reactor.ConnectionContext;
 import org.cloudfoundry.reactor.DefaultConnectionContext;
 import org.cloudfoundry.reactor.TokenProvider;
 import org.cloudfoundry.reactor.client.ReactorCloudFoundryClient;
+import org.cloudfoundry.reactor.doppler.ReactorDopplerClient;
 import org.cloudfoundry.reactor.tokenprovider.PasswordGrantTokenProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -51,11 +53,13 @@ public class IntegrationTestConfiguration {
 
     @Bean
     CloudFoundryOperations cloudFoundryOperations(CloudFoundryClient cloudFoundryClient,
+                                                  DopplerClient dopplerClient,
                                                   @Value("${test.organization}") String organization,
                                                   @Value("${test.space}") String space) {
 
         return DefaultCloudFoundryOperations.builder()
             .cloudFoundryClient(cloudFoundryClient)
+            .dopplerClient(dopplerClient)
             .organization(organization)
             .space(space)
             .build();
@@ -68,6 +72,14 @@ public class IntegrationTestConfiguration {
         return DefaultConnectionContext.builder()
             .apiHost(host)
             .skipSslValidation(skipSslValidation)
+            .build();
+    }
+
+    @Bean
+    ReactorDopplerClient dopplerClient(ConnectionContext connectionContext, TokenProvider tokenProvider) {
+        return ReactorDopplerClient.builder()
+            .connectionContext(connectionContext)
+            .tokenProvider(tokenProvider)
             .build();
     }
 

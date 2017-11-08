@@ -42,10 +42,10 @@
     </modules>
 
     <properties>
-        <cf-java-client.version>3.0.0.RELEASE</cf-java-client.version>
+        <cf-java-client.version>3.1.0.RELEASE</cf-java-client.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <reactor-core.version>3.1.0.RELEASE</reactor-core.version>
-        <reactor-netty.version>0.7.0.RELEASE</reactor-netty.version>
+        <reactor-netty.version>0.7.1.RELEASE</reactor-netty.version>
     </properties>
 
     <dependencyManagement>

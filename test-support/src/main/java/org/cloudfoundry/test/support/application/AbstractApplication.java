@@ -16,6 +16,7 @@
 
 package org.cloudfoundry.test.support.application;
 
+import org.cloudfoundry.doppler.LogMessage;
 import org.cloudfoundry.operations.CloudFoundryOperations;
 import org.cloudfoundry.operations.applications.ApplicationManifest;
 import org.cloudfoundry.operations.applications.ApplicationManifestUtils;
@@ -24,7 +25,6 @@ import org.cloudfoundry.operations.applications.GetApplicationRequest;
 import org.cloudfoundry.operations.applications.LogsRequest;
 import org.cloudfoundry.operations.applications.PushApplicationManifestRequest;
 import org.cloudfoundry.operations.applications.RestageApplicationRequest;
-import org.cloudfoundry.util.DelayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
@@ -34,7 +34,6 @@ import org.springframework.web.client.AsyncRestOperations;
 import reactor.core.publisher.Mono;
 
 import java.io.File;
-import java.time.Duration;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -112,8 +111,9 @@ abstract class AbstractApplication implements Application {
 
                 })))
             .doOnError(t -> this.logger.warn("Error while making request: {}", t.getMessage()))
-            .retryWhen(DelayUtils.exponentialBackOffError(Duration.ofSeconds(1), Duration.ofSeconds(10), Duration.ofMinutes(1)))
+            .log("stream.pre.error")
             .onErrorResume(this::printRecentLogs)
+            .log("stream.post.error")
             .map(HttpEntity::getBody);
     }
 
@@ -187,6 +187,7 @@ abstract class AbstractApplication implements Application {
                 .name(this.name)
                 .recent(true)
                 .build())
+            .map(LogMessage::getMessage)
             .doOnNext(System.out::println)
             .then(Mono.error(t));
     }
