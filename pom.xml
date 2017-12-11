@@ -26,7 +26,7 @@
     <parent>
         <groupId>io.spring.platform</groupId>
         <artifactId>platform-bom</artifactId>
-        <version>Brussels-SR5</version>
+        <version>Brussels-SR6</version>
     </parent>
 
     <groupId>org.cloudfoundry</groupId>
@@ -44,8 +44,8 @@
     <properties>
         <cf-java-client.version>3.3.0.RELEASE</cf-java-client.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <reactor-core.version>3.1.0.RELEASE</reactor-core.version>
-        <reactor-netty.version>0.7.1.RELEASE</reactor-netty.version>
+        <reactor-core.version>3.1.2.RELEASE</reactor-core.version>
+        <reactor-netty.version>0.7.2.RELEASE</reactor-netty.version>
     </properties>
 
     <dependencyManagement>
