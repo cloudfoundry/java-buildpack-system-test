@@ -17,8 +17,8 @@ $ ./mvnw clean test
 The tests are extremely configurable allowing fine-grained control over what applications and services are tested.
 
 ### Application Types:
-* `EJB`
 * `DISTZIP`
+* `EJB`
 * `GROOVY`
 * `JAVAMAIN`
 * `RATPACK`
@@ -31,7 +31,7 @@ The tests are extremely configurable allowing fine-grained control over what app
 
 | Type | Service | Plan
 | ---- | ------- | ----
-| `mongodb` | `mongolab` | `sandbox`
+| `mongodb` | `mlab` | `sandbox`
 | `mysql` | `cleardb` | `amp`
 | `postgresql` | `elephantsql` | `hippo`
 | `rabbitmq` | `cloudamqp` | `lemur`
