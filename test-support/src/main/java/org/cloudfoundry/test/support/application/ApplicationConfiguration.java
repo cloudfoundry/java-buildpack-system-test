@@ -46,6 +46,7 @@ class ApplicationConfiguration {
             .fromIterable(this.applications)
             .flatMap(Application::push)
             .then()
+            .doOnSubscribe(s -> Runtime.getRuntime().addShutdownHook(new Thread(this::delete)))
             .block(Duration.ofMinutes(15));
     }
 

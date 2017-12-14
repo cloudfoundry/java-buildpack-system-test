@@ -44,7 +44,8 @@ final class ServiceBindingTestExecutionListener extends AbstractTestExecutionLis
                 .fromIterable(applications)
                 .flatMap((application) -> serviceInstance.unbind(application)
                     .doOnError(t -> this.logger.warn("Error while unbinding: {}", t.getMessage()))
-                    .retryWhen(DelayUtils.exponentialBackOffError(Duration.ofSeconds(1), Duration.ofSeconds(10), Duration.ofMinutes(1))))
+                    .retryWhen(DelayUtils.exponentialBackOffError(Duration.ofSeconds(1), Duration.ofSeconds(10), Duration.ofMinutes(1)))
+                    .onErrorResume(t -> Mono.empty()))
                 .then()
                 .block(Duration.ofMinutes(1));
         });
