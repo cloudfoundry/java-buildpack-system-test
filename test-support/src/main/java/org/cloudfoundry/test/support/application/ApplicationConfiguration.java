@@ -19,8 +19,6 @@ package org.cloudfoundry.test.support.application;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
-import reactor.util.concurrent.Queues;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -35,30 +33,20 @@ class ApplicationConfiguration {
 
     @PreDestroy
     void delete() {
-        doDelete()
+        Flux
+            .fromIterable(this.applications)
+            .flatMap(Application::delete)
+            .then()
             .block(Duration.ofMinutes(15));
     }
 
     @PostConstruct
     void push() {
-        doPush()
+        Flux
+            .fromIterable(this.applications)
+            .flatMap(Application::push)
+            .then()
             .block(Duration.ofMinutes(15));
-    }
-
-    private Mono<Void> doDelete() {
-        return Flux
-            .fromIterable(this.applications)
-            .flatMap(Application::delete)
-            .then();
-    }
-
-    private Mono<Void> doPush() {
-        return Flux
-            .fromIterable(this.applications)
-            .flatMapDelayError(Application::push, Queues.SMALL_BUFFER_SIZE, Queues.XS_BUFFER_SIZE)
-            .doOnError(Throwable::printStackTrace)
-            .onErrorResume(t -> doDelete())
-            .then();
     }
 
 }
