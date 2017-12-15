@@ -31,6 +31,9 @@ import java.time.Duration;
 import java.util.Collection;
 import java.util.Optional;
 
+import static reactor.util.concurrent.Queues.SMALL_BUFFER_SIZE;
+import static reactor.util.concurrent.Queues.XS_BUFFER_SIZE;
+
 final class ServiceBindingTestExecutionListener extends AbstractTestExecutionListener {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -42,10 +45,9 @@ final class ServiceBindingTestExecutionListener extends AbstractTestExecutionLis
 
             Flux
                 .fromIterable(applications)
-                .flatMap((application) -> serviceInstance.unbind(application)
+                .flatMapDelayError(application -> serviceInstance.unbind(application)
                     .doOnError(t -> this.logger.warn("Error while unbinding: {}", t.getMessage()))
-                    .retryWhen(DelayUtils.exponentialBackOffError(Duration.ofSeconds(1), Duration.ofSeconds(10), Duration.ofMinutes(1)))
-                    .onErrorResume(t -> Mono.empty()))
+                    .retryWhen(DelayUtils.exponentialBackOffError(Duration.ofSeconds(1), Duration.ofSeconds(10), Duration.ofMinutes(1))), SMALL_BUFFER_SIZE, XS_BUFFER_SIZE)
                 .then()
                 .block(Duration.ofMinutes(1));
         });

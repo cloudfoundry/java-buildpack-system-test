@@ -25,6 +25,9 @@ import javax.annotation.PreDestroy;
 import java.time.Duration;
 import java.util.List;
 
+import static reactor.util.concurrent.Queues.SMALL_BUFFER_SIZE;
+import static reactor.util.concurrent.Queues.XS_BUFFER_SIZE;
+
 @Configuration
 class ApplicationConfiguration {
 
@@ -35,7 +38,7 @@ class ApplicationConfiguration {
     void delete() {
         Flux
             .fromIterable(this.applications)
-            .flatMap(Application::delete)
+            .flatMapDelayError(Application::delete, SMALL_BUFFER_SIZE, XS_BUFFER_SIZE)
             .then()
             .block(Duration.ofMinutes(15));
     }
