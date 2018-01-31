@@ -30,7 +30,7 @@
     </appender>
 
     <logger name="org.cloudfoundry.test" level="${LOGGING_LEVEL:-INFO}"/>
-    <logger name="cloudfoundry-client.delay" level="${DELAY_LOGGING_LEVEL:-INFO}"/>
+    <logger name="cloudfoundry-client" level="${CLIENT_LOGGING_LEVEL:-INFO}"/>
 
     <logger name="stream" level="INFO" additivity="false">
         <appender-ref ref="STREAM"/>
