@@ -23,7 +23,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="java-buildpack-system-test" target="1.6" />
+      <module name="java-buildpack-system-test" target="1.5" />
       <module name="test-support" target="1.8" />
       <module name="test-support (1)" target="1.8" />
       <module name="test-support (2)" target="1.8" />

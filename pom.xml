@@ -24,9 +24,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>io.spring.platform</groupId>
-        <artifactId>platform-bom</artifactId>
-        <version>Brussels-SR7</version>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>2.0.2.RELEASE</version>
     </parent>
 
     <groupId>org.cloudfoundry</groupId>
@@ -42,10 +42,10 @@
     </modules>
 
     <properties>
-        <cf-java-client.version>3.3.0.RELEASE</cf-java-client.version>
+        <cf-java-client.version>3.9.0.RELEASE</cf-java-client.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <reactor-core.version>3.1.2.RELEASE</reactor-core.version>
-        <reactor-netty.version>0.7.2.RELEASE</reactor-netty.version>
+        <reactor-core.version>3.1.7.RELEASE</reactor-core.version>
+        <reactor-netty.version>0.7.7.RELEASE</reactor-netty.version>
     </properties>
 
     <dependencyManagement>
