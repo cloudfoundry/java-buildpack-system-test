@@ -44,7 +44,6 @@ class ApplicationConfiguration {
     @Autowired
     private CloudFoundryOperations cloudFoundryOperations;
 
-    @PreDestroy
     void delete() {
         this.cloudFoundryOperations.applications()
             .list()
