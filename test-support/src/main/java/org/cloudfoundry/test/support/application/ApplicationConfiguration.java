@@ -19,6 +19,8 @@ package org.cloudfoundry.test.support.application;
 import org.cloudfoundry.operations.CloudFoundryOperations;
 import org.cloudfoundry.operations.applications.ApplicationSummary;
 import org.cloudfoundry.operations.applications.DeleteApplicationRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import reactor.core.publisher.Flux;
@@ -33,6 +35,8 @@ import static reactor.util.concurrent.Queues.XS_BUFFER_SIZE;
 
 @Configuration
 class ApplicationConfiguration {
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private List<Application> applications;
@@ -49,7 +53,10 @@ class ApplicationConfiguration {
                 .delete(DeleteApplicationRequest.builder()
                     .deleteRoutes(true)
                     .name(applicationName)
-                    .build()), SMALL_BUFFER_SIZE, XS_BUFFER_SIZE)
+                    .build())
+                .doOnError(t -> this.logger.error("Error deleting {}", applicationName, t))
+                .doOnSubscribe(s -> this.logger.info("Deleting {}", applicationName)),
+                SMALL_BUFFER_SIZE, XS_BUFFER_SIZE)
             .then()
             .block(Duration.ofMinutes(15));
     }
