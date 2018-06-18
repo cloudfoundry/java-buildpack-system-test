@@ -44,17 +44,18 @@ class ApplicationConfiguration {
     @Autowired
     private CloudFoundryOperations cloudFoundryOperations;
 
+    @PreDestroy
     void delete() {
         this.cloudFoundryOperations.applications()
             .list()
             .map(ApplicationSummary::getName)
             .flatMapDelayError(applicationName -> this.cloudFoundryOperations.applications()
-                .delete(DeleteApplicationRequest.builder()
-                    .deleteRoutes(true)
-                    .name(applicationName)
-                    .build())
-                .doOnError(t -> this.logger.error("Error deleting {}", applicationName, t))
-                .doOnSubscribe(s -> this.logger.info("Deleting {}", applicationName)),
+                    .delete(DeleteApplicationRequest.builder()
+                        .deleteRoutes(true)
+                        .name(applicationName)
+                        .build())
+                    .doOnError(t -> this.logger.error("Error deleting {}", applicationName, t))
+                    .doOnSubscribe(s -> this.logger.info("Deleting {}", applicationName)),
                 SMALL_BUFFER_SIZE, XS_BUFFER_SIZE)
             .then()
             .block(Duration.ofMinutes(15));
@@ -68,8 +69,6 @@ class ApplicationConfiguration {
             .fromIterable(this.applications)
             .flatMap(Application::push)
             .then()
-            .doOnSubscribe(s -> Runtime.getRuntime().addShutdownHook(new Thread(this::delete)))
             .block(Duration.ofMinutes(15));
     }
-
 }
