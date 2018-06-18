@@ -16,6 +16,9 @@
 
 package org.cloudfoundry.test.support.application;
 
+import org.cloudfoundry.operations.CloudFoundryOperations;
+import org.cloudfoundry.operations.applications.ApplicationSummary;
+import org.cloudfoundry.operations.applications.DeleteApplicationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import reactor.core.publisher.Flux;
@@ -34,17 +37,27 @@ class ApplicationConfiguration {
     @Autowired
     private List<Application> applications;
 
+    @Autowired
+    private CloudFoundryOperations cloudFoundryOperations;
+
     @PreDestroy
     void delete() {
-        Flux
-            .fromIterable(this.applications)
-            .flatMapDelayError(Application::delete, SMALL_BUFFER_SIZE, XS_BUFFER_SIZE)
+        this.cloudFoundryOperations.applications()
+            .list()
+            .map(ApplicationSummary::getName)
+            .flatMapDelayError(applicationName -> this.cloudFoundryOperations.applications()
+                .delete(DeleteApplicationRequest.builder()
+                    .deleteRoutes(true)
+                    .name(applicationName)
+                    .build()), SMALL_BUFFER_SIZE, XS_BUFFER_SIZE)
             .then()
             .block(Duration.ofMinutes(15));
     }
 
     @PostConstruct
     void push() {
+        delete();
+
         Flux
             .fromIterable(this.applications)
             .flatMap(Application::push)

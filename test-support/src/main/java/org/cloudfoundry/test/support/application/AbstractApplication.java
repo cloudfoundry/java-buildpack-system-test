@@ -67,17 +67,6 @@ abstract class AbstractApplication implements Application {
     }
 
     @Override
-    public final Mono<Void> delete() {
-        return this.cloudFoundryOperations.applications()
-            .delete(DeleteApplicationRequest.builder()
-                .deleteRoutes(true)
-                .name(this.name)
-                .build())
-            .doOnError(t -> this.logger.error("Error deleting {}", this.name, t))
-            .doOnSubscribe(s -> this.logger.info("Deleting {}", this.name));
-    }
-
-    @Override
     public final String getName() {
         return this.name;
     }

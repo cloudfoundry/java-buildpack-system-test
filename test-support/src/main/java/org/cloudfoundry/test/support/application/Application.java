@@ -20,8 +20,6 @@ import reactor.core.publisher.Mono;
 
 public interface Application {
 
-    Mono<Void> delete();
-
     String getName();
 
     Mono<Void> push();

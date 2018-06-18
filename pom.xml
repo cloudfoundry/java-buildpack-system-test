@@ -26,7 +26,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-dependencies</artifactId>
-        <version>2.0.2.RELEASE</version>
+        <version>2.0.3.RELEASE</version>
     </parent>
 
     <groupId>org.cloudfoundry</groupId>
@@ -42,10 +42,10 @@
     </modules>
 
     <properties>
-        <cf-java-client.version>3.9.0.RELEASE</cf-java-client.version>
+        <cf-java-client.version>3.11.0.RELEASE</cf-java-client.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <reactor-core.version>3.1.7.RELEASE</reactor-core.version>
-        <reactor-netty.version>0.7.7.RELEASE</reactor-netty.version>
+        <reactor-core.version>3.1.8.RELEASE</reactor-core.version>
+        <reactor-netty.version>0.7.8.RELEASE</reactor-netty.version>
     </properties>
 
     <dependencyManagement>
