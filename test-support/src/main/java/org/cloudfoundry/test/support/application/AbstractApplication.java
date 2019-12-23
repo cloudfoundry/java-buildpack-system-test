@@ -20,17 +20,13 @@ import org.cloudfoundry.doppler.LogMessage;
 import org.cloudfoundry.operations.CloudFoundryOperations;
 import org.cloudfoundry.operations.applications.ApplicationManifest;
 import org.cloudfoundry.operations.applications.ApplicationManifestUtils;
-import org.cloudfoundry.operations.applications.DeleteApplicationRequest;
 import org.cloudfoundry.operations.applications.GetApplicationRequest;
 import org.cloudfoundry.operations.applications.LogsRequest;
 import org.cloudfoundry.operations.applications.PushApplicationManifestRequest;
 import org.cloudfoundry.operations.applications.RestageApplicationRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.concurrent.ListenableFutureCallback;
-import org.springframework.web.client.AsyncRestOperations;
+import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.io.File;
@@ -54,16 +50,16 @@ abstract class AbstractApplication implements Application {
 
     private final String name;
 
-    private final AsyncRestOperations restOperations;
+    private final WebClient webClient;
 
-    protected AbstractApplication(String buildpack, CloudFoundryOperations cloudFoundryOperations, File location, String memory, String name, AsyncRestOperations restOperations) {
+    protected AbstractApplication(String buildpack, CloudFoundryOperations cloudFoundryOperations, File location, String memory, String name, WebClient webClient) {
         this.buildpack = buildpack;
         this.cloudFoundryOperations = cloudFoundryOperations;
         this.host = getHost(cloudFoundryOperations, name);
         this.location = location;
         this.memory = memory;
         this.name = name;
-        this.restOperations = restOperations;
+        this.webClient = webClient;
     }
 
     @Override
@@ -85,23 +81,12 @@ abstract class AbstractApplication implements Application {
     @Override
     public final Mono<String> request(String path) {
         return this.host
-            .flatMap(host -> Mono.<ResponseEntity<String>>create(emitter -> this.restOperations.getForEntity(String.format("https://%s%s", host, path), String.class)
-                .addCallback(new ListenableFutureCallback<ResponseEntity<String>>() {
-
-                    @Override
-                    public void onFailure(Throwable ex) {
-                        emitter.error(ex);
-                    }
-
-                    @Override
-                    public void onSuccess(ResponseEntity<String> result) {
-                        emitter.success(result);
-                    }
-
-                })))
+            .flatMap(host -> this.webClient
+                .get().uri(String.format("https://%s%s", host, path))
+                .retrieve()
+                .bodyToMono(String.class))
             .doOnError(t -> this.logger.warn("Error while making request: {}", t.getMessage()))
-            .onErrorResume(this::printRecentLogs)
-            .map(HttpEntity::getBody);
+            .onErrorResume(this::printRecentLogs);
     }
 
     @Override

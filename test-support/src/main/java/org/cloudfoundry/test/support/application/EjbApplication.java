@@ -22,7 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.AsyncRestOperations;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.File;
 
@@ -37,8 +37,8 @@ public final class EjbApplication extends AbstractApplication {
                    @Value("${applications.ejb.memory:#{null}}") String memory,
                    NameFactory nameFactory,
                    @Value("${applications.ejb.prefix}") String prefix,
-                   AsyncRestOperations restOperations) {
-        super(buildpack, cloudFoundryOperations, location, memory, nameFactory.getName(prefix), restOperations);
+                   WebClient webClient) {
+        super(buildpack, cloudFoundryOperations, location, memory, nameFactory.getName(prefix), webClient);
     }
 
 }

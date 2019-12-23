@@ -31,7 +31,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.client.AsyncRestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @ComponentScan
 @Configuration
@@ -84,17 +84,17 @@ public class IntegrationTestConfiguration {
     }
 
     @Bean
-    AsyncRestTemplate restOperations() {
-        return new AsyncRestTemplate();
-    }
-
-    @Bean
     PasswordGrantTokenProvider tokenProvider(@Value("${test.username}") String username,
                                              @Value("${test.password}") String password) {
         return PasswordGrantTokenProvider.builder()
             .username(username)
             .password(password)
             .build();
+    }
+
+    @Bean
+    WebClient webClient() {
+        return WebClient.create();
     }
 
 }
