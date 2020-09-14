@@ -30,6 +30,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -115,7 +116,6 @@ abstract class AbstractApplication implements Application {
             .cache();
     }
 
-    @SuppressWarnings("unchecked")
     private static ApplicationManifest getManifest(Logger logger, String buildpack, File location, String memory, String name) {
         ApplicationManifest template = ApplicationManifestUtils.read(new File(location, "manifest.yml").toPath()).stream()
             .findFirst()
@@ -123,7 +123,7 @@ abstract class AbstractApplication implements Application {
 
         ApplicationManifest.Builder builder = ApplicationManifest.builder().from(template)
             .name(name)
-            .buildpack(buildpack)
+            .buildpacks(Collections.singletonList(buildpack))
             .putAllEnvironmentVariables(getEnvironmentVariables());
 
         Optional.ofNullable(memory)
@@ -137,20 +137,20 @@ abstract class AbstractApplication implements Application {
     }
 
     private static Integer resolveMemory(String raw) {
-        Character last = raw.charAt(raw.length() - 1);
+        char last = raw.charAt(raw.length() - 1);
         if (Character.isDigit(last)) {
             return Integer.parseInt(raw);
         }
 
-        if (Character.toLowerCase(last) == 'g') {
-            return Integer.parseInt(raw.substring(0, raw.length() - 1)) * 1024;
+        int size = Integer.parseInt(raw.substring(0, raw.length() - 1));
+        switch (Character.toLowerCase(last)) {
+            case 'g':
+                return size * 1024;
+            case 'm':
+                return size;
+            default:
+                throw new IllegalArgumentException(String.format("Illegal memory size %s", raw));
         }
-
-        if (Character.toLowerCase(last) == 'm') {
-            return Integer.parseInt(raw.substring(0, raw.length() - 1));
-        }
-
-        throw new IllegalArgumentException(String.format("Illegal memory size %s", raw));
     }
 
     private <T> Mono<T> printRecentLogs(Throwable t) {

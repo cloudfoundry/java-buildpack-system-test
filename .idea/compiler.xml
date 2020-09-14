@@ -24,10 +24,10 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="java-buildpack-system-test" target="1.5" />
-      <module name="test-support" target="1.8" />
+      <module name="test-support" target="11" />
       <module name="test-support (1)" target="1.8" />
       <module name="test-support (2)" target="1.8" />
-      <module name="tests" target="1.8" />
+      <module name="tests" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>
