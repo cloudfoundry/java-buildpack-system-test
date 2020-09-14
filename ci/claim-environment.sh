@@ -13,7 +13,7 @@ POOL_NAME=$(curl \
   "https://environments.toolsmiths.cf-app.com/pool_names" \
   | jq -r '.pool_names.gcp | last')
 
-printf "Claiming envrionment from %s\n" "${POOL_NAME}"
+printf "Claiming environment from %s\n" "${POOL_NAME}"
 
 CLAIM=$(curl \
   --silent \
