@@ -6,9 +6,10 @@ set -euo pipefail
 source "$(dirname "$0")"/common.sh
 
 POOL_NAME=$(curl \
-  --silent \
-  --show-error \
+  --fail \
   --location \
+  --show-error \
+  --silent \
   --header 'Accept: application/json' \
   "https://environments.toolsmiths.cf-app.com/pool_names" \
   | jq -r '.pool_names.gcp | last')
@@ -16,9 +17,10 @@ POOL_NAME=$(curl \
 printf "Claiming environment from %s\n" "${POOL_NAME}"
 
 CLAIM=$(curl \
-  --silent \
-  --show-error \
+  --fail \
   --location \
+  --show-error \
+  --silent \
   --header 'Accept: application/json' \
   --request "POST" \
   "https://environments.toolsmiths.cf-app.com/pooled_gcp_engineering_environments/claim?api_token=${API_TOKEN}&pool_name=${POOL_NAME}&notes=Claimed%20by%20Java%20Buildpack%20CI")
