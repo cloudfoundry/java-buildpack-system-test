@@ -5,11 +5,8 @@ if [[ -d "${PWD}"/maven && ! -d "${HOME}"/.m2 ]]; then
   ln -s "${PWD}"/maven "${HOME}"/.m2
 fi
 
-
 if [[ -d "${ROOT}"/om ]]; then
-  printf "➜ Preparing om\n"
-  mv "${ROOT}"/om/om-linux-* "${ROOT}"/om/om
-  chmod +x "${ROOT}"/om/om
+  printf "➜ Expanding om\n"
+  tar xzf "${ROOT}"/om/om-linux-*.tar.gz -C "${ROOT}"/om
   export PATH="${ROOT}"/om:${PATH}
 fi
-
