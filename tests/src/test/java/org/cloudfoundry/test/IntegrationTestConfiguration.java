@@ -20,6 +20,8 @@ import org.cloudfoundry.client.CloudFoundryClient;
 import org.cloudfoundry.doppler.DopplerClient;
 import org.cloudfoundry.operations.CloudFoundryOperations;
 import org.cloudfoundry.operations.DefaultCloudFoundryOperations;
+import org.cloudfoundry.operations.organizations.CreateOrganizationRequest;
+import org.cloudfoundry.operations.spaces.CreateSpaceRequest;
 import org.cloudfoundry.reactor.ConnectionContext;
 import org.cloudfoundry.reactor.DefaultConnectionContext;
 import org.cloudfoundry.reactor.TokenProvider;
@@ -31,7 +33,9 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 @ComponentScan
 @Configuration
@@ -81,6 +85,27 @@ public class IntegrationTestConfiguration {
             .connectionContext(connectionContext)
             .tokenProvider(tokenProvider)
             .build();
+    }
+
+    @Bean(initMethod = "block")
+    Mono<Void> organization(CloudFoundryOperations cloudFoundryOperations,
+                            @Value("${test.organization}") String organization) {
+
+        return cloudFoundryOperations.organizations()
+            .create(CreateOrganizationRequest.builder()
+                .organizationName(organization)
+                .build());
+    }
+
+    @Bean(initMethod = "block")
+    @DependsOn("organization")
+    Mono<Void> space(CloudFoundryOperations cloudFoundryOperations,
+                     @Value("${test.space}") String space) {
+
+        return cloudFoundryOperations.spaces()
+            .create(CreateSpaceRequest.builder()
+                .name(space)
+                .build());
     }
 
     @Bean
