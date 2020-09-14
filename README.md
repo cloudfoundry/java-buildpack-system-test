@@ -1,6 +1,6 @@
 # Cloud Foundry Java Buildpack System Tests
 
-The purpose of this repository is to exercise the [Cloud Foundry Java Buildpack][b] together with its dependencies and associated services to ensure that the whole works together correctly.
+The purpose of this repository is to exercise the [Cloud Foundry Java Buildpack][b] together with its dependencies to ensure that the whole works together correctly.
 
 The tests are JUnit tests in a Maven build which push the [Java Test Applications][a] to Cloud Foundry.
 
@@ -14,7 +14,7 @@ $ ./mvnw clean test
 ```
 
 ## Configuration
-The tests are extremely configurable allowing fine-grained control over what applications and services are tested.
+The tests are extremely configurable allowing fine-grained control over what applications are tested.
 
 ### Application Types:
 * `DISTZIP`
@@ -26,16 +26,6 @@ The tests are extremely configurable allowing fine-grained control over what app
 * `SPRINGBOOTCLIJAR`
 * `WEB`
 * `WEBSERVLET2`
-
-### Service Types
-
-| Type | Service | Plan
-| ---- | ------- | ----
-| `mongodb` | `mlab` | `sandbox`
-| `mysql` | `cleardb` | `amp`
-| `postgresql` | `elephantsql` | `hippo`
-| `rabbitmq` | `cloudamqp` | `lemur`
-| `redis` | `rediscloud` | `30mb`
 
 ### General Configuration
 The following configuration elements are required and define where the tests will run.
@@ -55,12 +45,7 @@ The following configuration elements define what tests will run.
 
 | Environment Variable | Value
 | -------------------- | -----
-| `TEST_HEALTH_<APPLICATION>` | Whether the health tests for a particular application are enabled
-| `TEST_MONGODB_<APPLICATION>` | Whether the MongoDB tests for a particular application are enabled
-| `TEST_MYSQL_<APPLICATION>` | Whether the MySQL tests for a particular application are enabled
-| `TEST_POSTGRESQL_<APPLICATION>` | Whether the PostgreSQL tests for a particular application are enabled
-| `TEST_RABBITMQ_<APPLICATION>` | Whether the RabbitMQ tests for a particular application are enabled
-| `TEST_REDIS_<APPLICATION>` | Whether the Redis tests for a particular application are enabled
+| `TEST_<APPLICATION>` | Whether the health tests for a particular application are enabled
 
 ### Application Configuration
 The following configuration elements define details about the test applications.
@@ -71,17 +56,6 @@ The following configuration elements define details about the test applications.
 | `APPLICATIONS_<APPLICATION>_ENABLED` | Whether the application is pushed to Cloud Foundry
 | `APPLICATIONS_<APPLICATION>_MEMORY` | The amount of memory allocated for the application, overriding the value in the `manifest.yml`
 | `APPLICATIONS_<APPLICATION>_PREFIX` | The application name prefix for the application
-
-
-### Service Configuration
-The following configuration elements define details about the test services.
-
-| Environment Variable | Value
-| -------------------- | -----
-| `SERVICES_<SERVICE>_ENABLED` | Whether to create the service
-| `SERVICES_<APPLICATION>_NAME` | The name of the service
-| `SERVICES_<APPLICATION>_SERVICE` | The service provider to use
-| `SERVICES_<APPLICATION>_PLAN` | The service plan to use
 
 ## Contributing
 [Pull requests][p] are welcome; see the [contributor guidelines][g] for details.

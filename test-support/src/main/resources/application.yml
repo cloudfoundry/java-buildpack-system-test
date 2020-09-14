@@ -29,25 +29,3 @@ applications:
   webServlet2:
     location: ${applications.root}/web-servlet-2-application
     prefix:   web-servlet-2-application-
-
-services:
-  mongodb:
-    name:    test-mongodb
-    service: mlab
-    plan:    sandbox
-  mysql:
-    name:    test-mysql
-    service: cleardb
-    plan:    amp
-  postgresql:
-    name:    test-postgresql
-    service: elephantsql
-    plan:    hippo
-  rabbitmq:
-    name:    test-rabbitmq
-    service: cloudamqp
-    plan:    lemur
-  redis:
-    name:    test-redis
-    service: rediscloud
-    plan:    30mb
