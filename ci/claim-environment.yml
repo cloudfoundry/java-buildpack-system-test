@@ -7,13 +7,14 @@ image_resource:
     repository: cfje/java-buildpack-system-test
 
 inputs:
-- name: environment
-- name: java-test-applications-built
-  path: java-test-applications
 - name: java-buildpack-system-test
+- name: om
 
-caches:
-- path: maven
+outputs:
+- name: environment
 
 run:
-  path: java-buildpack-system-test/ci/system-test.sh
+  path: java-buildpack-system-test/ci/claim-environment.sh
+
+params:
+  API_TOKEN:
