@@ -40,5 +40,5 @@ CREDENTIALS=$(om \
     -n -r \
     --argjson claim "${CLAIM}" \
     --argjson credentials "${CREDENTIALS}" \
-    '{ name: $claim.name, username: $credentials.identity, password $credntials.password }' \
+    '{ name: $claim.name, username: $credentials.identity, password: $credentials.password }' \
     > "${ROOT}"/environment/credentials.json
