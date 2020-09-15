@@ -15,4 +15,4 @@ curl \
   --show-error \
   --silent \
   --request "POST" \
-  "https://environments.toolsmiths.cf-app.com/pooled_gcp_engineering_environments/unclaim?api_token=${API_TOKEN}&name$(jq -n -r --argjson credentials "${CREDENTIALS}" '$credentials.name')"
+  "https://environments.toolsmiths.cf-app.com/pooled_gcp_engineering_environments/unclaim?api_token=${API_TOKEN}&name=$(jq -n -r --argjson credentials "${CREDENTIALS}" '$credentials.name')"
