@@ -127,6 +127,7 @@ abstract class AbstractApplication implements Application {
         ApplicationManifest.Builder builder = ApplicationManifest.builder().from(template)
             .name(name)
             .buildpacks(Collections.singletonList(buildpack))
+            .timeout(600)
             .putAllEnvironmentVariables(getEnvironmentVariables());
 
         Optional.ofNullable(memory)
