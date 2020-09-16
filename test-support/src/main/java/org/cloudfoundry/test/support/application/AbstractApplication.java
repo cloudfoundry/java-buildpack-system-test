@@ -74,8 +74,6 @@ abstract class AbstractApplication implements Application {
         return this.cloudFoundryOperations.applications()
             .pushManifest(PushApplicationManifestRequest.builder()
                 .manifest(getManifest(this.logger, this.buildpack, this.location, this.memory, this.name))
-                .stagingTimeout(Duration.ofMinutes(10))
-                .startupTimeout(Duration.ofMinutes(10))
                 .build())
             .doOnError(t -> this.logger.error("Error pushing {}", this.name, t))
             .onErrorResume(this::printRecentLogs)
