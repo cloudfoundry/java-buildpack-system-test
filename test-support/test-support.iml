@@ -2,7 +2,11 @@
 <module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" version="4">
   <component name="FacetManager">
     <facet type="Spring" name="Spring">
-      <configuration />
+      <configuration>
+        <fileset id="fileset" name="ApplicationConfiguration" removed="false">
+          <file>file://$MODULE_DIR$/src/main/java/org/cloudfoundry/test/support/application/ApplicationConfiguration.java</file>
+        </fileset>
+      </configuration>
     </facet>
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_11">
@@ -20,7 +24,7 @@
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.11.0" level="project" />
     <orderEntry type="library" name="Maven: org.yaml:snakeyaml:1.26" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.11.0" level="project" />
-    <orderEntry type="library" name="Maven: org.cloudfoundry:cloudfoundry-client-reactor:4.9.0.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.cloudfoundry:cloudfoundry-client-reactor:4.10.0.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.11.0" level="project" />
     <orderEntry type="library" name="Maven: com.github.zafarkhaja:java-semver:0.9.0" level="project" />
     <orderEntry type="library" name="Maven: io.jsonwebtoken:jjwt:0.9.1" level="project" />
@@ -39,10 +43,10 @@
     <orderEntry type="library" name="Maven: io.netty:netty-transport-native-unix-common:4.1.50.Final" level="project" />
     <orderEntry type="library" name="Maven: io.projectreactor:reactor-core:3.3.6.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.reactivestreams:reactive-streams:1.0.3" level="project" />
-    <orderEntry type="library" name="Maven: org.cloudfoundry:cloudfoundry-client:4.9.0.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.cloudfoundry:cloudfoundry-client:4.10.0.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: com.squareup.wire:wire-runtime:2.2.0" level="project" />
     <orderEntry type="library" name="Maven: com.squareup.okio:okio:1.8.0" level="project" />
-    <orderEntry type="library" name="Maven: org.cloudfoundry:cloudfoundry-util:4.9.0.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.cloudfoundry:cloudfoundry-util:4.10.0.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-compress:1.20" level="project" />
     <orderEntry type="library" name="Maven: org.atteo:evo-inflector:1.2.2" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:jcl-over-slf4j:1.7.30" level="project" />
@@ -50,7 +54,7 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-core:5.2.7.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-jcl:5.2.7.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-web:5.2.7.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: org.cloudfoundry:cloudfoundry-operations:4.9.0.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.cloudfoundry:cloudfoundry-operations:4.10.0.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-test:2.3.1.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter:2.3.1.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:2.3.1.RELEASE" level="project" />

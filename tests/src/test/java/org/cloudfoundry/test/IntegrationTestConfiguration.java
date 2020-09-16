@@ -28,6 +28,8 @@ import org.cloudfoundry.reactor.TokenProvider;
 import org.cloudfoundry.reactor.client.ReactorCloudFoundryClient;
 import org.cloudfoundry.reactor.doppler.ReactorDopplerClient;
 import org.cloudfoundry.reactor.tokenprovider.PasswordGrantTokenProvider;
+import org.cloudfoundry.reactor.uaa.ReactorUaaClient;
+import org.cloudfoundry.uaa.UaaClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -56,6 +58,7 @@ public class IntegrationTestConfiguration {
     }
 
     @Bean
+    @DependsOn({"organization", "space"})
     CloudFoundryOperations cloudFoundryOperations(CloudFoundryClient cloudFoundryClient,
                                                   DopplerClient dopplerClient,
                                                   @Value("${test.organization}") String organization,
@@ -88,8 +91,14 @@ public class IntegrationTestConfiguration {
     }
 
     @Bean(initMethod = "block")
-    Mono<Void> organization(CloudFoundryOperations cloudFoundryOperations,
+    Mono<Void> organization(CloudFoundryClient cloudFoundryClient,
+                            UaaClient uaaClient,
                             @Value("${test.organization}") String organization) {
+
+        CloudFoundryOperations cloudFoundryOperations = DefaultCloudFoundryOperations.builder()
+            .cloudFoundryClient(cloudFoundryClient)
+            .uaaClient(uaaClient)
+            .build();
 
         return cloudFoundryOperations.organizations()
             .create(CreateOrganizationRequest.builder()
@@ -99,12 +108,20 @@ public class IntegrationTestConfiguration {
 
     @Bean(initMethod = "block")
     @DependsOn("organization")
-    Mono<Void> space(CloudFoundryOperations cloudFoundryOperations,
+    Mono<Void> space(CloudFoundryClient cloudFoundryClient,
+                     UaaClient uaaClient,
+                     @Value("${test.organization}") String organization,
                      @Value("${test.space}") String space) {
+
+        CloudFoundryOperations cloudFoundryOperations = DefaultCloudFoundryOperations.builder()
+            .cloudFoundryClient(cloudFoundryClient)
+            .uaaClient(uaaClient)
+            .build();
 
         return cloudFoundryOperations.spaces()
             .create(CreateSpaceRequest.builder()
                 .name(space)
+                .organization(organization)
                 .build());
     }
 
@@ -114,6 +131,14 @@ public class IntegrationTestConfiguration {
         return PasswordGrantTokenProvider.builder()
             .username(username)
             .password(password)
+            .build();
+    }
+
+    @Bean
+    UaaClient uaaClient(ConnectionContext connectionContext, TokenProvider tokenProvider) {
+        return ReactorUaaClient.builder()
+            .connectionContext(connectionContext)
+            .tokenProvider(tokenProvider)
             .build();
     }
 

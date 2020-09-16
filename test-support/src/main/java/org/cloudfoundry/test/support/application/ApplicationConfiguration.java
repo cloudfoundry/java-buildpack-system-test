@@ -38,11 +38,14 @@ class ApplicationConfiguration {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    private List<Application> applications;
+    private final List<Application> applications;
 
-    @Autowired
-    private CloudFoundryOperations cloudFoundryOperations;
+    private final CloudFoundryOperations cloudFoundryOperations;
+
+    ApplicationConfiguration(List<Application> applications, CloudFoundryOperations cloudFoundryOperations) {
+        this.applications = applications;
+        this.cloudFoundryOperations = cloudFoundryOperations;
+    }
 
     @PreDestroy
     void delete() {
