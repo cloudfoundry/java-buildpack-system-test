@@ -16,12 +16,17 @@
 
 package org.cloudfoundry.test;
 
+import io.netty.handler.ssl.SslContext;
+import io.netty.handler.ssl.SslContextBuilder;
+import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import org.cloudfoundry.client.CloudFoundryClient;
 import org.cloudfoundry.doppler.DopplerClient;
 import org.cloudfoundry.operations.CloudFoundryOperations;
 import org.cloudfoundry.operations.DefaultCloudFoundryOperations;
 import org.cloudfoundry.operations.organizations.CreateOrganizationRequest;
+import org.cloudfoundry.operations.organizations.OrganizationSummary;
 import org.cloudfoundry.operations.spaces.CreateSpaceRequest;
+import org.cloudfoundry.operations.spaces.SpaceSummary;
 import org.cloudfoundry.reactor.ConnectionContext;
 import org.cloudfoundry.reactor.DefaultConnectionContext;
 import org.cloudfoundry.reactor.TokenProvider;
@@ -36,8 +41,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+import reactor.netty.http.client.HttpClient;
+
+import javax.net.ssl.SSLException;
 
 @ComponentScan
 @Configuration
@@ -101,9 +110,14 @@ public class IntegrationTestConfiguration {
             .build();
 
         return cloudFoundryOperations.organizations()
-            .create(CreateOrganizationRequest.builder()
-                .organizationName(organization)
-                .build());
+            .list()
+            .filter(o -> organization.equals(o.getName()))
+            .switchIfEmpty(cloudFoundryOperations.organizations()
+                .create(CreateOrganizationRequest.builder()
+                    .organizationName(organization)
+                    .build())
+                .cast(OrganizationSummary.class))
+            .then();
     }
 
     @Bean(initMethod = "block")
@@ -116,13 +130,18 @@ public class IntegrationTestConfiguration {
         CloudFoundryOperations cloudFoundryOperations = DefaultCloudFoundryOperations.builder()
             .cloudFoundryClient(cloudFoundryClient)
             .uaaClient(uaaClient)
+            .organization(organization)
             .build();
 
         return cloudFoundryOperations.spaces()
-            .create(CreateSpaceRequest.builder()
-                .name(space)
-                .organization(organization)
-                .build());
+            .list()
+            .filter(s -> space.equals(s.getName()))
+            .switchIfEmpty(cloudFoundryOperations.spaces()
+                .create(CreateSpaceRequest.builder()
+                    .name(space)
+                    .build())
+                .cast(SpaceSummary.class))
+            .then();
     }
 
     @Bean
@@ -143,8 +162,18 @@ public class IntegrationTestConfiguration {
     }
 
     @Bean
-    WebClient webClient() {
-        return WebClient.create();
+    WebClient webClient(@Value("${test.skipSslValidation:false}") Boolean skipSslValidation) throws SSLException {
+        if (!skipSslValidation) {
+            return WebClient.create();
+        }
+
+        SslContext context = SslContextBuilder.forClient()
+            .trustManager(InsecureTrustManagerFactory.INSTANCE)
+            .build();
+
+        return WebClient.builder()
+            .clientConnector(new ReactorClientHttpConnector(HttpClient.create().secure(s -> s.sslContext(context))))
+            .build();
     }
 
 }
