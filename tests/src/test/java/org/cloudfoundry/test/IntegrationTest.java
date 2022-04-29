@@ -35,9 +35,11 @@ import org.springframework.core.env.Environment;
 import org.springframework.test.context.ActiveProfiles;
 import reactor.test.StepVerifier;
 
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
+
 import java.time.Duration;
 
-import static org.junit.Assume.assumeTrue;
+
 
 @ActiveProfiles("test")
 @SpringBootTest(classes = IntegrationTestConfiguration.class)
@@ -114,7 +116,7 @@ final class IntegrationTest {
 
     private static void isIgnored(Environment environment, String applicationType) {
         String key = String.format("test.%s", applicationType);
-        assumeTrue(String.format("Test is disabled via %s", key), environment.getProperty(key, boolean.class, true));
+        assumeTrue(environment.getProperty(key, boolean.class, true), String.format("Test is disabled via %s", key));
     }
 
     private static void test(Application application) {
