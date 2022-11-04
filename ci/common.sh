@@ -7,6 +7,6 @@ fi
 
 if [[ -d "${ROOT}"/om ]]; then
   printf "➜ Expanding om\n"
-  tar xzf "${ROOT}"/om/om-linux-*.tar.gz -C "${ROOT}"/om
+  tar xzf "${ROOT}"/om/om-linux-amd64-*.tar.gz -C "${ROOT}"/om
   export PATH="${ROOT}"/om:${PATH}
 fi
