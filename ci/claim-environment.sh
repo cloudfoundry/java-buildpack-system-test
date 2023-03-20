@@ -12,7 +12,7 @@ POOL_NAME=$(curl \
   --silent \
   --header 'Accept: application/json' \
   "https://environments.toolsmiths.cf-app.com/pool_names" \
-  | jq -r '.pool_names.gcp | map(select(contains("us"))) | map(select(contains("lts"))) | .[]' | sort -Vr | head -1)
+  | jq -r '.pool_names.gcp | map(select(contains("us"))) | map(select(test("3_[0-9]$"))) | .[]' | sort -Vr | head -1)
 
 printf "Claiming environment from %s\n" "${POOL_NAME}"
 
