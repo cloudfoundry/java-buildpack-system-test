@@ -7,7 +7,7 @@ source "$(dirname "$0")"/common.sh
 
 CREDENTIALS=$(cat "${ROOT}"/environment/credentials.json)
 
-TEST_HOST=$(jq -n -r --argjson credentials "${CREDENTIALS}" 'api.sys.\($credentials.api_url).cf-app.com')
+TEST_HOST=$(jq -n -r --argjson credentials "${CREDENTIALS}" '"api.sys.\($credentials.api_url)"')
 export TEST_HOST
 
 TEST_PASSWORD=$(jq -n -r --argjson credentials "${CREDENTIALS}" '$credentials.password')
